@@ -6,5 +6,5 @@ CXX_FLAGS =  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/abishek/myFiles/mcw/rpp/AMD-RPP-CPUONLY/include 
+CXX_INCLUDES = -I/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/include 
 

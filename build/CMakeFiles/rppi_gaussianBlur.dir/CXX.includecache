@@ -10,11 +10,13 @@
 stdlib.h
 -
 
-/Users/abishek/myFiles/mcw/rpp/AMD-RPP-CPUONLY/src/imgaug/rppi_gaussianBlur.cpp
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppi_gaussianBlur.cpp
 stdio.h
+-
+math.h
 -
 algorithm
 -
 rppdefs.h
-/Users/abishek/myFiles/mcw/rpp/AMD-RPP-CPUONLY/src/imgaug/rppdefs.h
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppdefs.h
 

@@ -1,4 +1,4 @@
-# Install script for directory: /Users/abishek/myFiles/mcw/rpp/AMD-RPP-CPUONLY
+# Install script for directory: /Users/abishek/myFiles/github/AMD-RPP-CPUONLY
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/abishek/myFiles/mcw/rpp/AMD-RPP-CPUONLY/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

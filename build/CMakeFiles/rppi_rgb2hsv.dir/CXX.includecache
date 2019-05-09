@@ -10,7 +10,7 @@
 stdlib.h
 -
 
-/Users/abishek/myFiles/mcw/rpp/AMD-RPP-CPUONLY/src/imgaug/rppi_rgb2hsv.cpp
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppi_rgb2hsv.cpp
 stdio.h
 -
 math.h
@@ -18,5 +18,5 @@ math.h
 algorithm
 -
 rppdefs.h
-/Users/abishek/myFiles/mcw/rpp/AMD-RPP-CPUONLY/src/imgaug/rppdefs.h
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppdefs.h
 

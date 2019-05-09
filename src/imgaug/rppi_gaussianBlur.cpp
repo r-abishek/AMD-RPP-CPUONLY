@@ -4,6 +4,7 @@
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include <stdio.h>
+#include <math.h>
 #include <algorithm>
 #include "rppdefs.h"
  
@@ -18,30 +19,23 @@ void display(Rpp8u *pArr, RppiSize size);
 RppStatus rppi_gaussianBlur3x3_1C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst)
 {
     float kernel_3x3[9] = {1,2,1,2,4,2,1,2,1};
-    
-    //printf("\n\nKernel:\n");
     for (int i = 0; i < 9; i++)
     {
         kernel_3x3[i] *= 0.0625;
-        //printf("%f\t", kernel_3x3[i]);
-        //if (((i + 1) % 3) == 0)
-        //{
-        //    printf("\n");
-        //}
     }
     RppiSize sizeMod;
     sizeMod.channel = size.channel;
     sizeMod.width = size.width + 2;
     sizeMod.height = size.height + 2;
 
-    Rpp8u *pSrcMod = (Rpp8u *)malloc((size.width + 2) * (size.height + 2) * sizeof(Rpp8u));
+    Rpp8u *pSrcMod = (Rpp8u *)malloc(sizeMod.width * sizeMod.height * sizeof(Rpp8u));
 
     int srcLoc = 0, srcModLoc = 0, dstLoc = 0;
-    for (int i = 0; i < (size.width + 2); i++)
+    for (int i = 0; i < sizeMod.width; i++)
     {
         pSrcMod[i] = 0;
     }
-    srcModLoc = (size.width + 2);
+    srcModLoc = sizeMod.width;
     for (int i = 0; i < size.height; i++)
     {
         pSrcMod[srcModLoc] = 0;
@@ -55,13 +49,10 @@ RppStatus rppi_gaussianBlur3x3_1C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *p
         pSrcMod[srcModLoc] = 0;
         srcModLoc += 1;
     }
-    for (int i = 0; i < (size.width + 2); i++)
+    for (int i = 0; i < sizeMod.width; i++)
     {
         pSrcMod[i] = 0;
     }
-    
-    //printf("\n\nPaddded image:\n");
-    //display(pSrcMod, sizeMod);
     
     dstLoc = 0;
     srcModLoc = 0;
@@ -73,6 +64,7 @@ RppStatus rppi_gaussianBlur3x3_1C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *p
         for (int j = 0; j < size.width; j++)
         {
             count = 0;
+            pixel = 0.0;
             for (int m = 0; m < 3; m++)
             {
                 for (int n = 0; n < 3; n++, count++)
@@ -82,25 +74,94 @@ RppStatus rppi_gaussianBlur3x3_1C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *p
             }
             for (int k = 0; k < 9; k++)
             {
-                pixel += (kernel_3x3[k] * pSrcMod[convLocs[k]]);
+                //printf("\nkernel - %f, pSrcMod - %d", kernel_3x3[k], pSrcMod[convLocs[k]]);
+                pixel += (kernel_3x3[k] * (float)pSrcMod[convLocs[k]]);
             }
+            //printf("\npixel = %f", pixel);
             pixel = std::min(pixel, (Rpp32f) 255);
             pixel = std::max(pixel, (Rpp32f) 0);
-            pDst[dstLoc] = (Rpp8u) pixel;
+            pDst[dstLoc] = (Rpp8u) round(pixel);
             dstLoc += 1;
             srcModLoc += 1;
         }
+        srcModLoc += 2;
     }
     
     return RPP_SUCCESS;
 
 }
 
-RppStatus rppi_gaussianBlur3x3_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, Rpp32f alpha = 1, Rpp32f beta = 0)
+RppStatus rppi_gaussianBlur3x3_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst)
 {
+    float kernel_3x3[9] = {1,2,1,2,4,2,1,2,1};
+    for (int i = 0; i < 9; i++)
+    {
+        kernel_3x3[i] *= 0.0625;
+    }
+    RppiSize sizeMod;
+    sizeMod.channel = size.channel;
+    sizeMod.width = size.width + 2;
+    sizeMod.height = size.height + 2;
 
-    // Not ready
+    Rpp8u *pSrcMod = (Rpp8u *)malloc(sizeMod.width * sizeMod.height * sizeof(Rpp8u));
 
+    int srcLoc = 0, srcModLoc = 0, dstLoc = 0;
+    for (int i = 0; i < sizeMod.width; i++)
+    {
+        pSrcMod[i] = 0;
+    }
+    srcModLoc = sizeMod.width;
+    for (int i = 0; i < size.height; i++)
+    {
+        pSrcMod[srcModLoc] = 0;
+        srcModLoc += 1;
+        for (int j = 0; j < size.width; j++)
+        {
+            pSrcMod[srcModLoc] = pSrc[srcLoc];
+            srcModLoc += 1;
+            srcLoc += 1;
+        }
+        pSrcMod[srcModLoc] = 0;
+        srcModLoc += 1;
+    }
+    for (int i = 0; i < sizeMod.width; i++)
+    {
+        pSrcMod[i] = 0;
+    }
+    
+    dstLoc = 0;
+    srcModLoc = 0;
+    int convLocs[9] = {0}, count = 0;
+    float pixel = 0.0;
+
+    for (int i = 0; i < size.height; i++)
+    {
+        for (int j = 0; j < size.width; j++)
+        {
+            count = 0;
+            pixel = 0.0;
+            for (int m = 0; m < 3; m++)
+            {
+                for (int n = 0; n < 3; n++, count++)
+                {
+                    convLocs[count] = srcModLoc + (m * sizeMod.width) + n;
+                }
+            }
+            for (int k = 0; k < 9; k++)
+            {
+                //printf("\nkernel - %f, pSrcMod - %d", kernel_3x3[k], pSrcMod[convLocs[k]]);
+                pixel += (kernel_3x3[k] * (float)pSrcMod[convLocs[k]]);
+            }
+            //printf("\npixel = %f", pixel);
+            pixel = std::min(pixel, (Rpp32f) 255);
+            pixel = std::max(pixel, (Rpp32f) 0);
+            pDst[dstLoc] = (Rpp8u) round(pixel);
+            dstLoc += 1;
+            srcModLoc += 1;
+        }
+        srcModLoc += 2;
+    }
+    
     return RPP_SUCCESS;
 
 }
