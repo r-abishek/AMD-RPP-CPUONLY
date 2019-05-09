@@ -11,23 +11,7 @@
 using namespace std;
 
 
-void displayf(Rpp32f *pArr, RppiSize size)
-{
-    int p = 0;
-    for(int c = 0; c < size.channel; c++)
-    {
-        printf("\n\nChannel %d:\n", c+1);
-        for (int i = 0; i < (size.width * size.height); i++)
-        {
-            printf("%0.2f\t\t", *(pArr + p));
-            if (((i + 1) % size.width) == 0)
-            {
-                printf("\n");
-            }
-            p += 1;
-        }
-    }
-}
+
 
 
 RppStatus rppi_hue_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, Rpp32f hueShift = 0)
@@ -50,7 +34,6 @@ RppStatus rppi_hue_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, Rpp32f 
         else if (cmax == rf)
         {
             pHSV[i] = round(60 * fmod(((gf - bf) / delta),6));
-            //printf("HSV - %f", pHSV[i]);
         }
         else if (cmax == gf)
         {
