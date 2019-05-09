@@ -60,9 +60,9 @@ RppStatus rppi_hsv2rgb_3C8U_pln_cpu(Rpp32f *pSrc, RppiSize size, Rpp8u *pDst)
             bf = x;
         }
 
-        pDst[i] = (Rpp8u) ((rf + m) * 255);
-        pDst[i + (size.width * size.height)] = (Rpp8u) ((gf + m) * 255);
-        pDst[i + (2 * size.width * size.height)] = (Rpp8u) ((bf + m) * 255);
+        pDst[i] = (Rpp8u) round((rf + m) * 255);
+        pDst[i + (size.width * size.height)] = (Rpp8u) round((gf + m) * 255);
+        pDst[i + (2 * size.width * size.height)] = (Rpp8u) round((bf + m) * 255);
     }
 
     return RPP_SUCCESS;

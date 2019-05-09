@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named rppi_hsv2rgb
+# Target rules for targets named rppi_hue
 
 # Build rule for target.
-rppi_hsv2rgb: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rppi_hsv2rgb
-.PHONY : rppi_hsv2rgb
+rppi_hue: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_hue
+.PHONY : rppi_hue
 
 # fast build rule for target.
-rppi_hsv2rgb/fast:
-	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/build
-.PHONY : rppi_hsv2rgb/fast
+rppi_hue/fast:
+	$(MAKE) -f CMakeFiles/rppi_hue.dir/build.make CMakeFiles/rppi_hue.dir/build
+.PHONY : rppi_hue/fast
 
 #=============================================================================
 # Target rules for targets named rppi_gaussianBlur
@@ -135,6 +135,19 @@ rppi_gaussianBlur: cmake_check_build_system
 rppi_gaussianBlur/fast:
 	$(MAKE) -f CMakeFiles/rppi_gaussianBlur.dir/build.make CMakeFiles/rppi_gaussianBlur.dir/build
 .PHONY : rppi_gaussianBlur/fast
+
+#=============================================================================
+# Target rules for targets named rppi_hsv2rgb
+
+# Build rule for target.
+rppi_hsv2rgb: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_hsv2rgb
+.PHONY : rppi_hsv2rgb
+
+# fast build rule for target.
+rppi_hsv2rgb/fast:
+	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/build
+.PHONY : rppi_hsv2rgb/fast
 
 #=============================================================================
 # Target rules for targets named rppi_rgb2hsv
@@ -283,6 +296,33 @@ src/imgaug/rppi_hsv2rgb.cpp.s:
 	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/src/imgaug/rppi_hsv2rgb.cpp.s
 .PHONY : src/imgaug/rppi_hsv2rgb.cpp.s
 
+src/imgaug/rppi_hue.o: src/imgaug/rppi_hue.cpp.o
+
+.PHONY : src/imgaug/rppi_hue.o
+
+# target to build an object file
+src/imgaug/rppi_hue.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_hue.dir/build.make CMakeFiles/rppi_hue.dir/src/imgaug/rppi_hue.cpp.o
+.PHONY : src/imgaug/rppi_hue.cpp.o
+
+src/imgaug/rppi_hue.i: src/imgaug/rppi_hue.cpp.i
+
+.PHONY : src/imgaug/rppi_hue.i
+
+# target to preprocess a source file
+src/imgaug/rppi_hue.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_hue.dir/build.make CMakeFiles/rppi_hue.dir/src/imgaug/rppi_hue.cpp.i
+.PHONY : src/imgaug/rppi_hue.cpp.i
+
+src/imgaug/rppi_hue.s: src/imgaug/rppi_hue.cpp.s
+
+.PHONY : src/imgaug/rppi_hue.s
+
+# target to generate assembly for a file
+src/imgaug/rppi_hue.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_hue.dir/build.make CMakeFiles/rppi_hue.dir/src/imgaug/rppi_hue.cpp.s
+.PHONY : src/imgaug/rppi_hue.cpp.s
+
 src/imgaug/rppi_rgb2hsv.o: src/imgaug/rppi_rgb2hsv.cpp.o
 
 .PHONY : src/imgaug/rppi_rgb2hsv.o
@@ -317,9 +357,10 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... rppi_hue"
 	@echo "... rebuild_cache"
-	@echo "... rppi_hsv2rgb"
 	@echo "... rppi_gaussianBlur"
+	@echo "... rppi_hsv2rgb"
 	@echo "... rppi_rgb2hsv"
 	@echo "... rppi_contrast"
 	@echo "... rppi_brightness"
@@ -335,6 +376,9 @@ help:
 	@echo "... src/imgaug/rppi_hsv2rgb.o"
 	@echo "... src/imgaug/rppi_hsv2rgb.i"
 	@echo "... src/imgaug/rppi_hsv2rgb.s"
+	@echo "... src/imgaug/rppi_hue.o"
+	@echo "... src/imgaug/rppi_hue.i"
+	@echo "... src/imgaug/rppi_hue.s"
 	@echo "... src/imgaug/rppi_rgb2hsv.o"
 	@echo "... src/imgaug/rppi_rgb2hsv.i"
 	@echo "... src/imgaug/rppi_rgb2hsv.s"

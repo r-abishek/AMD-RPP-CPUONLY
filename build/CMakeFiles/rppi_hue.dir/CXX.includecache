@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/rppdefs.h
+stdlib.h
+-
+
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppi_hue.cpp
+stdio.h
+-
+math.h
+-
+algorithm
+-
+rppdefs.h
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppdefs.h
+

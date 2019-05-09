@@ -22,6 +22,11 @@ add_executable(
 )
 
 add_executable(
+    rppi_hue
+    src/imgaug/rppi_hue.cpp
+)
+
+add_executable(
     rppi_gaussianBlur
     src/imgaug/rppi_gaussianBlur.cpp
 )
@@ -42,6 +47,11 @@ target_include_directories(rppi_rgb2hsv
 )
 
 target_include_directories(rppi_hsv2rgb
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_include_directories(rppi_hue
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )

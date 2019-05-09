@@ -65,39 +65,39 @@ CMAKE_SOURCE_DIR = /Users/abishek/myFiles/github/AMD-RPP-CPUONLY
 CMAKE_BINARY_DIR = /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build
 
 #=============================================================================
-# Target rules for target CMakeFiles/rppi_hsv2rgb.dir
+# Target rules for target CMakeFiles/rppi_hue.dir
 
 # All Build rule for target.
-CMakeFiles/rppi_hsv2rgb.dir/all:
-	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/depend
-	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=7,8 "Built target rppi_hsv2rgb"
-.PHONY : CMakeFiles/rppi_hsv2rgb.dir/all
+CMakeFiles/rppi_hue.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_hue.dir/build.make CMakeFiles/rppi_hue.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_hue.dir/build.make CMakeFiles/rppi_hue.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=9,10 "Built target rppi_hue"
+.PHONY : CMakeFiles/rppi_hue.dir/all
 
 # Include target in all.
-all: CMakeFiles/rppi_hsv2rgb.dir/all
+all: CMakeFiles/rppi_hue.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/rppi_hsv2rgb.dir/rule: cmake_check_build_system
+CMakeFiles/rppi_hue.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_hsv2rgb.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_hue.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
-.PHONY : CMakeFiles/rppi_hsv2rgb.dir/rule
+.PHONY : CMakeFiles/rppi_hue.dir/rule
 
 # Convenience name for target.
-rppi_hsv2rgb: CMakeFiles/rppi_hsv2rgb.dir/rule
+rppi_hue: CMakeFiles/rppi_hue.dir/rule
 
-.PHONY : rppi_hsv2rgb
-
-# clean rule for target.
-CMakeFiles/rppi_hsv2rgb.dir/clean:
-	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/clean
-.PHONY : CMakeFiles/rppi_hsv2rgb.dir/clean
+.PHONY : rppi_hue
 
 # clean rule for target.
-clean: CMakeFiles/rppi_hsv2rgb.dir/clean
+CMakeFiles/rppi_hue.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_hue.dir/build.make CMakeFiles/rppi_hue.dir/clean
+.PHONY : CMakeFiles/rppi_hue.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_hue.dir/clean
 
 .PHONY : clean
 
@@ -139,13 +139,50 @@ clean: CMakeFiles/rppi_gaussianBlur.dir/clean
 .PHONY : clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/rppi_hsv2rgb.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_hsv2rgb.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=7,8 "Built target rppi_hsv2rgb"
+.PHONY : CMakeFiles/rppi_hsv2rgb.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_hsv2rgb.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_hsv2rgb.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_hsv2rgb.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_hsv2rgb.dir/rule
+
+# Convenience name for target.
+rppi_hsv2rgb: CMakeFiles/rppi_hsv2rgb.dir/rule
+
+.PHONY : rppi_hsv2rgb
+
+# clean rule for target.
+CMakeFiles/rppi_hsv2rgb.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/clean
+.PHONY : CMakeFiles/rppi_hsv2rgb.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_hsv2rgb.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/rppi_rgb2hsv.dir
 
 # All Build rule for target.
 CMakeFiles/rppi_rgb2hsv.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_rgb2hsv.dir/build.make CMakeFiles/rppi_rgb2hsv.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_rgb2hsv.dir/build.make CMakeFiles/rppi_rgb2hsv.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=9,10 "Built target rppi_rgb2hsv"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=11,12 "Built target rppi_rgb2hsv"
 .PHONY : CMakeFiles/rppi_rgb2hsv.dir/all
 
 # Include target in all.

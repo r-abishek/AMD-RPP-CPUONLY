@@ -1,4 +1,4 @@
-// rppi_brightness
+// rppi_gaussianBlur
 // Parameters to functions are in the order inputs, input optional, outputs, outputs optional
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
