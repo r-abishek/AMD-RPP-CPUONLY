@@ -43,6 +43,15 @@ RppStatus rppi_rgb2hsv_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp32f *pDst)
             pDst[i] = round(60 * (((rf - gf) / delta) + 4));
         }
 
+        while (pDst[i] > 360)
+        {
+            pDst[i] = pDst[i] - 360;
+        }
+        while (pDst[i] < 0)
+        {
+            pDst[i] = 360 + pDst[i];
+        }
+
         if (cmax == 0)
         {
             pDst[i + (size.width * size.height)] = 0;
