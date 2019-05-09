@@ -2,14 +2,18 @@
 // Parameters to functions are in the order inputs, input optional, outputs, outputs optional
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
-/*
+
 #include <stdio.h>
 #include <math.h>
 #include <algorithm>
 #include "rppdefs.h"
  
 using namespace std;
-*/
+
+
+
+
+
 RppStatus rppi_rgb2hsv_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp32f *pDst)
 {    
     for (int i = 0; i < (size.width * size.height); i++)
@@ -56,8 +60,12 @@ RppStatus rppi_rgb2hsv_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp32f *pDst)
 
 }
 
+
+
+
+
 // Uncomment the segment below to get this standalone to work for basic unit testing
-/*
+
 void input(int *isrc, RppiSize size)
 {
     int p = 0;
@@ -149,4 +157,3 @@ int main()
     displayf(dst, size);
 
 }
-*/

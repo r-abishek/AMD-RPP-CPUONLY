@@ -2,7 +2,7 @@
 // Parameters to functions are in the order inputs, input optional, outputs, outputs optional
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
-/*
+
 #include <stdio.h>
 #include <algorithm>
 #include "rppdefs.h"
@@ -10,7 +10,11 @@
 using namespace std;
 
 void display(Rpp8u *pArr, RppiSize size);
-*/
+
+
+
+
+
 RppStatus rppi_gaussianBlur3x3_1C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst)
 {
     float kernel_3x3[9] = {1,2,1,2,4,2,1,2,1};
@@ -101,8 +105,12 @@ RppStatus rppi_gaussianBlur3x3_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *p
 
 }
 
+
+
+
+
 // Uncomment the segment below to get this standalone to work for basic unit testing
-/*
+
 void input(int *isrc, RppiSize size)
 {
     int p = 0;
@@ -182,4 +190,3 @@ int main()
     printf("\nOutput of Gaussian Blur 3x3:");
     display(dst, size);
 }
-*/

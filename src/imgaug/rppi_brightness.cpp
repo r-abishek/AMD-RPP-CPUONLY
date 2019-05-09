@@ -2,13 +2,17 @@
 // Parameters to functions are in the order inputs, input optional, outputs, outputs optional
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
-/*
+
 #include <stdio.h>
 #include <algorithm>
 #include "rppdefs.h"
  
 using namespace std;
-*/
+
+
+
+
+
 RppStatus rppi_brightness_1C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, Rpp32f alpha = 1, Rpp32f beta = 0)
 {
 
@@ -39,8 +43,12 @@ RppStatus rppi_brightness_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, 
 
 }
 
+
+
+
+
 // Uncomment the segment below to get this standalone to work for basic unit testing
-/*
+
 void input(int *isrc, RppiSize size)
 {
     int p = 0;
@@ -122,4 +130,3 @@ int main()
     printf("\nOutput of Brightness Modification:\n\n");
     display(dst, size);
 }
-*/

@@ -2,13 +2,17 @@
 // Parameters to functions are in the order inputs, input optional, outputs, outputs optional
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
-/*
+
 #include <stdio.h>
 #include <algorithm>
 #include "rppdefs.h"
  
 using namespace std;
-*/
+
+
+
+
+
 RppStatus rppi_contrast_1C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, Rpp32f newMax = 255, Rpp32f newMin = 0)
 {
     Rpp32f Min = (Rpp32f) *std::min_element(pSrc,pSrc + (size.width * size.height));
@@ -49,8 +53,12 @@ RppStatus rppi_contrast_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, Rp
 
 }
 
+
+
+
+
 // Uncomment the segment below to get this standalone to work for basic unit testing
-/*
+
 void input(int *isrc, RppiSize size)
 {
     int p = 0;
@@ -132,4 +140,3 @@ int main()
     printf("\nOutput of Contrast Modification:\n\n");
     display(dst, size);
 }
-*/
