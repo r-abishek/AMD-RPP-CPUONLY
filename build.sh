@@ -5,4 +5,3 @@ mkdir build
 cd build
 cmake ..
 make
-./rppi_gaussianBlur
