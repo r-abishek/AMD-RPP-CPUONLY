@@ -176,6 +176,19 @@ rppi_contrast/fast:
 .PHONY : rppi_contrast/fast
 
 #=============================================================================
+# Target rules for targets named rppi_saturation
+
+# Build rule for target.
+rppi_saturation: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_saturation
+.PHONY : rppi_saturation
+
+# fast build rule for target.
+rppi_saturation/fast:
+	$(MAKE) -f CMakeFiles/rppi_saturation.dir/build.make CMakeFiles/rppi_saturation.dir/build
+.PHONY : rppi_saturation/fast
+
+#=============================================================================
 # Target rules for targets named rppi_brightness
 
 # Build rule for target.
@@ -350,6 +363,33 @@ src/imgaug/rppi_rgb2hsv.cpp.s:
 	$(MAKE) -f CMakeFiles/rppi_rgb2hsv.dir/build.make CMakeFiles/rppi_rgb2hsv.dir/src/imgaug/rppi_rgb2hsv.cpp.s
 .PHONY : src/imgaug/rppi_rgb2hsv.cpp.s
 
+src/imgaug/rppi_saturation.o: src/imgaug/rppi_saturation.cpp.o
+
+.PHONY : src/imgaug/rppi_saturation.o
+
+# target to build an object file
+src/imgaug/rppi_saturation.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_saturation.dir/build.make CMakeFiles/rppi_saturation.dir/src/imgaug/rppi_saturation.cpp.o
+.PHONY : src/imgaug/rppi_saturation.cpp.o
+
+src/imgaug/rppi_saturation.i: src/imgaug/rppi_saturation.cpp.i
+
+.PHONY : src/imgaug/rppi_saturation.i
+
+# target to preprocess a source file
+src/imgaug/rppi_saturation.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_saturation.dir/build.make CMakeFiles/rppi_saturation.dir/src/imgaug/rppi_saturation.cpp.i
+.PHONY : src/imgaug/rppi_saturation.cpp.i
+
+src/imgaug/rppi_saturation.s: src/imgaug/rppi_saturation.cpp.s
+
+.PHONY : src/imgaug/rppi_saturation.s
+
+# target to generate assembly for a file
+src/imgaug/rppi_saturation.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_saturation.dir/build.make CMakeFiles/rppi_saturation.dir/src/imgaug/rppi_saturation.cpp.s
+.PHONY : src/imgaug/rppi_saturation.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -363,6 +403,7 @@ help:
 	@echo "... rppi_hsv2rgb"
 	@echo "... rppi_rgb2hsv"
 	@echo "... rppi_contrast"
+	@echo "... rppi_saturation"
 	@echo "... rppi_brightness"
 	@echo "... src/imgaug/rppi_brightness.o"
 	@echo "... src/imgaug/rppi_brightness.i"
@@ -382,6 +423,9 @@ help:
 	@echo "... src/imgaug/rppi_rgb2hsv.o"
 	@echo "... src/imgaug/rppi_rgb2hsv.i"
 	@echo "... src/imgaug/rppi_rgb2hsv.s"
+	@echo "... src/imgaug/rppi_saturation.o"
+	@echo "... src/imgaug/rppi_saturation.i"
+	@echo "... src/imgaug/rppi_saturation.s"
 .PHONY : help
 
 

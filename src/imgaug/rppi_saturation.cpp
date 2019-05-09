@@ -1,4 +1,4 @@
-// rppi_hue
+// rppi_saturation
 // Parameters to functions are in the order inputs, input optional, outputs, outputs optional
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
@@ -14,7 +14,7 @@ using namespace std;
 
 
 
-RppStatus rppi_hue_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, Rpp32f hueShift = 0)
+RppStatus rppi_hue_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, Rpp32f saturationFactor = 1)
 {
     Rpp32f *pHSV = (Rpp32f *)malloc(size.channel * size.width * size.height * sizeof(Rpp32f));
     for (int i = 0; i < (size.width * size.height); i++)
@@ -68,15 +68,9 @@ RppStatus rppi_hue_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, Rpp32f 
     
     for (int i = 0; i < (size.width * size.height); i++)
     {
-        pHSV[i] += hueShift;
-        while (pHSV[i] > 360)
-        {
-            pHSV[i] = pHSV[i] - 360;
-        }
-        while (pHSV[i] < 0)
-        {
-            pHSV[i] = 360 + pHSV[i];
-        }
+        pHSV[i + (size.width * size.height)] *= saturationFactor;
+        pHSV[i + (size.width * size.height)] = std::min(pHSV[i + (size.width * size.height)], (float) 1);
+        pHSV[i + (size.width * size.height)] = std::max(pHSV[i + (size.width * size.height)], (float) 0);
     }
 
     for (int i = 0; i < (size.width * size.height); i++)
@@ -197,7 +191,7 @@ int main()
     
     int *isrc = (int *)malloc(size.channel * size.width * size.height * sizeof(int));
     
-    float hueShift = 30;
+    float saturationFactor = 0.3;
     
     printf("\n\n\n\nEnter elements in array of size %d x %d x %d: \n", size.channel, size.width, size.height);
     input(isrc, size);
@@ -207,8 +201,8 @@ int main()
     printf("\nInput:\n\n");
     display(src, size);
 
-    rppi_hue_3C8U_pln_cpu(src, size, dst, hueShift);
+    rppi_hue_3C8U_pln_cpu(src, size, dst, saturationFactor);
 
-    printf("\nOutput of Hue Modification:\n\n");
+    printf("\nOutput of Saturation Modification:\n\n");
     display(dst, size);
 }

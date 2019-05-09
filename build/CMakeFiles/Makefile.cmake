@@ -127,5 +127,6 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/rppi_hsv2rgb.dir/DependInfo.cmake"
   "CMakeFiles/rppi_rgb2hsv.dir/DependInfo.cmake"
   "CMakeFiles/rppi_contrast.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_saturation.dir/DependInfo.cmake"
   "CMakeFiles/rppi_brightness.dir/DependInfo.cmake"
   )
