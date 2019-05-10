@@ -102,6 +102,43 @@ clean: CMakeFiles/rppi_hue.dir/clean
 .PHONY : clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/rppi_rotate.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_rotate.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_rotate.dir/build.make CMakeFiles/rppi_rotate.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_rotate.dir/build.make CMakeFiles/rppi_rotate.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=13,14 "Built target rppi_rotate"
+.PHONY : CMakeFiles/rppi_rotate.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_rotate.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_rotate.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_rotate.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_rotate.dir/rule
+
+# Convenience name for target.
+rppi_rotate: CMakeFiles/rppi_rotate.dir/rule
+
+.PHONY : rppi_rotate
+
+# clean rule for target.
+CMakeFiles/rppi_rotate.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_rotate.dir/build.make CMakeFiles/rppi_rotate.dir/clean
+.PHONY : CMakeFiles/rppi_rotate.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_rotate.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/rppi_gaussianBlur.dir
 
 # All Build rule for target.
@@ -256,7 +293,7 @@ clean: CMakeFiles/rppi_contrast.dir/clean
 CMakeFiles/rppi_saturation.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_saturation.dir/build.make CMakeFiles/rppi_saturation.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_saturation.dir/build.make CMakeFiles/rppi_saturation.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=13,14 "Built target rppi_saturation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=15,16 "Built target rppi_saturation"
 .PHONY : CMakeFiles/rppi_saturation.dir/all
 
 # Include target in all.

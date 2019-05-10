@@ -124,6 +124,19 @@ rppi_hue/fast:
 .PHONY : rppi_hue/fast
 
 #=============================================================================
+# Target rules for targets named rppi_rotate
+
+# Build rule for target.
+rppi_rotate: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_rotate
+.PHONY : rppi_rotate
+
+# fast build rule for target.
+rppi_rotate/fast:
+	$(MAKE) -f CMakeFiles/rppi_rotate.dir/build.make CMakeFiles/rppi_rotate.dir/build
+.PHONY : rppi_rotate/fast
+
+#=============================================================================
 # Target rules for targets named rppi_gaussianBlur
 
 # Build rule for target.
@@ -363,6 +376,33 @@ src/imgaug/rppi_rgb2hsv.cpp.s:
 	$(MAKE) -f CMakeFiles/rppi_rgb2hsv.dir/build.make CMakeFiles/rppi_rgb2hsv.dir/src/imgaug/rppi_rgb2hsv.cpp.s
 .PHONY : src/imgaug/rppi_rgb2hsv.cpp.s
 
+src/imgaug/rppi_rotate.o: src/imgaug/rppi_rotate.cpp.o
+
+.PHONY : src/imgaug/rppi_rotate.o
+
+# target to build an object file
+src/imgaug/rppi_rotate.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_rotate.dir/build.make CMakeFiles/rppi_rotate.dir/src/imgaug/rppi_rotate.cpp.o
+.PHONY : src/imgaug/rppi_rotate.cpp.o
+
+src/imgaug/rppi_rotate.i: src/imgaug/rppi_rotate.cpp.i
+
+.PHONY : src/imgaug/rppi_rotate.i
+
+# target to preprocess a source file
+src/imgaug/rppi_rotate.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_rotate.dir/build.make CMakeFiles/rppi_rotate.dir/src/imgaug/rppi_rotate.cpp.i
+.PHONY : src/imgaug/rppi_rotate.cpp.i
+
+src/imgaug/rppi_rotate.s: src/imgaug/rppi_rotate.cpp.s
+
+.PHONY : src/imgaug/rppi_rotate.s
+
+# target to generate assembly for a file
+src/imgaug/rppi_rotate.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_rotate.dir/build.make CMakeFiles/rppi_rotate.dir/src/imgaug/rppi_rotate.cpp.s
+.PHONY : src/imgaug/rppi_rotate.cpp.s
+
 src/imgaug/rppi_saturation.o: src/imgaug/rppi_saturation.cpp.o
 
 .PHONY : src/imgaug/rppi_saturation.o
@@ -399,6 +439,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rppi_hue"
 	@echo "... rebuild_cache"
+	@echo "... rppi_rotate"
 	@echo "... rppi_gaussianBlur"
 	@echo "... rppi_hsv2rgb"
 	@echo "... rppi_rgb2hsv"
@@ -423,6 +464,9 @@ help:
 	@echo "... src/imgaug/rppi_rgb2hsv.o"
 	@echo "... src/imgaug/rppi_rgb2hsv.i"
 	@echo "... src/imgaug/rppi_rgb2hsv.s"
+	@echo "... src/imgaug/rppi_rotate.o"
+	@echo "... src/imgaug/rppi_rotate.i"
+	@echo "... src/imgaug/rppi_rotate.s"
 	@echo "... src/imgaug/rppi_saturation.o"
 	@echo "... src/imgaug/rppi_saturation.i"
 	@echo "... src/imgaug/rppi_saturation.s"
