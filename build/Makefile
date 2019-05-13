@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named rppi_flip
+
+# Build rule for target.
+rppi_flip: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_flip
+.PHONY : rppi_flip
+
+# fast build rule for target.
+rppi_flip/fast:
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/build
+.PHONY : rppi_flip/fast
+
+#=============================================================================
 # Target rules for targets named rppi_hue
 
 # Build rule for target.
@@ -267,6 +280,33 @@ src/imgaug/rppi_contrast.s: src/imgaug/rppi_contrast.cpp.s
 src/imgaug/rppi_contrast.cpp.s:
 	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/src/imgaug/rppi_contrast.cpp.s
 .PHONY : src/imgaug/rppi_contrast.cpp.s
+
+src/imgaug/rppi_flip.o: src/imgaug/rppi_flip.cpp.o
+
+.PHONY : src/imgaug/rppi_flip.o
+
+# target to build an object file
+src/imgaug/rppi_flip.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/src/imgaug/rppi_flip.cpp.o
+.PHONY : src/imgaug/rppi_flip.cpp.o
+
+src/imgaug/rppi_flip.i: src/imgaug/rppi_flip.cpp.i
+
+.PHONY : src/imgaug/rppi_flip.i
+
+# target to preprocess a source file
+src/imgaug/rppi_flip.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/src/imgaug/rppi_flip.cpp.i
+.PHONY : src/imgaug/rppi_flip.cpp.i
+
+src/imgaug/rppi_flip.s: src/imgaug/rppi_flip.cpp.s
+
+.PHONY : src/imgaug/rppi_flip.s
+
+# target to generate assembly for a file
+src/imgaug/rppi_flip.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/src/imgaug/rppi_flip.cpp.s
+.PHONY : src/imgaug/rppi_flip.cpp.s
 
 src/imgaug/rppi_gaussianBlur.o: src/imgaug/rppi_gaussianBlur.cpp.o
 
@@ -437,6 +477,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... rppi_flip"
 	@echo "... rppi_hue"
 	@echo "... rebuild_cache"
 	@echo "... rppi_rotate"
@@ -452,6 +493,9 @@ help:
 	@echo "... src/imgaug/rppi_contrast.o"
 	@echo "... src/imgaug/rppi_contrast.i"
 	@echo "... src/imgaug/rppi_contrast.s"
+	@echo "... src/imgaug/rppi_flip.o"
+	@echo "... src/imgaug/rppi_flip.i"
+	@echo "... src/imgaug/rppi_flip.s"
 	@echo "... src/imgaug/rppi_gaussianBlur.o"
 	@echo "... src/imgaug/rppi_gaussianBlur.i"
 	@echo "... src/imgaug/rppi_gaussianBlur.s"

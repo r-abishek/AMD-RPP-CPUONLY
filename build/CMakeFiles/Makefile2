@@ -65,13 +65,50 @@ CMAKE_SOURCE_DIR = /Users/abishek/myFiles/github/AMD-RPP-CPUONLY
 CMAKE_BINARY_DIR = /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build
 
 #=============================================================================
+# Target rules for target CMakeFiles/rppi_flip.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_flip.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=5,6 "Built target rppi_flip"
+.PHONY : CMakeFiles/rppi_flip.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_flip.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_flip.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_flip.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_flip.dir/rule
+
+# Convenience name for target.
+rppi_flip: CMakeFiles/rppi_flip.dir/rule
+
+.PHONY : rppi_flip
+
+# clean rule for target.
+CMakeFiles/rppi_flip.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/clean
+.PHONY : CMakeFiles/rppi_flip.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_flip.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/rppi_hue.dir
 
 # All Build rule for target.
 CMakeFiles/rppi_hue.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_hue.dir/build.make CMakeFiles/rppi_hue.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_hue.dir/build.make CMakeFiles/rppi_hue.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=9,10 "Built target rppi_hue"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=11,12 "Built target rppi_hue"
 .PHONY : CMakeFiles/rppi_hue.dir/all
 
 # Include target in all.
@@ -108,7 +145,7 @@ clean: CMakeFiles/rppi_hue.dir/clean
 CMakeFiles/rppi_rotate.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_rotate.dir/build.make CMakeFiles/rppi_rotate.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_rotate.dir/build.make CMakeFiles/rppi_rotate.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=13,14 "Built target rppi_rotate"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=15,16 "Built target rppi_rotate"
 .PHONY : CMakeFiles/rppi_rotate.dir/all
 
 # Include target in all.
@@ -145,7 +182,7 @@ clean: CMakeFiles/rppi_rotate.dir/clean
 CMakeFiles/rppi_gaussianBlur.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_gaussianBlur.dir/build.make CMakeFiles/rppi_gaussianBlur.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_gaussianBlur.dir/build.make CMakeFiles/rppi_gaussianBlur.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=5,6 "Built target rppi_gaussianBlur"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=7,8 "Built target rppi_gaussianBlur"
 .PHONY : CMakeFiles/rppi_gaussianBlur.dir/all
 
 # Include target in all.
@@ -182,7 +219,7 @@ clean: CMakeFiles/rppi_gaussianBlur.dir/clean
 CMakeFiles/rppi_hsv2rgb.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_hsv2rgb.dir/build.make CMakeFiles/rppi_hsv2rgb.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=7,8 "Built target rppi_hsv2rgb"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=9,10 "Built target rppi_hsv2rgb"
 .PHONY : CMakeFiles/rppi_hsv2rgb.dir/all
 
 # Include target in all.
@@ -219,7 +256,7 @@ clean: CMakeFiles/rppi_hsv2rgb.dir/clean
 CMakeFiles/rppi_rgb2hsv.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_rgb2hsv.dir/build.make CMakeFiles/rppi_rgb2hsv.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_rgb2hsv.dir/build.make CMakeFiles/rppi_rgb2hsv.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=11,12 "Built target rppi_rgb2hsv"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=13,14 "Built target rppi_rgb2hsv"
 .PHONY : CMakeFiles/rppi_rgb2hsv.dir/all
 
 # Include target in all.
@@ -293,7 +330,7 @@ clean: CMakeFiles/rppi_contrast.dir/clean
 CMakeFiles/rppi_saturation.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_saturation.dir/build.make CMakeFiles/rppi_saturation.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_saturation.dir/build.make CMakeFiles/rppi_saturation.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=15,16 "Built target rppi_saturation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=17,18 "Built target rppi_saturation"
 .PHONY : CMakeFiles/rppi_saturation.dir/all
 
 # Include target in all.

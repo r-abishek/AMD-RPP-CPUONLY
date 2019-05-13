@@ -7,8 +7,6 @@
 #IncludeRegexTransform: 
 
 ../include/rppdefs.h
-stdlib.h
--
 
 /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppi_gaussianBlur.cpp
 stdio.h

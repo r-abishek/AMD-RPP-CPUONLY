@@ -41,6 +41,11 @@ add_executable(
     src/imgaug/rppi_rotate.cpp
 )
 
+add_executable(
+    rppi_flip
+    src/imgaug/rppi_flip.cpp
+)
+
 target_include_directories(rppi_brightness
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -77,6 +82,11 @@ target_include_directories(rppi_gaussianBlur
 )
 
 target_include_directories(rppi_rotate
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_include_directories(rppi_flip
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )

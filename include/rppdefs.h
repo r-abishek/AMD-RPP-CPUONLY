@@ -51,6 +51,7 @@ typedef enum
 } RppiChnFormat;
 
 typedef struct {
+    unsigned int channel;
     unsigned int width;
     unsigned int height;
     } RppiSize;
