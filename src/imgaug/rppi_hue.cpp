@@ -197,7 +197,7 @@ int main()
     
     int *isrc = (int *)malloc(size.channel * size.width * size.height * sizeof(int));
     
-    float hueShift = 30;
+    float hueShift = -30;
     
     printf("\n\n\n\nEnter elements in array of size %d x %d x %d: \n", size.channel, size.width, size.height);
     input(isrc, size);
