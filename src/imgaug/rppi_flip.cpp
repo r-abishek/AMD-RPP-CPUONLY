@@ -141,6 +141,81 @@ RppStatus rppi_flip_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, RppiAx
 
 }
 
+RppStatus rppi_flip_3C8U_pkd_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, RppiAxis flipAxis)
+{
+    if (flipAxis == RPPI_HORIZONTAL_AXIS)
+    {
+        int srcLoc = 0, dstLoc = 0;
+        for (int i = (size.height - 1); i >= 0; i--)
+        {
+            for (int j = 0; j < size.width; j++)
+            {
+                srcLoc = (i * 3 * size.width) + (3 * j);
+                pDst[dstLoc] = pSrc[srcLoc];
+                pDst[dstLoc + 1] = pSrc[srcLoc + 1];
+                pDst[dstLoc + 2] = pSrc[srcLoc + 2];
+                srcLoc += 3;
+                dstLoc += 3;
+            }
+        }
+    }
+    else if (flipAxis == RPPI_VERTICAL_AXIS)
+    {
+        int srcLoc = 0, dstLoc = 0;
+        for (int i = (size.width - 1); i >= 0; i--)
+        {
+            dstLoc = 3 * (size.width - 1 - i);
+            for (int j = 0; j < size.height; j++)
+            {
+                srcLoc = (j * 3 * size.width) + (i * 3);
+                pDst[dstLoc] = pSrc[srcLoc];
+                pDst[dstLoc + 1] = pSrc[srcLoc + 1];
+                pDst[dstLoc + 2] = pSrc[srcLoc + 2];
+                dstLoc += (size.width * 3);
+            }
+        }
+    }
+    else if (flipAxis == RPPI_BOTH_AXIS)
+    {
+        Rpp8u *pInter = (Rpp8u *)malloc(size.channel * size.width * size.height * sizeof(Rpp8u));
+        int srcLoc = 0, interLoc = 0;
+
+        for (int i = (size.height - 1); i >= 0; i--)
+        {
+            for (int j = 0; j < size.width; j++)
+            {
+                srcLoc = (i * 3 * size.width) + (3 * j);
+                pInter[interLoc] = pSrc[srcLoc];
+                pInter[interLoc + 1] = pSrc[srcLoc + 1];
+                pInter[interLoc + 2] = pSrc[srcLoc + 2];
+                srcLoc += 3;
+                interLoc += 3;
+            }
+        }
+
+        int dstLoc = 0;
+        interLoc = 0;
+
+
+        for (int i = (size.width - 1); i >= 0; i--)
+        {
+            dstLoc = 3 * (size.width - 1 - i);
+            for (int j = 0; j < size.height; j++)
+            {
+                interLoc = (j * 3 * size.width) + (i * 3);
+                pDst[dstLoc] = pInter[interLoc];
+                pDst[dstLoc + 1] = pInter[interLoc + 1];
+                pDst[dstLoc + 2] = pInter[interLoc + 2];
+                dstLoc += (size.width * 3);
+            }
+        }
+    }
+
+    return RPP_SUCCESS;
+
+}
+
+
 
 
 
@@ -190,9 +265,26 @@ void display(Rpp8u *pArr, RppiSize size)
     }
 }
 
+void displayPacked(Rpp8u *pArr, RppiSize size)
+{
+    int p = 0;
+    for (int i = 0; i < (size.width * size.height); i++)
+    {
+        printf("%d,%d,%d\t\t", *(pArr + p), *(pArr + p + 1), *(pArr + p + 2));
+        if (((i + 1) % size.width) == 0)
+        {
+            printf("\n");
+        }
+        p += 3;
+    }
+}
+
 int main()
 {
     RppiSize size;
+    int type;
+    printf("\nEnter 1 = planar, 2 = packed: ");
+    scanf("%d", &type);
     printf("\nEnter number of channels: ");
     scanf("%d", &size.channel);
     printf("Enter width of image in pixels: ");
@@ -206,25 +298,35 @@ int main()
     
     int *isrc = (int *)malloc(size.channel * size.width * size.height * sizeof(int));
 
-    RppiAxis flipAxis = RPPI_VERTICAL_AXIS;
+    RppiAxis flipAxis = RPPI_BOTH_AXIS;
 
     printf("\n\n\n\nEnter elements in array of size %d x %d x %d: \n", size.channel, size.width, size.height);
     input(isrc, size);
 
     cast(isrc, src, size);
 
-    printf("\nInput:\n\n");
-    display(src, size);
-
     if (size.channel == 1)
     {
+        printf("\nInput:\n\n");
+        display(src, size);
         rppi_flip_1C8U_pln_cpu(src, size, dst, flipAxis);
+        printf("\nOutput of Brightness Modification:\n\n");
+        display(dst, size);
     }
-    else if (size.channel == 3)
+    else if ((size.channel == 3) && (type == 1))
     {
+        printf("\nInput:\n\n");
+        display(src, size);
         rppi_flip_3C8U_pln_cpu(src, size, dst, flipAxis);
+        printf("\nOutput of Brightness Modification:\n\n");
+        display(dst, size);
     }
-
-    printf("\nOutput of Brightness Modification:\n\n");
-    display(dst, size);
+    else if ((size.channel == 3) && (type == 2))
+    {
+        printf("\nInput:\n\n");
+        displayPacked(src, size);
+        rppi_flip_3C8U_pkd_cpu(src, size, dst, flipAxis);
+        printf("\nOutput of Brightness Modification:\n\n");
+        displayPacked(dst, size);
+    }
 }
