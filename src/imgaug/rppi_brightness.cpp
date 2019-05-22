@@ -4,8 +4,10 @@
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <algorithm>
 #include "rppdefs.h"
+#include<time.h>
  
 using namespace std;
 
@@ -20,7 +22,9 @@ RppStatus rppi_brightness_1C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, 
     {
         Rpp32f pixel = ((Rpp32f) pSrc[i]) * alpha + beta;
         pixel = std::min(pixel, (Rpp32f) 255);
+        //pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
         pixel = std::max(pixel, (Rpp32f) 0);
+        //pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
         pDst[i] = (Rpp8u) pixel;
     }
 
@@ -35,7 +39,9 @@ RppStatus rppi_brightness_3C8U_pln_cpu(Rpp8u *pSrc, RppiSize size, Rpp8u *pDst, 
     {
         Rpp32f pixel = ((Rpp32f) pSrc[i]) * alpha + beta;
         pixel = std::min(pixel, (Rpp32f) 255);
+        //pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
         pixel = std::max(pixel, (Rpp32f) 0);
+        //pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
         pDst[i] = (Rpp8u) pixel;
     }
 
@@ -68,7 +74,9 @@ void cast(int *isrc, Rpp8u *pSrc, RppiSize size)
     for (int i = 0; i < (size.channel * size.width * size.height); i++)
     {
         isrc[i] = std::min(isrc[i], 255);
+        //isrc[i] = (isrc[i] < 255) ? isrc[i] : 255;
         isrc[i] = std::max(isrc[i], 0);
+        //isrc[i] = (isrc[i] > 0) ? isrc[i] : 0;
         pSrc[i] = (Rpp8u) isrc[i];
 
     }
@@ -118,15 +126,24 @@ int main()
     printf("\nInput:\n\n");
     display(src, size);
 
+    clock_t start, end;
+    double cpu_time_used;
+
     if (size.channel == 1)
     {
+        start = clock();
         rppi_brightness_1C8U_pln_cpu(src, size, dst, alpha, beta);
+        end = clock();
     }
     else if (size.channel == 3)
     {
+        start = clock();
         rppi_brightness_3C8U_pln_cpu(src, size, dst, alpha, beta);
+        end = clock();
     }
 
     printf("\nOutput of Brightness Modification:\n\n");
     display(dst, size);
+
+    printf("\n\nTime taken = %f", (((double) (end - start)) / CLOCKS_PER_SEC));
 }
