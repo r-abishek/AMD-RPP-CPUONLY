@@ -8,6 +8,8 @@
 
 ../include/rppdefs.h
 
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/cpu/host_brightness_contrast.hpp
+
 /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppi_brightness.cpp
 stdio.h
 -
@@ -15,4 +17,6 @@ stdlib.h
 -
 rppdefs.h
 /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppdefs.h
+cpu/host_brightness_contrast.hpp
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/cpu/host_brightness_contrast.hpp
 

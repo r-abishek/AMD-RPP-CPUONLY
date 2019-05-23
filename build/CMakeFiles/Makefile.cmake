@@ -122,13 +122,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/rppi_flip.dir/DependInfo.cmake"
-  "CMakeFiles/rppi_hue.dir/DependInfo.cmake"
-  "CMakeFiles/rppi_rotate.dir/DependInfo.cmake"
-  "CMakeFiles/rppi_gaussianBlur.dir/DependInfo.cmake"
-  "CMakeFiles/rppi_hsv2rgb.dir/DependInfo.cmake"
-  "CMakeFiles/rppi_rgb2hsv.dir/DependInfo.cmake"
-  "CMakeFiles/rppi_contrast.dir/DependInfo.cmake"
-  "CMakeFiles/rppi_saturation.dir/DependInfo.cmake"
   "CMakeFiles/rppi_brightness.dir/DependInfo.cmake"
   )
