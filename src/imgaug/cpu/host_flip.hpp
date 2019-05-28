@@ -80,13 +80,13 @@ RppStatus host_flip(T* srcPtr, RppiSize srcSize, T* dstPtr,
             {
                 for (int j = 0; j < srcSize.width; j++)
                 {
-                    srcLoc = (i * 3 * srcSize.width) + (3 * j);
+                    srcLoc = (i * channel * srcSize.width) + (channel * j);
                     for (int c = 0; c < channel; c++)
                     {
                         dstPtr[dstLoc + c] = srcPtr[srcLoc + c];
                     }
-                    srcLoc += 3;
-                    dstLoc += 3;
+                    srcLoc += channel;
+                    dstLoc += channel;
                 }
             }
         }
@@ -95,15 +95,15 @@ RppStatus host_flip(T* srcPtr, RppiSize srcSize, T* dstPtr,
             int srcLoc = 0, dstLoc = 0;
             for (int i = (srcSize.width - 1); i >= 0; i--)
             {
-                dstLoc = 3 * (srcSize.width - 1 - i);
+                dstLoc = channel * (srcSize.width - 1 - i);
                 for (int j = 0; j < srcSize.height; j++)
                 {
-                    srcLoc = (j * 3 * srcSize.width) + (i * 3);
+                    srcLoc = (j * channel * srcSize.width) + (i * channel);
                     for (int c = 0; c < channel; c++)
                     {
                         dstPtr[dstLoc + c] = srcPtr[srcLoc + c];
                     }
-                    dstLoc += (srcSize.width * 3);
+                    dstLoc += (srcSize.width * channel);
                 }
             }
         }
@@ -116,13 +116,13 @@ RppStatus host_flip(T* srcPtr, RppiSize srcSize, T* dstPtr,
             {
                 for (int j = 0; j < srcSize.width; j++)
                 {
-                    srcLoc = (i * 3 * srcSize.width) + (3 * j);
+                    srcLoc = (i * channel * srcSize.width) + (channel * j);
                     for (int c = 0; c < channel; c++)
                     {
                         pInter[interLoc + c] = srcPtr[srcLoc + c];
                     }
-                    srcLoc += 3;
-                    interLoc += 3;
+                    srcLoc += channel;
+                    interLoc += channel;
                 }
             }
 
@@ -132,15 +132,15 @@ RppStatus host_flip(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
             for (int i = (srcSize.width - 1); i >= 0; i--)
             {
-                dstLoc = 3 * (srcSize.width - 1 - i);
+                dstLoc = channel * (srcSize.width - 1 - i);
                 for (int j = 0; j < srcSize.height; j++)
                 {
-                    interLoc = (j * 3 * srcSize.width) + (i * 3);
+                    interLoc = (j * channel * srcSize.width) + (i * channel);
                     for (int c = 0; c < channel; c++)
                     {
                         dstPtr[dstLoc + c] = pInter[interLoc + c];
                     }
-                    dstLoc += (srcSize.width * 3);
+                    dstLoc += (srcSize.width * channel);
                 }
             }
         }
