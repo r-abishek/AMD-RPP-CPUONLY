@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/rppdefs.h
+
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/cpu/host_flip.hpp
+
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppi_flip.cpp
+stdio.h
+-
+stdlib.h
+-
+rppdefs.h
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppdefs.h
+cpu/host_flip.hpp
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/cpu/host_flip.hpp
+

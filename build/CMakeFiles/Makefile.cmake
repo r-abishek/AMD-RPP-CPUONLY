@@ -122,5 +122,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/rppi_brightness.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_flip.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_contrast.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_brightness_contrast.dir/DependInfo.cmake"
   )

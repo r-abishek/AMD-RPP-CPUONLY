@@ -111,44 +111,124 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named rppi_brightness
+# Target rules for targets named rppi_flip
 
 # Build rule for target.
-rppi_brightness: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rppi_brightness
-.PHONY : rppi_brightness
+rppi_flip: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_flip
+.PHONY : rppi_flip
 
 # fast build rule for target.
-rppi_brightness/fast:
-	$(MAKE) -f CMakeFiles/rppi_brightness.dir/build.make CMakeFiles/rppi_brightness.dir/build
-.PHONY : rppi_brightness/fast
+rppi_flip/fast:
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/build
+.PHONY : rppi_flip/fast
 
-src/imgaug/rppi_brightness.o: src/imgaug/rppi_brightness.cpp.o
+#=============================================================================
+# Target rules for targets named rppi_contrast
 
-.PHONY : src/imgaug/rppi_brightness.o
+# Build rule for target.
+rppi_contrast: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_contrast
+.PHONY : rppi_contrast
+
+# fast build rule for target.
+rppi_contrast/fast:
+	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/build
+.PHONY : rppi_contrast/fast
+
+#=============================================================================
+# Target rules for targets named rppi_brightness_contrast
+
+# Build rule for target.
+rppi_brightness_contrast: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_brightness_contrast
+.PHONY : rppi_brightness_contrast
+
+# fast build rule for target.
+rppi_brightness_contrast/fast:
+	$(MAKE) -f CMakeFiles/rppi_brightness_contrast.dir/build.make CMakeFiles/rppi_brightness_contrast.dir/build
+.PHONY : rppi_brightness_contrast/fast
+
+src/imgaug/rppi_brightness_contrast.o: src/imgaug/rppi_brightness_contrast.cpp.o
+
+.PHONY : src/imgaug/rppi_brightness_contrast.o
 
 # target to build an object file
-src/imgaug/rppi_brightness.cpp.o:
-	$(MAKE) -f CMakeFiles/rppi_brightness.dir/build.make CMakeFiles/rppi_brightness.dir/src/imgaug/rppi_brightness.cpp.o
-.PHONY : src/imgaug/rppi_brightness.cpp.o
+src/imgaug/rppi_brightness_contrast.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_brightness_contrast.dir/build.make CMakeFiles/rppi_brightness_contrast.dir/src/imgaug/rppi_brightness_contrast.cpp.o
+.PHONY : src/imgaug/rppi_brightness_contrast.cpp.o
 
-src/imgaug/rppi_brightness.i: src/imgaug/rppi_brightness.cpp.i
+src/imgaug/rppi_brightness_contrast.i: src/imgaug/rppi_brightness_contrast.cpp.i
 
-.PHONY : src/imgaug/rppi_brightness.i
+.PHONY : src/imgaug/rppi_brightness_contrast.i
 
 # target to preprocess a source file
-src/imgaug/rppi_brightness.cpp.i:
-	$(MAKE) -f CMakeFiles/rppi_brightness.dir/build.make CMakeFiles/rppi_brightness.dir/src/imgaug/rppi_brightness.cpp.i
-.PHONY : src/imgaug/rppi_brightness.cpp.i
+src/imgaug/rppi_brightness_contrast.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_brightness_contrast.dir/build.make CMakeFiles/rppi_brightness_contrast.dir/src/imgaug/rppi_brightness_contrast.cpp.i
+.PHONY : src/imgaug/rppi_brightness_contrast.cpp.i
 
-src/imgaug/rppi_brightness.s: src/imgaug/rppi_brightness.cpp.s
+src/imgaug/rppi_brightness_contrast.s: src/imgaug/rppi_brightness_contrast.cpp.s
 
-.PHONY : src/imgaug/rppi_brightness.s
+.PHONY : src/imgaug/rppi_brightness_contrast.s
 
 # target to generate assembly for a file
-src/imgaug/rppi_brightness.cpp.s:
-	$(MAKE) -f CMakeFiles/rppi_brightness.dir/build.make CMakeFiles/rppi_brightness.dir/src/imgaug/rppi_brightness.cpp.s
-.PHONY : src/imgaug/rppi_brightness.cpp.s
+src/imgaug/rppi_brightness_contrast.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_brightness_contrast.dir/build.make CMakeFiles/rppi_brightness_contrast.dir/src/imgaug/rppi_brightness_contrast.cpp.s
+.PHONY : src/imgaug/rppi_brightness_contrast.cpp.s
+
+src/imgaug/rppi_contrast.o: src/imgaug/rppi_contrast.cpp.o
+
+.PHONY : src/imgaug/rppi_contrast.o
+
+# target to build an object file
+src/imgaug/rppi_contrast.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/src/imgaug/rppi_contrast.cpp.o
+.PHONY : src/imgaug/rppi_contrast.cpp.o
+
+src/imgaug/rppi_contrast.i: src/imgaug/rppi_contrast.cpp.i
+
+.PHONY : src/imgaug/rppi_contrast.i
+
+# target to preprocess a source file
+src/imgaug/rppi_contrast.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/src/imgaug/rppi_contrast.cpp.i
+.PHONY : src/imgaug/rppi_contrast.cpp.i
+
+src/imgaug/rppi_contrast.s: src/imgaug/rppi_contrast.cpp.s
+
+.PHONY : src/imgaug/rppi_contrast.s
+
+# target to generate assembly for a file
+src/imgaug/rppi_contrast.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/src/imgaug/rppi_contrast.cpp.s
+.PHONY : src/imgaug/rppi_contrast.cpp.s
+
+src/imgaug/rppi_flip.o: src/imgaug/rppi_flip.cpp.o
+
+.PHONY : src/imgaug/rppi_flip.o
+
+# target to build an object file
+src/imgaug/rppi_flip.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/src/imgaug/rppi_flip.cpp.o
+.PHONY : src/imgaug/rppi_flip.cpp.o
+
+src/imgaug/rppi_flip.i: src/imgaug/rppi_flip.cpp.i
+
+.PHONY : src/imgaug/rppi_flip.i
+
+# target to preprocess a source file
+src/imgaug/rppi_flip.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/src/imgaug/rppi_flip.cpp.i
+.PHONY : src/imgaug/rppi_flip.cpp.i
+
+src/imgaug/rppi_flip.s: src/imgaug/rppi_flip.cpp.s
+
+.PHONY : src/imgaug/rppi_flip.s
+
+# target to generate assembly for a file
+src/imgaug/rppi_flip.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/src/imgaug/rppi_flip.cpp.s
+.PHONY : src/imgaug/rppi_flip.cpp.s
 
 # Help Target
 help:
@@ -158,10 +238,18 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... rppi_brightness"
-	@echo "... src/imgaug/rppi_brightness.o"
-	@echo "... src/imgaug/rppi_brightness.i"
-	@echo "... src/imgaug/rppi_brightness.s"
+	@echo "... rppi_flip"
+	@echo "... rppi_contrast"
+	@echo "... rppi_brightness_contrast"
+	@echo "... src/imgaug/rppi_brightness_contrast.o"
+	@echo "... src/imgaug/rppi_brightness_contrast.i"
+	@echo "... src/imgaug/rppi_brightness_contrast.s"
+	@echo "... src/imgaug/rppi_contrast.o"
+	@echo "... src/imgaug/rppi_contrast.i"
+	@echo "... src/imgaug/rppi_contrast.s"
+	@echo "... src/imgaug/rppi_flip.o"
+	@echo "... src/imgaug/rppi_flip.i"
+	@echo "... src/imgaug/rppi_flip.s"
 .PHONY : help
 
 

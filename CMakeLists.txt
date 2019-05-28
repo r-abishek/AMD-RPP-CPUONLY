@@ -10,3 +10,25 @@ target_include_directories(rppi_brightness_contrast
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+
+add_executable(
+    rppi_contrast
+    src/imgaug/rppi_contrast.cpp
+)
+
+target_include_directories(rppi_contrast
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+
+add_executable(
+    rppi_flip
+    src/imgaug/rppi_flip.cpp
+)
+
+target_include_directories(rppi_flip
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
