@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/rppdefs.h
+
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/cpu/host_blur.hpp
+math.h
+-
+
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppi_blur.cpp
+stdio.h
+-
+stdlib.h
+-
+rppdefs.h
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/rppdefs.h
+cpu/host_blur.hpp
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/imgaug/cpu/host_blur.hpp
+

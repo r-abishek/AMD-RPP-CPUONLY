@@ -32,3 +32,13 @@ target_include_directories(rppi_flip
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+add_executable(
+    rppi_blur
+    src/imgaug/rppi_blur.cpp
+)
+
+target_include_directories(rppi_blur
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
