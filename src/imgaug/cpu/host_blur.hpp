@@ -6,20 +6,36 @@ RppStatus host_blur(T* srcPtr, RppiSize srcSize, T* dstPtr,
                     Rpp32f stdDev, unsigned int kernelSize,
                     RppiChnFormat chnFormat, unsigned int channel)
 {
+    if (kernelSize % 2 == 0)
+    {
+        return RPP_ERROR;
+    }
+    Rpp32f *kernel = (Rpp32f *)malloc(kernelSize * kernelSize * sizeof(Rpp32f));
+    Rpp32f s, sum = 0.0;
+    int bound = ((kernelSize - 1) / 2);
+    unsigned int c = 0;
+    s = 1 / (2 * stdDev * stdDev);
+    for (int i = -bound; i <= bound; i++)
+    {
+        for (int j = -bound; j <= bound; j++)
+        {
+            kernel[c] = (1 / M_PI) * (s) * exp((-1) * (s) * (i*i + j*j));
+            sum += kernel[c];
+            c += 1;
+        }
+    }
+    for (int i = 0; i < (kernelSize * kernelSize); i++)
+    {
+        kernel[i] /= sum;
+    }
+    RppiSize sizeMod;
+    sizeMod.width = srcSize.width + 2;
+    sizeMod.height = srcSize.height + 2;
+    Rpp8u *pSrcMod = (Rpp8u *)malloc(sizeMod.width * sizeMod.height * channel * sizeof(Rpp8u));
+    int srcLoc = 0, srcModLoc = 0, dstLoc = 0;
+
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        float kernel_3x3[9] = {1,2,1,2,4,2,1,2,1};
-        for (int i = 0; i < 9; i++)
-        {
-            kernel_3x3[i] *= 0.0625;
-        }
-        RppiSize sizeMod;
-        sizeMod.width = srcSize.width + 2;
-        sizeMod.height = srcSize.height + 2;
-
-        Rpp8u *pSrcMod = (Rpp8u *)malloc(sizeMod.width * sizeMod.height * channel * sizeof(Rpp8u));
-
-        int srcLoc = 0, srcModLoc = 0, dstLoc = 0;
         for (int c = 0; c < channel; c++)
         {
             for (int i = 0; i < sizeMod.width; i++)
@@ -46,12 +62,10 @@ RppStatus host_blur(T* srcPtr, RppiSize srcSize, T* dstPtr,
                 srcModLoc += 1;
             }
         }
-        
         dstLoc = 0;
         srcModLoc = 0;
         int convLocs[9] = {0}, count = 0;
         float pixel = 0.0;
-
         for (int c = 0; c < channel; c++)
         {
             for (int i = 0; i < srcSize.height; i++)
@@ -69,7 +83,7 @@ RppStatus host_blur(T* srcPtr, RppiSize srcSize, T* dstPtr,
                     }
                     for (int k = 0; k < 9; k++)
                     {
-                        pixel += (kernel_3x3[k] * (float)pSrcMod[convLocs[k]]);
+                        pixel += (kernel[k] * (float)pSrcMod[convLocs[k]]);
                     }
                     pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
                     pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
@@ -84,18 +98,6 @@ RppStatus host_blur(T* srcPtr, RppiSize srcSize, T* dstPtr,
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
-        float kernel_3x3[9] = {1,2,1,2,4,2,1,2,1};
-        for (int i = 0; i < 9; i++)
-        {
-            kernel_3x3[i] *= 0.0625;
-        }
-        RppiSize sizeMod;
-        sizeMod.width = srcSize.width + 2;
-        sizeMod.height = srcSize.height + 2;
-
-        Rpp8u *pSrcMod = (Rpp8u *)malloc(sizeMod.width * sizeMod.height * channel * sizeof(Rpp8u));
-
-        int srcLoc = 0, srcModLoc = 0, dstLoc = 0;
         for (int c = 0; c < channel; c++)
         {
             srcModLoc = c;
@@ -103,34 +105,32 @@ RppStatus host_blur(T* srcPtr, RppiSize srcSize, T* dstPtr,
             for (int i = 0; i < sizeMod.width; i++)
             {
                 pSrcMod[srcModLoc] = 0;
-                srcModLoc += 3;
+                srcModLoc += channel;
             }
             for (int i = 0; i < srcSize.height; i++)
             {
                 pSrcMod[srcModLoc] = 0;
-                srcModLoc += 3;
+                srcModLoc += channel;
                 for (int j = 0; j < srcSize.width; j++)
                 {
                     pSrcMod[srcModLoc] = srcPtr[srcLoc];
-                    srcModLoc += 3;
-                    srcLoc += 3;
+                    srcModLoc += channel;
+                    srcLoc += channel;
                 }
                 pSrcMod[srcModLoc] = 0;
-                srcModLoc += 3;
+                srcModLoc += channel;
             }
             for (int i = 0; i < sizeMod.width; i++)
             {
                 pSrcMod[srcModLoc] = 0;
-                srcModLoc += 3;
+                srcModLoc += channel;
             }
         }
-
         dstLoc = 0;
         srcModLoc = 0;
         int convLocs[9] = {0}, count = 0;
         float pixel = 0.0;
-
-        for (int c = 0; c < 3; c++)
+        for (int c = 0; c < channel; c++)
         {
             srcModLoc = c;
             dstLoc = c;
@@ -144,20 +144,20 @@ RppStatus host_blur(T* srcPtr, RppiSize srcSize, T* dstPtr,
                     {
                         for (int n = 0; n < 3; n++, count++)
                         {
-                            convLocs[count] = srcModLoc + (m * sizeMod.width * 3) + (n * 3);
+                            convLocs[count] = srcModLoc + (m * sizeMod.width * channel) + (n * channel);
                         }
                     }
                     for (int k = 0; k < 9; k++)
                     {
-                        pixel += (kernel_3x3[k] * (float)pSrcMod[convLocs[k]]);
+                        pixel += (kernel[k] * (float)pSrcMod[convLocs[k]]);
                     }
                     pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
                     pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
                     dstPtr[dstLoc] = (Rpp8u) round(pixel);
-                    dstLoc += 3;
-                    srcModLoc += 3;
+                    dstLoc += channel;
+                    srcModLoc += channel;
                 }
-                srcModLoc += 6;
+                srcModLoc += (2 * channel);
             }
         }
     }

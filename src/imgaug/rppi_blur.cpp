@@ -320,6 +320,10 @@ int main()
                     rppi_blur7x7_u8_pln3_host(srcPtr, srcSize, dstPtr, stdDev);
                 }
             }
+            else if (channel == 4)
+            {
+                rppi_blur3x3_u8_pln3_host(srcPtr, srcSize, dstPtr, stdDev);
+            }
             printf("\n\nOutput of Blur:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
@@ -359,6 +363,10 @@ int main()
                 {
                     rppi_blur7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev);
                 }
+            }
+            else if (channel == 4)
+            {
+                rppi_blur3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev);
             }
             printf("\n\nOutput of Blur:\n");
             displayPacked(dstPtr, srcSize, channel);
