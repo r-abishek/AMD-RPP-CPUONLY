@@ -151,7 +151,7 @@ int main()
         printf("\n\nInput 2:\n");
         displayPlanar(srcPtr2, srcSize, channel);
         rppi_accumulate_u8_pln1_host(srcPtr1, srcPtr2, srcSize);
-        printf("\n\nOutput of Absolute Difference:\n");
+        printf("\n\nOutput of Accumulate:\n");
         displayPlanar(srcPtr1, srcSize, channel);
     }
     else if (matrix == 2)
@@ -168,7 +168,7 @@ int main()
             printf("\n\nInput 2:\n");
             displayPlanar(srcPtr2, srcSize, channel);
             rppi_accumulate_u8_pln3_host(srcPtr1, srcPtr2, srcSize);
-            printf("\n\nOutput of Absolute Difference:\n");
+            printf("\n\nOutput of Accumulate:\n");
             displayPlanar(srcPtr1, srcSize, channel);
         }
         else if (type == 2)
@@ -180,7 +180,7 @@ int main()
             printf("\n\nInput 2:\n");
             displayPacked(srcPtr2, srcSize, channel);
             rppi_accumulate_u8_pkd3_host(srcPtr1, srcPtr2, srcSize);
-            printf("\n\nOutput of Absolute Difference:\n");
+            printf("\n\nOutput of Accumulate:\n");
             displayPacked(srcPtr1, srcSize, channel);
         } 
     }
@@ -217,7 +217,7 @@ int main()
             {
                 rppi_accumulate_u8_pln3_host(srcPtr1, srcPtr2, srcSize);
             }
-            printf("\n\nOutput of Absolute Difference:\n");
+            printf("\n\nOutput of Accumulate:\n");
             displayPlanar(srcPtr1, srcSize, channel);
         }
         else if (type == 2)
@@ -240,7 +240,7 @@ int main()
             {
                 rppi_accumulate_u8_pkd3_host(srcPtr1, srcPtr2, srcSize);
             }
-            printf("\n\nOutput of Absolute Difference:\n");
+            printf("\n\nOutput of Accumulate:\n");
             displayPacked(srcPtr1, srcSize, channel);
         }
     }

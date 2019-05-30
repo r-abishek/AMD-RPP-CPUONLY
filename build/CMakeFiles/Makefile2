@@ -65,6 +65,302 @@ CMAKE_SOURCE_DIR = /Users/abishek/myFiles/github/AMD-RPP-CPUONLY
 CMAKE_BINARY_DIR = /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build
 
 #=============================================================================
+# Target rules for target CMakeFiles/rppi_not.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_not.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_not.dir/build.make CMakeFiles/rppi_not.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_not.dir/build.make CMakeFiles/rppi_not.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=19,20 "Built target rppi_not"
+.PHONY : CMakeFiles/rppi_not.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_not.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_not.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_not.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_not.dir/rule
+
+# Convenience name for target.
+rppi_not: CMakeFiles/rppi_not.dir/rule
+
+.PHONY : rppi_not
+
+# clean rule for target.
+CMakeFiles/rppi_not.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_not.dir/build.make CMakeFiles/rppi_not.dir/clean
+.PHONY : CMakeFiles/rppi_not.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_not.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/rppi_xor.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_xor.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_xor.dir/build.make CMakeFiles/rppi_xor.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_xor.dir/build.make CMakeFiles/rppi_xor.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=25,26 "Built target rppi_xor"
+.PHONY : CMakeFiles/rppi_xor.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_xor.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_xor.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_xor.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_xor.dir/rule
+
+# Convenience name for target.
+rppi_xor: CMakeFiles/rppi_xor.dir/rule
+
+.PHONY : rppi_xor
+
+# clean rule for target.
+CMakeFiles/rppi_xor.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_xor.dir/build.make CMakeFiles/rppi_xor.dir/clean
+.PHONY : CMakeFiles/rppi_xor.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_xor.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/rppi_sub.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_sub.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_sub.dir/build.make CMakeFiles/rppi_sub.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_sub.dir/build.make CMakeFiles/rppi_sub.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=23,24 "Built target rppi_sub"
+.PHONY : CMakeFiles/rppi_sub.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_sub.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_sub.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_sub.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_sub.dir/rule
+
+# Convenience name for target.
+rppi_sub: CMakeFiles/rppi_sub.dir/rule
+
+.PHONY : rppi_sub
+
+# clean rule for target.
+CMakeFiles/rppi_sub.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_sub.dir/build.make CMakeFiles/rppi_sub.dir/clean
+.PHONY : CMakeFiles/rppi_sub.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_sub.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/rppi_add.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_add.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_add.dir/build.make CMakeFiles/rppi_add.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_add.dir/build.make CMakeFiles/rppi_add.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=7,8 "Built target rppi_add"
+.PHONY : CMakeFiles/rppi_add.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_add.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_add.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_add.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_add.dir/rule
+
+# Convenience name for target.
+rppi_add: CMakeFiles/rppi_add.dir/rule
+
+.PHONY : rppi_add
+
+# clean rule for target.
+CMakeFiles/rppi_add.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_add.dir/build.make CMakeFiles/rppi_add.dir/clean
+.PHONY : CMakeFiles/rppi_add.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_add.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/rppi_and.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_and.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_and.dir/build.make CMakeFiles/rppi_and.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_and.dir/build.make CMakeFiles/rppi_and.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=9,10 "Built target rppi_and"
+.PHONY : CMakeFiles/rppi_and.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_and.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_and.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_and.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_and.dir/rule
+
+# Convenience name for target.
+rppi_and: CMakeFiles/rppi_and.dir/rule
+
+.PHONY : rppi_and
+
+# clean rule for target.
+CMakeFiles/rppi_and.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_and.dir/build.make CMakeFiles/rppi_and.dir/clean
+.PHONY : CMakeFiles/rppi_and.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_and.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/rppi_accumulate_weighted.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_accumulate_weighted.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_accumulate_weighted.dir/build.make CMakeFiles/rppi_accumulate_weighted.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_accumulate_weighted.dir/build.make CMakeFiles/rppi_accumulate_weighted.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=5,6 "Built target rppi_accumulate_weighted"
+.PHONY : CMakeFiles/rppi_accumulate_weighted.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_accumulate_weighted.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_accumulate_weighted.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_accumulate_weighted.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_accumulate_weighted.dir/rule
+
+# Convenience name for target.
+rppi_accumulate_weighted: CMakeFiles/rppi_accumulate_weighted.dir/rule
+
+.PHONY : rppi_accumulate_weighted
+
+# clean rule for target.
+CMakeFiles/rppi_accumulate_weighted.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_accumulate_weighted.dir/build.make CMakeFiles/rppi_accumulate_weighted.dir/clean
+.PHONY : CMakeFiles/rppi_accumulate_weighted.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_accumulate_weighted.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/rppi_or.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_or.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_or.dir/build.make CMakeFiles/rppi_or.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_or.dir/build.make CMakeFiles/rppi_or.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=21,22 "Built target rppi_or"
+.PHONY : CMakeFiles/rppi_or.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_or.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_or.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_or.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_or.dir/rule
+
+# Convenience name for target.
+rppi_or: CMakeFiles/rppi_or.dir/rule
+
+.PHONY : rppi_or
+
+# clean rule for target.
+CMakeFiles/rppi_or.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_or.dir/build.make CMakeFiles/rppi_or.dir/clean
+.PHONY : CMakeFiles/rppi_or.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_or.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/rppi_contrast.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_contrast.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=15,16 "Built target rppi_contrast"
+.PHONY : CMakeFiles/rppi_contrast.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_contrast.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_contrast.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_contrast.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_contrast.dir/rule
+
+# Convenience name for target.
+rppi_contrast: CMakeFiles/rppi_contrast.dir/rule
+
+.PHONY : rppi_contrast
+
+# clean rule for target.
+CMakeFiles/rppi_contrast.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/clean
+.PHONY : CMakeFiles/rppi_contrast.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_contrast.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/rppi_accumulate.dir
 
 # All Build rule for target.
@@ -108,7 +404,7 @@ clean: CMakeFiles/rppi_accumulate.dir/clean
 CMakeFiles/rppi_brightness_contrast.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_brightness_contrast.dir/build.make CMakeFiles/rppi_brightness_contrast.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_brightness_contrast.dir/build.make CMakeFiles/rppi_brightness_contrast.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=7,8 "Built target rppi_brightness_contrast"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=13,14 "Built target rppi_brightness_contrast"
 .PHONY : CMakeFiles/rppi_brightness_contrast.dir/all
 
 # Include target in all.
@@ -145,7 +441,7 @@ clean: CMakeFiles/rppi_brightness_contrast.dir/clean
 CMakeFiles/rppi_flip.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=11,12 "Built target rppi_flip"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=17,18 "Built target rppi_flip"
 .PHONY : CMakeFiles/rppi_flip.dir/all
 
 # Include target in all.
@@ -182,7 +478,7 @@ clean: CMakeFiles/rppi_flip.dir/clean
 CMakeFiles/rppi_blur.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_blur.dir/build.make CMakeFiles/rppi_blur.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_blur.dir/build.make CMakeFiles/rppi_blur.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=5,6 "Built target rppi_blur"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=11,12 "Built target rppi_blur"
 .PHONY : CMakeFiles/rppi_blur.dir/all
 
 # Include target in all.
@@ -246,43 +542,6 @@ CMakeFiles/rppi_absolute_difference.dir/clean:
 
 # clean rule for target.
 clean: CMakeFiles/rppi_absolute_difference.dir/clean
-
-.PHONY : clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/rppi_contrast.dir
-
-# All Build rule for target.
-CMakeFiles/rppi_contrast.dir/all:
-	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/depend
-	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=9,10 "Built target rppi_contrast"
-.PHONY : CMakeFiles/rppi_contrast.dir/all
-
-# Include target in all.
-all: CMakeFiles/rppi_contrast.dir/all
-
-.PHONY : all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/rppi_contrast.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_contrast.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
-.PHONY : CMakeFiles/rppi_contrast.dir/rule
-
-# Convenience name for target.
-rppi_contrast: CMakeFiles/rppi_contrast.dir/rule
-
-.PHONY : rppi_contrast
-
-# clean rule for target.
-CMakeFiles/rppi_contrast.dir/clean:
-	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/clean
-.PHONY : CMakeFiles/rppi_contrast.dir/clean
-
-# clean rule for target.
-clean: CMakeFiles/rppi_contrast.dir/clean
 
 .PHONY : clean
 

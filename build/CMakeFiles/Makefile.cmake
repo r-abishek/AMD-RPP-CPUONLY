@@ -122,10 +122,17 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
+  "CMakeFiles/rppi_not.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_xor.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_sub.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_add.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_and.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_accumulate_weighted.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_or.dir/DependInfo.cmake"
+  "CMakeFiles/rppi_contrast.dir/DependInfo.cmake"
   "CMakeFiles/rppi_accumulate.dir/DependInfo.cmake"
   "CMakeFiles/rppi_brightness_contrast.dir/DependInfo.cmake"
   "CMakeFiles/rppi_flip.dir/DependInfo.cmake"
   "CMakeFiles/rppi_blur.dir/DependInfo.cmake"
   "CMakeFiles/rppi_absolute_difference.dir/DependInfo.cmake"
-  "CMakeFiles/rppi_contrast.dir/DependInfo.cmake"
   )

@@ -1,8 +1,15 @@
 /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rebuild_cache.dir
-/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/edit_cache.dir
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_not.dir
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_xor.dir
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_sub.dir
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_add.dir
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_and.dir
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_accumulate_weighted.dir
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_or.dir
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_contrast.dir
 /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_accumulate.dir
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/edit_cache.dir
 /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_brightness_contrast.dir
 /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_flip.dir
 /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_blur.dir
 /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_absolute_difference.dir
-/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles/rppi_contrast.dir

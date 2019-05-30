@@ -111,6 +111,110 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named rppi_not
+
+# Build rule for target.
+rppi_not: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_not
+.PHONY : rppi_not
+
+# fast build rule for target.
+rppi_not/fast:
+	$(MAKE) -f CMakeFiles/rppi_not.dir/build.make CMakeFiles/rppi_not.dir/build
+.PHONY : rppi_not/fast
+
+#=============================================================================
+# Target rules for targets named rppi_xor
+
+# Build rule for target.
+rppi_xor: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_xor
+.PHONY : rppi_xor
+
+# fast build rule for target.
+rppi_xor/fast:
+	$(MAKE) -f CMakeFiles/rppi_xor.dir/build.make CMakeFiles/rppi_xor.dir/build
+.PHONY : rppi_xor/fast
+
+#=============================================================================
+# Target rules for targets named rppi_sub
+
+# Build rule for target.
+rppi_sub: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_sub
+.PHONY : rppi_sub
+
+# fast build rule for target.
+rppi_sub/fast:
+	$(MAKE) -f CMakeFiles/rppi_sub.dir/build.make CMakeFiles/rppi_sub.dir/build
+.PHONY : rppi_sub/fast
+
+#=============================================================================
+# Target rules for targets named rppi_add
+
+# Build rule for target.
+rppi_add: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_add
+.PHONY : rppi_add
+
+# fast build rule for target.
+rppi_add/fast:
+	$(MAKE) -f CMakeFiles/rppi_add.dir/build.make CMakeFiles/rppi_add.dir/build
+.PHONY : rppi_add/fast
+
+#=============================================================================
+# Target rules for targets named rppi_and
+
+# Build rule for target.
+rppi_and: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_and
+.PHONY : rppi_and
+
+# fast build rule for target.
+rppi_and/fast:
+	$(MAKE) -f CMakeFiles/rppi_and.dir/build.make CMakeFiles/rppi_and.dir/build
+.PHONY : rppi_and/fast
+
+#=============================================================================
+# Target rules for targets named rppi_accumulate_weighted
+
+# Build rule for target.
+rppi_accumulate_weighted: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_accumulate_weighted
+.PHONY : rppi_accumulate_weighted
+
+# fast build rule for target.
+rppi_accumulate_weighted/fast:
+	$(MAKE) -f CMakeFiles/rppi_accumulate_weighted.dir/build.make CMakeFiles/rppi_accumulate_weighted.dir/build
+.PHONY : rppi_accumulate_weighted/fast
+
+#=============================================================================
+# Target rules for targets named rppi_or
+
+# Build rule for target.
+rppi_or: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_or
+.PHONY : rppi_or
+
+# fast build rule for target.
+rppi_or/fast:
+	$(MAKE) -f CMakeFiles/rppi_or.dir/build.make CMakeFiles/rppi_or.dir/build
+.PHONY : rppi_or/fast
+
+#=============================================================================
+# Target rules for targets named rppi_contrast
+
+# Build rule for target.
+rppi_contrast: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_contrast
+.PHONY : rppi_contrast
+
+# fast build rule for target.
+rppi_contrast/fast:
+	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/build
+.PHONY : rppi_contrast/fast
+
+#=============================================================================
 # Target rules for targets named rppi_accumulate
 
 # Build rule for target.
@@ -175,19 +279,6 @@ rppi_absolute_difference/fast:
 	$(MAKE) -f CMakeFiles/rppi_absolute_difference.dir/build.make CMakeFiles/rppi_absolute_difference.dir/build
 .PHONY : rppi_absolute_difference/fast
 
-#=============================================================================
-# Target rules for targets named rppi_contrast
-
-# Build rule for target.
-rppi_contrast: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rppi_contrast
-.PHONY : rppi_contrast
-
-# fast build rule for target.
-rppi_contrast/fast:
-	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/build
-.PHONY : rppi_contrast/fast
-
 src/arithmetic/rppi_absolute_difference.o: src/arithmetic/rppi_absolute_difference.cpp.o
 
 .PHONY : src/arithmetic/rppi_absolute_difference.o
@@ -241,6 +332,195 @@ src/arithmetic/rppi_accumulate.s: src/arithmetic/rppi_accumulate.cpp.s
 src/arithmetic/rppi_accumulate.cpp.s:
 	$(MAKE) -f CMakeFiles/rppi_accumulate.dir/build.make CMakeFiles/rppi_accumulate.dir/src/arithmetic/rppi_accumulate.cpp.s
 .PHONY : src/arithmetic/rppi_accumulate.cpp.s
+
+src/arithmetic/rppi_accumulate_weighted.o: src/arithmetic/rppi_accumulate_weighted.cpp.o
+
+.PHONY : src/arithmetic/rppi_accumulate_weighted.o
+
+# target to build an object file
+src/arithmetic/rppi_accumulate_weighted.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_accumulate_weighted.dir/build.make CMakeFiles/rppi_accumulate_weighted.dir/src/arithmetic/rppi_accumulate_weighted.cpp.o
+.PHONY : src/arithmetic/rppi_accumulate_weighted.cpp.o
+
+src/arithmetic/rppi_accumulate_weighted.i: src/arithmetic/rppi_accumulate_weighted.cpp.i
+
+.PHONY : src/arithmetic/rppi_accumulate_weighted.i
+
+# target to preprocess a source file
+src/arithmetic/rppi_accumulate_weighted.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_accumulate_weighted.dir/build.make CMakeFiles/rppi_accumulate_weighted.dir/src/arithmetic/rppi_accumulate_weighted.cpp.i
+.PHONY : src/arithmetic/rppi_accumulate_weighted.cpp.i
+
+src/arithmetic/rppi_accumulate_weighted.s: src/arithmetic/rppi_accumulate_weighted.cpp.s
+
+.PHONY : src/arithmetic/rppi_accumulate_weighted.s
+
+# target to generate assembly for a file
+src/arithmetic/rppi_accumulate_weighted.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_accumulate_weighted.dir/build.make CMakeFiles/rppi_accumulate_weighted.dir/src/arithmetic/rppi_accumulate_weighted.cpp.s
+.PHONY : src/arithmetic/rppi_accumulate_weighted.cpp.s
+
+src/arithmetic/rppi_add.o: src/arithmetic/rppi_add.cpp.o
+
+.PHONY : src/arithmetic/rppi_add.o
+
+# target to build an object file
+src/arithmetic/rppi_add.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_add.dir/build.make CMakeFiles/rppi_add.dir/src/arithmetic/rppi_add.cpp.o
+.PHONY : src/arithmetic/rppi_add.cpp.o
+
+src/arithmetic/rppi_add.i: src/arithmetic/rppi_add.cpp.i
+
+.PHONY : src/arithmetic/rppi_add.i
+
+# target to preprocess a source file
+src/arithmetic/rppi_add.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_add.dir/build.make CMakeFiles/rppi_add.dir/src/arithmetic/rppi_add.cpp.i
+.PHONY : src/arithmetic/rppi_add.cpp.i
+
+src/arithmetic/rppi_add.s: src/arithmetic/rppi_add.cpp.s
+
+.PHONY : src/arithmetic/rppi_add.s
+
+# target to generate assembly for a file
+src/arithmetic/rppi_add.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_add.dir/build.make CMakeFiles/rppi_add.dir/src/arithmetic/rppi_add.cpp.s
+.PHONY : src/arithmetic/rppi_add.cpp.s
+
+src/arithmetic/rppi_and.o: src/arithmetic/rppi_and.cpp.o
+
+.PHONY : src/arithmetic/rppi_and.o
+
+# target to build an object file
+src/arithmetic/rppi_and.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_and.dir/build.make CMakeFiles/rppi_and.dir/src/arithmetic/rppi_and.cpp.o
+.PHONY : src/arithmetic/rppi_and.cpp.o
+
+src/arithmetic/rppi_and.i: src/arithmetic/rppi_and.cpp.i
+
+.PHONY : src/arithmetic/rppi_and.i
+
+# target to preprocess a source file
+src/arithmetic/rppi_and.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_and.dir/build.make CMakeFiles/rppi_and.dir/src/arithmetic/rppi_and.cpp.i
+.PHONY : src/arithmetic/rppi_and.cpp.i
+
+src/arithmetic/rppi_and.s: src/arithmetic/rppi_and.cpp.s
+
+.PHONY : src/arithmetic/rppi_and.s
+
+# target to generate assembly for a file
+src/arithmetic/rppi_and.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_and.dir/build.make CMakeFiles/rppi_and.dir/src/arithmetic/rppi_and.cpp.s
+.PHONY : src/arithmetic/rppi_and.cpp.s
+
+src/arithmetic/rppi_not.o: src/arithmetic/rppi_not.cpp.o
+
+.PHONY : src/arithmetic/rppi_not.o
+
+# target to build an object file
+src/arithmetic/rppi_not.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_not.dir/build.make CMakeFiles/rppi_not.dir/src/arithmetic/rppi_not.cpp.o
+.PHONY : src/arithmetic/rppi_not.cpp.o
+
+src/arithmetic/rppi_not.i: src/arithmetic/rppi_not.cpp.i
+
+.PHONY : src/arithmetic/rppi_not.i
+
+# target to preprocess a source file
+src/arithmetic/rppi_not.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_not.dir/build.make CMakeFiles/rppi_not.dir/src/arithmetic/rppi_not.cpp.i
+.PHONY : src/arithmetic/rppi_not.cpp.i
+
+src/arithmetic/rppi_not.s: src/arithmetic/rppi_not.cpp.s
+
+.PHONY : src/arithmetic/rppi_not.s
+
+# target to generate assembly for a file
+src/arithmetic/rppi_not.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_not.dir/build.make CMakeFiles/rppi_not.dir/src/arithmetic/rppi_not.cpp.s
+.PHONY : src/arithmetic/rppi_not.cpp.s
+
+src/arithmetic/rppi_or.o: src/arithmetic/rppi_or.cpp.o
+
+.PHONY : src/arithmetic/rppi_or.o
+
+# target to build an object file
+src/arithmetic/rppi_or.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_or.dir/build.make CMakeFiles/rppi_or.dir/src/arithmetic/rppi_or.cpp.o
+.PHONY : src/arithmetic/rppi_or.cpp.o
+
+src/arithmetic/rppi_or.i: src/arithmetic/rppi_or.cpp.i
+
+.PHONY : src/arithmetic/rppi_or.i
+
+# target to preprocess a source file
+src/arithmetic/rppi_or.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_or.dir/build.make CMakeFiles/rppi_or.dir/src/arithmetic/rppi_or.cpp.i
+.PHONY : src/arithmetic/rppi_or.cpp.i
+
+src/arithmetic/rppi_or.s: src/arithmetic/rppi_or.cpp.s
+
+.PHONY : src/arithmetic/rppi_or.s
+
+# target to generate assembly for a file
+src/arithmetic/rppi_or.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_or.dir/build.make CMakeFiles/rppi_or.dir/src/arithmetic/rppi_or.cpp.s
+.PHONY : src/arithmetic/rppi_or.cpp.s
+
+src/arithmetic/rppi_sub.o: src/arithmetic/rppi_sub.cpp.o
+
+.PHONY : src/arithmetic/rppi_sub.o
+
+# target to build an object file
+src/arithmetic/rppi_sub.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_sub.dir/build.make CMakeFiles/rppi_sub.dir/src/arithmetic/rppi_sub.cpp.o
+.PHONY : src/arithmetic/rppi_sub.cpp.o
+
+src/arithmetic/rppi_sub.i: src/arithmetic/rppi_sub.cpp.i
+
+.PHONY : src/arithmetic/rppi_sub.i
+
+# target to preprocess a source file
+src/arithmetic/rppi_sub.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_sub.dir/build.make CMakeFiles/rppi_sub.dir/src/arithmetic/rppi_sub.cpp.i
+.PHONY : src/arithmetic/rppi_sub.cpp.i
+
+src/arithmetic/rppi_sub.s: src/arithmetic/rppi_sub.cpp.s
+
+.PHONY : src/arithmetic/rppi_sub.s
+
+# target to generate assembly for a file
+src/arithmetic/rppi_sub.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_sub.dir/build.make CMakeFiles/rppi_sub.dir/src/arithmetic/rppi_sub.cpp.s
+.PHONY : src/arithmetic/rppi_sub.cpp.s
+
+src/arithmetic/rppi_xor.o: src/arithmetic/rppi_xor.cpp.o
+
+.PHONY : src/arithmetic/rppi_xor.o
+
+# target to build an object file
+src/arithmetic/rppi_xor.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_xor.dir/build.make CMakeFiles/rppi_xor.dir/src/arithmetic/rppi_xor.cpp.o
+.PHONY : src/arithmetic/rppi_xor.cpp.o
+
+src/arithmetic/rppi_xor.i: src/arithmetic/rppi_xor.cpp.i
+
+.PHONY : src/arithmetic/rppi_xor.i
+
+# target to preprocess a source file
+src/arithmetic/rppi_xor.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_xor.dir/build.make CMakeFiles/rppi_xor.dir/src/arithmetic/rppi_xor.cpp.i
+.PHONY : src/arithmetic/rppi_xor.cpp.i
+
+src/arithmetic/rppi_xor.s: src/arithmetic/rppi_xor.cpp.s
+
+.PHONY : src/arithmetic/rppi_xor.s
+
+# target to generate assembly for a file
+src/arithmetic/rppi_xor.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_xor.dir/build.make CMakeFiles/rppi_xor.dir/src/arithmetic/rppi_xor.cpp.s
+.PHONY : src/arithmetic/rppi_xor.cpp.s
 
 src/imgaug/rppi_blur.o: src/imgaug/rppi_blur.cpp.o
 
@@ -357,19 +637,47 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... edit_cache"
+	@echo "... rppi_not"
+	@echo "... rppi_xor"
+	@echo "... rppi_sub"
+	@echo "... rppi_add"
+	@echo "... rppi_and"
+	@echo "... rppi_accumulate_weighted"
+	@echo "... rppi_or"
+	@echo "... rppi_contrast"
 	@echo "... rppi_accumulate"
+	@echo "... edit_cache"
 	@echo "... rppi_brightness_contrast"
 	@echo "... rppi_flip"
 	@echo "... rppi_blur"
 	@echo "... rppi_absolute_difference"
-	@echo "... rppi_contrast"
 	@echo "... src/arithmetic/rppi_absolute_difference.o"
 	@echo "... src/arithmetic/rppi_absolute_difference.i"
 	@echo "... src/arithmetic/rppi_absolute_difference.s"
 	@echo "... src/arithmetic/rppi_accumulate.o"
 	@echo "... src/arithmetic/rppi_accumulate.i"
 	@echo "... src/arithmetic/rppi_accumulate.s"
+	@echo "... src/arithmetic/rppi_accumulate_weighted.o"
+	@echo "... src/arithmetic/rppi_accumulate_weighted.i"
+	@echo "... src/arithmetic/rppi_accumulate_weighted.s"
+	@echo "... src/arithmetic/rppi_add.o"
+	@echo "... src/arithmetic/rppi_add.i"
+	@echo "... src/arithmetic/rppi_add.s"
+	@echo "... src/arithmetic/rppi_and.o"
+	@echo "... src/arithmetic/rppi_and.i"
+	@echo "... src/arithmetic/rppi_and.s"
+	@echo "... src/arithmetic/rppi_not.o"
+	@echo "... src/arithmetic/rppi_not.i"
+	@echo "... src/arithmetic/rppi_not.s"
+	@echo "... src/arithmetic/rppi_or.o"
+	@echo "... src/arithmetic/rppi_or.i"
+	@echo "... src/arithmetic/rppi_or.s"
+	@echo "... src/arithmetic/rppi_sub.o"
+	@echo "... src/arithmetic/rppi_sub.i"
+	@echo "... src/arithmetic/rppi_sub.s"
+	@echo "... src/arithmetic/rppi_xor.o"
+	@echo "... src/arithmetic/rppi_xor.i"
+	@echo "... src/arithmetic/rppi_xor.s"
 	@echo "... src/imgaug/rppi_blur.o"
 	@echo "... src/imgaug/rppi_blur.i"
 	@echo "... src/imgaug/rppi_blur.s"

@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/host_declarations.hpp
+
+../include/rppdefs.h
+
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/arithmetic/cpu/host_not.hpp
+host_declarations.hpp
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/arithmetic/cpu/host_declarations.hpp
+
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/arithmetic/rppi_not.cpp
+stdio.h
+-
+stdlib.h
+-
+rppdefs.h
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/arithmetic/rppdefs.h
+cpu/host_not.hpp
+/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/src/arithmetic/cpu/host_not.hpp
+
