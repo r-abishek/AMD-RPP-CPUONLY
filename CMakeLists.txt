@@ -36,3 +36,12 @@ target_include_directories(rppi_blur
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+add_executable(
+    rppi_absolute_difference
+    src/arithmetic/rppi_absolute_difference.cpp
+)
+target_include_directories(rppi_absolute_difference
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)

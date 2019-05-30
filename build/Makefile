@@ -150,6 +150,19 @@ rppi_blur/fast:
 .PHONY : rppi_blur/fast
 
 #=============================================================================
+# Target rules for targets named rppi_absolute_difference
+
+# Build rule for target.
+rppi_absolute_difference: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_absolute_difference
+.PHONY : rppi_absolute_difference
+
+# fast build rule for target.
+rppi_absolute_difference/fast:
+	$(MAKE) -f CMakeFiles/rppi_absolute_difference.dir/build.make CMakeFiles/rppi_absolute_difference.dir/build
+.PHONY : rppi_absolute_difference/fast
+
+#=============================================================================
 # Target rules for targets named rppi_contrast
 
 # Build rule for target.
@@ -161,6 +174,33 @@ rppi_contrast: cmake_check_build_system
 rppi_contrast/fast:
 	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/build
 .PHONY : rppi_contrast/fast
+
+src/arithmetic/rppi_absolute_difference.o: src/arithmetic/rppi_absolute_difference.cpp.o
+
+.PHONY : src/arithmetic/rppi_absolute_difference.o
+
+# target to build an object file
+src/arithmetic/rppi_absolute_difference.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_absolute_difference.dir/build.make CMakeFiles/rppi_absolute_difference.dir/src/arithmetic/rppi_absolute_difference.cpp.o
+.PHONY : src/arithmetic/rppi_absolute_difference.cpp.o
+
+src/arithmetic/rppi_absolute_difference.i: src/arithmetic/rppi_absolute_difference.cpp.i
+
+.PHONY : src/arithmetic/rppi_absolute_difference.i
+
+# target to preprocess a source file
+src/arithmetic/rppi_absolute_difference.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_absolute_difference.dir/build.make CMakeFiles/rppi_absolute_difference.dir/src/arithmetic/rppi_absolute_difference.cpp.i
+.PHONY : src/arithmetic/rppi_absolute_difference.cpp.i
+
+src/arithmetic/rppi_absolute_difference.s: src/arithmetic/rppi_absolute_difference.cpp.s
+
+.PHONY : src/arithmetic/rppi_absolute_difference.s
+
+# target to generate assembly for a file
+src/arithmetic/rppi_absolute_difference.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_absolute_difference.dir/build.make CMakeFiles/rppi_absolute_difference.dir/src/arithmetic/rppi_absolute_difference.cpp.s
+.PHONY : src/arithmetic/rppi_absolute_difference.cpp.s
 
 src/imgaug/rppi_blur.o: src/imgaug/rppi_blur.cpp.o
 
@@ -277,11 +317,15 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
+	@echo "... edit_cache"
 	@echo "... rppi_brightness_contrast"
 	@echo "... rppi_flip"
 	@echo "... rppi_blur"
-	@echo "... edit_cache"
+	@echo "... rppi_absolute_difference"
 	@echo "... rppi_contrast"
+	@echo "... src/arithmetic/rppi_absolute_difference.o"
+	@echo "... src/arithmetic/rppi_absolute_difference.i"
+	@echo "... src/arithmetic/rppi_absolute_difference.s"
 	@echo "... src/imgaug/rppi_blur.o"
 	@echo "... src/imgaug/rppi_blur.i"
 	@echo "... src/imgaug/rppi_blur.s"
