@@ -189,7 +189,7 @@ int main()
     RppiSize srcSize;
     unsigned int channel;
     Rpp32f stdDev = 0.84945;
-    unsigned int kernelSize = 7;
+    unsigned int kernelSize = 3;
      
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
