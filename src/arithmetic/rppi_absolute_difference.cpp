@@ -186,7 +186,7 @@ int main()
             printf("\n\nOutput of Absolute Difference:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
-    }/*
+    }
     else if (matrix == 3)
     {
         printf("\nEnter number of channels: ");
@@ -196,44 +196,56 @@ int main()
         printf("Enter width of image in pixels: ");
         scanf("%d", &srcSize.width);
         printf("Channels = %d, Height = %d, Width = %d", channel, srcSize.height, srcSize.width);
-        Rpp8u *srcPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+        Rpp8u *srcPtr1 = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+        Rpp8u *srcPtr2 = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
         Rpp8u *dstPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-        int *intSrcPtr = (int *)malloc(channel * srcSize.height * srcSize.width * sizeof(int));
+        int *intSrcPtr1 = (int *)malloc(channel * srcSize.height * srcSize.width * sizeof(int));
+        int *intSrcPtr2 = (int *)malloc(channel * srcSize.height * srcSize.width * sizeof(int));
         if (type == 1)
         {
-            printf("\n\n\n\nEnter elements in array of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);
-            inputPlanar(intSrcPtr, srcSize, channel);
-            cast(intSrcPtr, srcPtr, srcSize, channel);
-            printf("\n\nInput:\n");
-            displayPlanar(srcPtr, srcSize, channel);
+            printf("\n\n\n\nEnter elements in array 1 of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);
+            inputPlanar(intSrcPtr1, srcSize, channel);
+            cast(intSrcPtr1, srcPtr1, srcSize, channel);
+            printf("\n\nInput 1:\n");
+            displayPlanar(srcPtr1, srcSize, channel);
+            printf("\n\n\n\nEnter elements in array 2 of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);
+            inputPlanar(intSrcPtr2, srcSize, channel);
+            cast(intSrcPtr2, srcPtr2, srcSize, channel);
+            printf("\n\nInput 2:\n");
+            displayPlanar(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_brightness_u8_pln1_host(srcPtr, srcSize, dstPtr, alpha, beta);
+                rppi_absolute_difference_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_brightness_u8_pln3_host(srcPtr, srcSize, dstPtr, alpha, beta);
+                rppi_absolute_difference_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of Brightness Modification:\n");
+            printf("\n\nOutput of Absolute Difference:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
         {
-            printf("\n\n\n\nEnter elements in array of size %d x %d x %d in packed format: \n", channel, srcSize.height, srcSize.width);
-            inputPacked(intSrcPtr, srcSize, channel);
-            cast(intSrcPtr, srcPtr, srcSize, channel);
-            printf("\n\nInput:\n");
-            displayPacked(srcPtr, srcSize, channel);
+            printf("\n\n\n\nEnter elements in array 1 of size %d x %d x %d in packed format: \n", channel, srcSize.height, srcSize.width);
+            inputPacked(intSrcPtr1, srcSize, channel);
+            cast(intSrcPtr1, srcPtr1, srcSize, channel);
+            printf("\n\nInput 1:\n");
+            displayPacked(srcPtr1, srcSize, channel);
+            printf("\n\n\n\nEnter elements in array 2 of size %d x %d x %d in packed format: \n", channel, srcSize.height, srcSize.width);
+            inputPacked(intSrcPtr2, srcSize, channel);
+            cast(intSrcPtr2, srcPtr2, srcSize, channel);
+            printf("\n\nInput 2:\n");
+            displayPacked(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_brightness_u8_pln1_host(srcPtr, srcSize, dstPtr, alpha, beta);
+                rppi_absolute_difference_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_brightness_u8_pkd3_host(srcPtr, srcSize, dstPtr, alpha, beta);
+                rppi_absolute_difference_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of Brightness Modification:\n");
+            printf("\n\nOutput of Absolute Difference:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
-    }*/
+    }
 }
