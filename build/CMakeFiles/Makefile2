@@ -65,13 +65,50 @@ CMAKE_SOURCE_DIR = /Users/abishek/myFiles/github/AMD-RPP-CPUONLY
 CMAKE_BINARY_DIR = /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build
 
 #=============================================================================
+# Target rules for target CMakeFiles/rppi_accumulate.dir
+
+# All Build rule for target.
+CMakeFiles/rppi_accumulate.dir/all:
+	$(MAKE) -f CMakeFiles/rppi_accumulate.dir/build.make CMakeFiles/rppi_accumulate.dir/depend
+	$(MAKE) -f CMakeFiles/rppi_accumulate.dir/build.make CMakeFiles/rppi_accumulate.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=3,4 "Built target rppi_accumulate"
+.PHONY : CMakeFiles/rppi_accumulate.dir/all
+
+# Include target in all.
+all: CMakeFiles/rppi_accumulate.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/rppi_accumulate.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/rppi_accumulate.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles 0
+.PHONY : CMakeFiles/rppi_accumulate.dir/rule
+
+# Convenience name for target.
+rppi_accumulate: CMakeFiles/rppi_accumulate.dir/rule
+
+.PHONY : rppi_accumulate
+
+# clean rule for target.
+CMakeFiles/rppi_accumulate.dir/clean:
+	$(MAKE) -f CMakeFiles/rppi_accumulate.dir/build.make CMakeFiles/rppi_accumulate.dir/clean
+.PHONY : CMakeFiles/rppi_accumulate.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/rppi_accumulate.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/rppi_brightness_contrast.dir
 
 # All Build rule for target.
 CMakeFiles/rppi_brightness_contrast.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_brightness_contrast.dir/build.make CMakeFiles/rppi_brightness_contrast.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_brightness_contrast.dir/build.make CMakeFiles/rppi_brightness_contrast.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=5,6 "Built target rppi_brightness_contrast"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=7,8 "Built target rppi_brightness_contrast"
 .PHONY : CMakeFiles/rppi_brightness_contrast.dir/all
 
 # Include target in all.
@@ -108,7 +145,7 @@ clean: CMakeFiles/rppi_brightness_contrast.dir/clean
 CMakeFiles/rppi_flip.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_flip.dir/build.make CMakeFiles/rppi_flip.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=9,10 "Built target rppi_flip"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=11,12 "Built target rppi_flip"
 .PHONY : CMakeFiles/rppi_flip.dir/all
 
 # Include target in all.
@@ -145,7 +182,7 @@ clean: CMakeFiles/rppi_flip.dir/clean
 CMakeFiles/rppi_blur.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_blur.dir/build.make CMakeFiles/rppi_blur.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_blur.dir/build.make CMakeFiles/rppi_blur.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=3,4 "Built target rppi_blur"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=5,6 "Built target rppi_blur"
 .PHONY : CMakeFiles/rppi_blur.dir/all
 
 # Include target in all.
@@ -219,7 +256,7 @@ clean: CMakeFiles/rppi_absolute_difference.dir/clean
 CMakeFiles/rppi_contrast.dir/all:
 	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/depend
 	$(MAKE) -f CMakeFiles/rppi_contrast.dir/build.make CMakeFiles/rppi_contrast.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=7,8 "Built target rppi_contrast"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/abishek/myFiles/github/AMD-RPP-CPUONLY/build/CMakeFiles --progress-num=9,10 "Built target rppi_contrast"
 .PHONY : CMakeFiles/rppi_contrast.dir/all
 
 # Include target in all.

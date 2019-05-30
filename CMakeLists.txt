@@ -45,3 +45,12 @@ target_include_directories(rppi_absolute_difference
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+add_executable(
+    rppi_accumulate
+    src/arithmetic/rppi_accumulate.cpp
+)
+target_include_directories(rppi_accumulate
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)

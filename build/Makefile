@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named rppi_accumulate
+
+# Build rule for target.
+rppi_accumulate: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rppi_accumulate
+.PHONY : rppi_accumulate
+
+# fast build rule for target.
+rppi_accumulate/fast:
+	$(MAKE) -f CMakeFiles/rppi_accumulate.dir/build.make CMakeFiles/rppi_accumulate.dir/build
+.PHONY : rppi_accumulate/fast
+
+#=============================================================================
 # Target rules for targets named rppi_brightness_contrast
 
 # Build rule for target.
@@ -201,6 +214,33 @@ src/arithmetic/rppi_absolute_difference.s: src/arithmetic/rppi_absolute_differen
 src/arithmetic/rppi_absolute_difference.cpp.s:
 	$(MAKE) -f CMakeFiles/rppi_absolute_difference.dir/build.make CMakeFiles/rppi_absolute_difference.dir/src/arithmetic/rppi_absolute_difference.cpp.s
 .PHONY : src/arithmetic/rppi_absolute_difference.cpp.s
+
+src/arithmetic/rppi_accumulate.o: src/arithmetic/rppi_accumulate.cpp.o
+
+.PHONY : src/arithmetic/rppi_accumulate.o
+
+# target to build an object file
+src/arithmetic/rppi_accumulate.cpp.o:
+	$(MAKE) -f CMakeFiles/rppi_accumulate.dir/build.make CMakeFiles/rppi_accumulate.dir/src/arithmetic/rppi_accumulate.cpp.o
+.PHONY : src/arithmetic/rppi_accumulate.cpp.o
+
+src/arithmetic/rppi_accumulate.i: src/arithmetic/rppi_accumulate.cpp.i
+
+.PHONY : src/arithmetic/rppi_accumulate.i
+
+# target to preprocess a source file
+src/arithmetic/rppi_accumulate.cpp.i:
+	$(MAKE) -f CMakeFiles/rppi_accumulate.dir/build.make CMakeFiles/rppi_accumulate.dir/src/arithmetic/rppi_accumulate.cpp.i
+.PHONY : src/arithmetic/rppi_accumulate.cpp.i
+
+src/arithmetic/rppi_accumulate.s: src/arithmetic/rppi_accumulate.cpp.s
+
+.PHONY : src/arithmetic/rppi_accumulate.s
+
+# target to generate assembly for a file
+src/arithmetic/rppi_accumulate.cpp.s:
+	$(MAKE) -f CMakeFiles/rppi_accumulate.dir/build.make CMakeFiles/rppi_accumulate.dir/src/arithmetic/rppi_accumulate.cpp.s
+.PHONY : src/arithmetic/rppi_accumulate.cpp.s
 
 src/imgaug/rppi_blur.o: src/imgaug/rppi_blur.cpp.o
 
@@ -318,6 +358,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... rppi_accumulate"
 	@echo "... rppi_brightness_contrast"
 	@echo "... rppi_flip"
 	@echo "... rppi_blur"
@@ -326,6 +367,9 @@ help:
 	@echo "... src/arithmetic/rppi_absolute_difference.o"
 	@echo "... src/arithmetic/rppi_absolute_difference.i"
 	@echo "... src/arithmetic/rppi_absolute_difference.s"
+	@echo "... src/arithmetic/rppi_accumulate.o"
+	@echo "... src/arithmetic/rppi_accumulate.i"
+	@echo "... src/arithmetic/rppi_accumulate.s"
 	@echo "... src/imgaug/rppi_blur.o"
 	@echo "... src/imgaug/rppi_blur.i"
 	@echo "... src/imgaug/rppi_blur.s"
