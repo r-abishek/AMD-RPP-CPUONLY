@@ -289,7 +289,7 @@ target_link_libraries(
 
 add_executable(
     rppi_min
-    src/arithmetic/rppi_min.cpp
+    src/statistical/rppi_min.cpp
 )
 target_include_directories(rppi_min
     PUBLIC
@@ -298,9 +298,27 @@ target_include_directories(rppi_min
 
 add_executable(
     rppi_max
-    src/arithmetic/rppi_max.cpp
+    src/statistical/rppi_max.cpp
 )
 target_include_directories(rppi_max
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+add_executable(
+    rppi_minMax
+    src/statistical/rppi_minMax.cpp
+)
+target_include_directories(rppi_minMax
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+add_executable(
+    rppi_minMaxLoc
+    src/statistical/rppi_minMaxLoc.cpp
+)
+target_include_directories(rppi_minMaxLoc
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
