@@ -270,3 +270,37 @@ target_link_libraries(
     rppi_bilateral_filter
     ${OpenCV_LIBS}
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+add_executable(
+    rppi_min
+    src/arithmetic/rppi_min.cpp
+)
+target_include_directories(rppi_min
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+add_executable(
+    rppi_max
+    src/arithmetic/rppi_max.cpp
+)
+target_include_directories(rppi_max
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
