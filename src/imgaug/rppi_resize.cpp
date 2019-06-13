@@ -249,6 +249,7 @@ int main(int argc, char** argv)
 
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
+            printf("Height - %d, Width - %d", dstSize.height, dstSize.width);
             rppi_resize_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
             printf("\n\nOutput of resize:\n");
             displayPacked(dstPtr, dstSize, channel);
