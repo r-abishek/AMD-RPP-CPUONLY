@@ -1,11 +1,11 @@
-// rppi_resize
+// rppi_scale
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "rppdefs.h"
-#include "cpu/host_resize.hpp"
+#include "cpu/host_scale.hpp"
 #include "rppi_image_augumentation_functions.h"
  
 #include "opencv2/opencv.hpp"
@@ -17,10 +17,10 @@ using namespace cv;
 
 
 RppStatus
-rppi_resize_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
+rppi_scale_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
                              Rpp32f percentage)
 {
-    host_resize_output_size(srcSize, dstSizePtr,
+    host_scale_output_size(srcSize, dstSizePtr,
                             percentage);
 
     return RPP_SUCCESS;
@@ -28,10 +28,10 @@ rppi_resize_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
 }
 
 RppStatus
-rppi_resize_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+rppi_scale_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
                          Rpp32f percentage)
 {
-    host_resize<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
+    host_scale<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
                             percentage,
                             RPPI_CHN_PLANAR, 1);
 
@@ -40,10 +40,10 @@ rppi_resize_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp
 }
 
 RppStatus
-rppi_resize_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+rppi_scale_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
                          Rpp32f percentage)
 {
-    host_resize<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
+    host_scale<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
                             percentage,
                             RPPI_CHN_PLANAR, 3);
 
@@ -52,10 +52,10 @@ rppi_resize_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp
 }
 
 RppStatus
-rppi_resize_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+rppi_scale_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
                          Rpp32f percentage)
 {
-    host_resize<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
+    host_scale<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
                             percentage,
                             RPPI_CHN_PACKED, 3);
 
@@ -178,10 +178,10 @@ int main(int argc, char** argv)
         channel = imageIn.channels();
         Rpp8u *srcPtr = imageIn.data;
         
-        rppi_resize_output_size_host(srcSize, &dstSize, percentage);
+        rppi_scale_output_size_host(srcSize, &dstSize, percentage);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
-        rppi_resize_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
+        rppi_scale_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
         Mat imageOut(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
 
 
@@ -212,14 +212,14 @@ int main(int argc, char** argv)
         srcSize.width = 4;
         Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
         
-        rppi_resize_output_size_host(srcSize, &dstSize, percentage);
+        rppi_scale_output_size_host(srcSize, &dstSize, percentage);
         printf("Height - %d, Width - %d", dstSize.height, dstSize.width);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_resize_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
-        printf("\n\nOutput of resize:\n");
+        rppi_scale_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
+        printf("\n\nOutput of scale:\n");
         displayPlanar(dstPtr, dstSize, channel);
     }
     else if (matrix == 2)
@@ -231,27 +231,27 @@ int main(int argc, char** argv)
         {
             Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
             
-            rppi_resize_output_size_host(srcSize, &dstSize, percentage);
+            rppi_scale_output_size_host(srcSize, &dstSize, percentage);
             Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_resize_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
-            printf("\n\nOutput of resize:\n");
+            rppi_scale_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
+            printf("\n\nOutput of scale:\n");
             displayPlanar(dstPtr, dstSize, channel);
         }
         else if (type == 2)
         {
             Rpp8u srcPtr[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
             
-            rppi_resize_output_size_host(srcSize, &dstSize, percentage);
+            rppi_scale_output_size_host(srcSize, &dstSize, percentage);
             Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
             printf("Height - %d, Width - %d", dstSize.height, dstSize.width);
-            rppi_resize_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
-            printf("\n\nOutput of resize:\n");
+            rppi_scale_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
+            printf("\n\nOutput of scale:\n");
             displayPacked(dstPtr, dstSize, channel);
         } 
     }
@@ -267,7 +267,7 @@ int main(int argc, char** argv)
         Rpp8u *srcPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
         int *intSrcPtr = (int *)malloc(channel * srcSize.height * srcSize.width * sizeof(int));
         
-        rppi_resize_output_size_host(srcSize, &dstSize, percentage);
+        rppi_scale_output_size_host(srcSize, &dstSize, percentage);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
         if (type == 1)
@@ -279,13 +279,13 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_resize_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
+                rppi_scale_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
             }
             else if (channel == 3)
             {
-                rppi_resize_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
+                rppi_scale_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
             }
-            printf("\n\nOutput of resize:\n");
+            printf("\n\nOutput of scale:\n");
             displayPlanar(dstPtr, dstSize, channel);
         }
         else if (type == 2)
@@ -297,13 +297,13 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_resize_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
+                rppi_scale_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
             }
             else if (channel == 3)
             {
-                rppi_resize_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
+                rppi_scale_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
             }
-            printf("\n\nOutput of resize:\n");
+            printf("\n\nOutput of scale:\n");
             displayPacked(dstPtr, dstSize, channel);
         }
     }

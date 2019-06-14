@@ -146,16 +146,16 @@ target_link_libraries(
 
 
 add_executable(
-    rppi_resize
-    src/imgaug/rppi_resize.cpp
+    rppi_scale
+    src/imgaug/rppi_scale.cpp
 )
-target_include_directories(rppi_resize
+target_include_directories(rppi_scale
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_resize
+    rppi_scale
     ${OpenCV_LIBS}
 )
 
