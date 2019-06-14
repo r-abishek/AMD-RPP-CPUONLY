@@ -322,3 +322,12 @@ target_include_directories(rppi_minMaxLoc
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+add_executable(
+    rppi_meanStdDev
+    src/statistical/rppi_meanStdDev.cpp
+)
+target_include_directories(rppi_meanStdDev
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
