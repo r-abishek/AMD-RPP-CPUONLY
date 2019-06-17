@@ -1,3 +1,5 @@
+#include <cpu/rpp_cpu_common.hpp>
+
 template <typename T>
 RppStatus host_contrast(T* srcPtr, RppiSize srcSize, T* dstPtr, 
                         Rpp32u new_min, Rpp32u new_max,

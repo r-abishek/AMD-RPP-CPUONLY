@@ -1,3 +1,5 @@
+#include <cpu/rpp_cpu_common.hpp>
+
 template <typename T>
 RppStatus host_flip(T* srcPtr, RppiSize srcSize, T* dstPtr, 
                     RppiAxis flipAxis,

@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cpu/rpp_cpu_common.hpp>
 
 template <typename T, typename U>
 RppStatus host_hue(T* srcPtr, RppiSize srcSize, U* dstPtr,

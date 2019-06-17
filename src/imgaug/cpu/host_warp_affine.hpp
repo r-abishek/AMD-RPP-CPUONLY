@@ -1,6 +1,5 @@
 #include <cpu/rpp_cpu_common.hpp>
 
-
 template <typename T>
 RppStatus host_warp_affine_output_size(RppiSize srcSize, RppiSize *dstSizePtr,
                                        T* affine)

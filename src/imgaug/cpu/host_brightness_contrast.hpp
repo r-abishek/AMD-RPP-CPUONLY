@@ -1,3 +1,5 @@
+#include <cpu/rpp_cpu_common.hpp>
+
 template <typename T>
 RppStatus host_brightness_contrast(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                    Rpp32f alpha, Rpp32f beta,

@@ -1,6 +1,4 @@
-#include <math.h>
 #include <cpu/rpp_cpu_common.hpp>
-
 
 RppStatus host_scale_output_size(RppiSize srcSize, RppiSize *dstSizePtr,
                                   Rpp32f percentage)

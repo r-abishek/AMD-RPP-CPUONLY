@@ -1,6 +1,4 @@
-#include <math.h>
 #include <cpu/rpp_cpu_common.hpp>
-
 
 template <typename T>
 RppStatus host_bilateral_filter(T* srcPtr, RppiSize srcSize, T* dstPtr,
