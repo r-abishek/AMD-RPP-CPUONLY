@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
-RppStatus host_minMax(T* srcPtr, RppiSize srcSize, T* maskPtr,
+RppStatus minMax_host(T* srcPtr, RppiSize srcSize, T* maskPtr,
                       Rpp8u* min, Rpp8u* max, 
                       RppiChnFormat chnFormat, unsigned int channel)
 {

@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
-RppStatus host_absolute_difference(T* srcPtr1, T* srcPtr2, RppiSize srcSize, T* dstPtr,
+RppStatus absolute_difference_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize, T* dstPtr,
                                    unsigned int channel)
 {
     for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)

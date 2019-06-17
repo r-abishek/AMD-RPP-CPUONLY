@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
-RppStatus host_warp_affine_output_size(RppiSize srcSize, RppiSize *dstSizePtr,
+RppStatus warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
                                        T* affine)
 {
     float minX = 0, minY = 0, maxX = 0, maxY = 0;
@@ -37,7 +37,7 @@ RppStatus host_warp_affine_output_size(RppiSize srcSize, RppiSize *dstSizePtr,
 }
 
 template <typename T, typename U>
-RppStatus host_warp_affine(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
+RppStatus warp_affine_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            U* affine,
                            RppiChnFormat chnFormat, unsigned int channel)
 {

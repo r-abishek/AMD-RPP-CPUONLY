@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T, typename U>
-RppStatus host_saturation(T* srcPtr, RppiSize srcSize, U* dstPtr,
+RppStatus saturation_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                     Rpp32f saturationFactor,
                     RppiChnFormat chnFormat, unsigned channel, RppiFormat imageFormat)
 {

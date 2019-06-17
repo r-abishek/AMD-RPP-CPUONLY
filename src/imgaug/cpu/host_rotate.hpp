@@ -1,6 +1,6 @@
 #include <cpu/rpp_cpu_common.hpp>
 
-RppStatus host_rotate_output_size(RppiSize srcSize, RppiSize *dstSizePtr,
+RppStatus rotate_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
                                   Rpp32f angleDeg)
 {
     Rpp32f angleRad = RAD(angleDeg);
@@ -45,7 +45,7 @@ RppStatus host_rotate_output_size(RppiSize srcSize, RppiSize *dstSizePtr,
 }
 
 template <typename T>
-RppStatus host_rotate(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
+RppStatus rotate_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            Rpp32f angleDeg,
                            RppiChnFormat chnFormat, unsigned int channel)
 {

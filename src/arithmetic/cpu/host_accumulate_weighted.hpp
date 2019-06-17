@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
-RppStatus host_accumulate_weighted(T* srcPtr1, T* srcPtr2, RppiSize srcSize,
+RppStatus accumulate_weighted_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize,
                                    Rpp32f alpha,
                                    unsigned int channel)
 {

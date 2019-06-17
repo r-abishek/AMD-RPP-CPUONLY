@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
-RppStatus host_gamma_correction(T* srcPtr, RppiSize srcSize, T* dstPtr,
+RppStatus gamma_correction_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                    Rpp32f gamma,
                                    unsigned int channel)
 {

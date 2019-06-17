@@ -1,6 +1,6 @@
 #include <cpu/rpp_cpu_common.hpp>
 
-RppStatus host_scale_output_size(RppiSize srcSize, RppiSize *dstSizePtr,
+RppStatus scale_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
                                   Rpp32f percentage)
 {
     if (percentage < 0)
@@ -15,7 +15,7 @@ RppStatus host_scale_output_size(RppiSize srcSize, RppiSize *dstSizePtr,
 }
 
 template <typename T>
-RppStatus host_scale(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
+RppStatus scale_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            Rpp32f percentage,
                            RppiChnFormat chnFormat, unsigned int channel)
 {

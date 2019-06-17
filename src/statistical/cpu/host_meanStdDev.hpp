@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
-RppStatus host_meanStd(T* srcPtr, RppiSize srcSize,
+RppStatus meanStd_host(T* srcPtr, RppiSize srcSize,
                       Rpp32f* mean, Rpp32f* stdDev, 
                       RppiChnFormat chnFormat, unsigned int channel)
 {

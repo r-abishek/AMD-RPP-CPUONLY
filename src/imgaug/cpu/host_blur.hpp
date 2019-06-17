@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
-RppStatus host_blur(T* srcPtr, RppiSize srcSize, T* dstPtr,
+RppStatus blur_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                     Rpp32f stdDev, unsigned int kernelSize,
                     RppiChnFormat chnFormat, unsigned int channel)
 {

@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
-RppStatus host_resize(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
+RppStatus resize_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            RppiChnFormat chnFormat, unsigned int channel)
 {
     if (dstSize.height < 0 || dstSize.width < 0)

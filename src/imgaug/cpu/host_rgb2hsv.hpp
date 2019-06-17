@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T, typename U>
-RppStatus host_rgb2hsv(T* srcPtr, RppiSize srcSize, U* dstPtr,
+RppStatus rgb2hsv_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                     RppiChnFormat chnFormat, unsigned channel)
 {
     if (chnFormat == RPPI_CHN_PLANAR)
