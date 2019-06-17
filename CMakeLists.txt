@@ -12,6 +12,7 @@ add_executable(
 target_include_directories(rppi_brightness_contrast
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
@@ -27,6 +28,7 @@ add_executable(
 target_include_directories(rppi_contrast
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
@@ -42,6 +44,7 @@ add_executable(
 target_include_directories(rppi_flip
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
@@ -57,6 +60,7 @@ add_executable(
 target_include_directories(rppi_blur
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
@@ -72,6 +76,7 @@ add_executable(
 target_include_directories(rppi_rgb2hsv
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 
@@ -82,6 +87,7 @@ add_executable(
 target_include_directories(rppi_hsv2rgb
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 
@@ -92,6 +98,7 @@ add_executable(
 target_include_directories(rppi_hue
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 
@@ -102,6 +109,7 @@ add_executable(
 target_include_directories(rppi_saturation
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 
@@ -112,6 +120,7 @@ add_executable(
 target_include_directories(rppi_gamma_correction
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 
@@ -122,6 +131,7 @@ add_executable(
 target_include_directories(rppi_warp_affine
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
@@ -137,6 +147,7 @@ add_executable(
 target_include_directories(rppi_rotate
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
@@ -152,6 +163,7 @@ add_executable(
 target_include_directories(rppi_scale
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
@@ -167,6 +179,7 @@ add_executable(
 target_include_directories(rppi_resize
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
@@ -181,6 +194,7 @@ add_executable(
 target_include_directories(rppi_resizeCrop
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
@@ -212,6 +226,7 @@ add_executable(
 target_include_directories(rppi_absolute_difference
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -221,6 +236,7 @@ add_executable(
 target_include_directories(rppi_accumulate
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -230,6 +246,7 @@ add_executable(
 target_include_directories(rppi_accumulate_weighted
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -239,6 +256,7 @@ add_executable(
 target_include_directories(rppi_add
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -248,6 +266,7 @@ add_executable(
 target_include_directories(rppi_sub
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -257,6 +276,7 @@ add_executable(
 target_include_directories(rppi_and
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -266,6 +286,7 @@ add_executable(
 target_include_directories(rppi_or
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -275,6 +296,7 @@ add_executable(
 target_include_directories(rppi_xor
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -284,6 +306,7 @@ add_executable(
 target_include_directories(rppi_not
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -293,6 +316,7 @@ add_executable(
 target_include_directories(rppi_bilateral_filter
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
@@ -323,6 +347,7 @@ add_executable(
 target_include_directories(rppi_min
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -332,6 +357,7 @@ add_executable(
 target_include_directories(rppi_max
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -341,6 +367,7 @@ add_executable(
 target_include_directories(rppi_minMax
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -350,6 +377,7 @@ add_executable(
 target_include_directories(rppi_minMaxLoc
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
 
 add_executable(
@@ -359,4 +387,5 @@ add_executable(
 target_include_directories(rppi_meanStdDev
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )

@@ -1,4 +1,4 @@
-#include "host_declarations.hpp"
+#include <cpu/rpp_cpu_common.hpp>
 #include <math.h>
 
 template <typename T>

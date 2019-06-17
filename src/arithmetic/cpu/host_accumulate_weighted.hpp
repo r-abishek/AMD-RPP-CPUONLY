@@ -1,4 +1,4 @@
-#include "host_declarations.hpp"
+#include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
 RppStatus host_accumulate_weighted(T* srcPtr1, T* srcPtr2, RppiSize srcSize,

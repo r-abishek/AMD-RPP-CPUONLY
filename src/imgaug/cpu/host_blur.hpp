@@ -1,4 +1,5 @@
 #include <math.h>
+#include <cpu/rpp_cpu_common.hpp>
 
 
 template <typename T>

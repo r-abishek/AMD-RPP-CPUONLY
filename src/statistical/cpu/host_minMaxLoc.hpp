@@ -1,4 +1,4 @@
-#include "host_declarations.hpp"
+#include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
 RppStatus host_minMaxLoc(T* srcPtr, RppiSize srcSize, T* maskPtr,

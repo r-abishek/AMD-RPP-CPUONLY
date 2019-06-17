@@ -1,5 +1,5 @@
 #include <math.h>
-#include "host_declarations.hpp"
+#include <cpu/rpp_cpu_common.hpp>
 
 
 template <typename T>
