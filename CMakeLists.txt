@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
-
+#[[
 add_executable(
     rppi_brightness_contrast
     src/imgaug/rppi_brightness_contrast.cpp
@@ -173,7 +173,21 @@ target_link_libraries(
     rppi_resize
     ${OpenCV_LIBS}
 )
-
+]]
+add_executable(
+    rppi_resizeCrop
+    src/imgaug/rppi_resizeCrop.cpp
+)
+target_include_directories(rppi_resizeCrop
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_resizeCrop
+    ${OpenCV_LIBS}
+)
+#[[
 
 add_executable(
     DisplayImage
@@ -346,3 +360,4 @@ target_include_directories(rppi_meanStdDev
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+]]
