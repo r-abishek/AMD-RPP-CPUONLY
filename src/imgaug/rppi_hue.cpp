@@ -19,7 +19,7 @@ rppi_hueRGB_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f hueShift)
 {
 
-    host_hue<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+    hue_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                            hueShift,
                            RPPI_CHN_PLANAR, 3, RGB);
     return RPP_SUCCESS;
@@ -30,7 +30,7 @@ rppi_hueRGB_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f hueShift)
 {
 
-    host_hue<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+    hue_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                            hueShift,
                            RPPI_CHN_PACKED, 3, RGB);
     return RPP_SUCCESS;
@@ -41,7 +41,7 @@ rppi_hueHSV_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f hueShift)
 {
 
-    host_hue<Rpp32f>(static_cast<Rpp32f*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr),
+    hue_host<Rpp32f>(static_cast<Rpp32f*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr),
                            hueShift,
                            RPPI_CHN_PLANAR, 3, HSV);
     return RPP_SUCCESS;
@@ -52,7 +52,7 @@ rppi_hueHSV_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f hueShift)
 {
 
-    host_hue<Rpp32f>(static_cast<Rpp32f*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr),
+    hue_host<Rpp32f>(static_cast<Rpp32f*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr),
                            hueShift,
                            RPPI_CHN_PACKED, 3, HSV);
     return RPP_SUCCESS;

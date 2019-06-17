@@ -17,7 +17,7 @@ using namespace std;
 RppStatus
 rppi_minMax_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t maskPtr, Rpp8u* min, Rpp8u* max)
 {
-    host_minMax<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(maskPtr), 
+    minMax_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(maskPtr), 
                        min, max, 
                        RPPI_CHN_PLANAR, 1);
 
@@ -28,7 +28,7 @@ rppi_minMax_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t maskPtr, Rp
 RppStatus
 rppi_minMax_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t maskPtr, Rpp8u* min, Rpp8u* max)
 {
-    host_minMax<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(maskPtr), 
+    minMax_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(maskPtr), 
                        min, max, 
                        RPPI_CHN_PLANAR, 3);
 
@@ -39,7 +39,7 @@ rppi_minMax_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t maskPtr, Rp
 RppStatus
 rppi_minMax_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t maskPtr, Rpp8u* min, Rpp8u* max)
 {
-    host_minMax<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(maskPtr), 
+    minMax_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(maskPtr), 
                        min, max, 
                        RPPI_CHN_PACKED, 3);
 
