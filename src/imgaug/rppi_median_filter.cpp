@@ -184,7 +184,7 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize;
     unsigned int channel;
-    unsigned int kernelSize = 7;
+    unsigned int kernelSize = 3;
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");

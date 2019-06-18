@@ -5,10 +5,11 @@ RppStatus median_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                     unsigned int kernelSize,
                     RppiChnFormat chnFormat, unsigned int channel)
 {
-    if (kernelSize % 2 == 0)
+    if (kernelSize % 2 == 0 || kernelSize > RPPMIN2(srcSize.width, srcSize.height))
     {
         return RPP_ERROR;
     }
+    printf("\nkernelSize = %d", kernelSize);
     for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
         dstPtr[i] = srcPtr[i];
@@ -22,14 +23,20 @@ RppStatus median_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
             {
                 for (int j = 0; j < srcSize.width - kernelSize + 2; j++)
                 {
+                    printf("\nKernel\n\n");
                     for (int m = 0; m < kernelSize; m++)
                     {
                         for (int n = 0; n < kernelSize; n++)
                         {
                             kernel[(m * kernelSize) + n] = srcPtr[(c * srcSize.height * srcSize.width) + ((i + m) * srcSize.width) + (j + n)];
+                            printf("\n%d = %d", (m * kernelSize) + n, kernel[(m * kernelSize) + n]);
                         }
                     }
-                    std::sort(std::begin(kernel), std::end(kernel));
+                    std::sort(kernel, kernel + (kernelSize * kernelSize));
+                    for (int m = 0; m < kernelSize*kernelSize; m++)
+                    {
+                        printf("  %d ", kernel[m]);
+                    }
                     dstPtr[(c * srcSize.height * srcSize.width) + ((i + (kernelSize / 2)) * srcSize.width) + (j + (kernelSize / 2))] = kernel[((kernelSize / 2) * (kernelSize)) + (kernelSize / 2) + 1];
                 }
             }
@@ -43,15 +50,21 @@ RppStatus median_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
             {
                 for (int j = 0; j < srcSize.width; j++)
                 {
+                    printf("\nKernel\n\n");
                     for (int m = 0; m < kernelSize; m++)
                     {
                         for (int n = 0; n < kernelSize; n++)
                         {
-                            kernel[(m * kernelSize) + n] = srcPtr[c + (channel * (i + m) * dstSize.width) + (channel * (j + n))];
+                            kernel[(m * kernelSize) + n] = srcPtr[c + (channel * (i + m) * srcSize.width) + (channel * (j + n))];
+                            printf("\n%d = %d", (m * kernelSize) + n, kernel[(m * kernelSize) + n]);
                         }
                     }
-                    std::sort(std::begin(kernel), std::end(kernel));
-                    dstPtr[c + (channel * (i + (kernelSize / 2)) * dstSize.width) + (channel * (j + (kernelSize / 2)))] = kernel[((kernelSize / 2) * (kernelSize)) + (kernelSize / 2) + 1];
+                    std::sort(kernel, kernel + (kernelSize * kernelSize));
+                    for (int m = 0; m < kernelSize*kernelSize; m++)
+                    {
+                        printf("  %d ", kernel[m]);
+                    }
+                    dstPtr[c + (channel * (i + (kernelSize / 2)) * srcSize.width) + (channel * (j + (kernelSize / 2)))] = kernel[((kernelSize / 2) * (kernelSize)) + (kernelSize / 2) + 1];
                 }
             }
         }
