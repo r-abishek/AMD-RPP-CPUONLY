@@ -187,6 +187,7 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+
 add_executable(
     rppi_resizeCrop
     src/imgaug/rppi_resizeCrop.cpp
@@ -202,6 +203,22 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+#[[
+add_executable(
+    rppi_median_filter
+    src/imgaug/rppi_median_filter.cpp
+)
+target_include_directories(rppi_median_filter
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_median_filter
+    ${OpenCV_LIBS}
+)
+]]
 
 add_executable(
     DisplayImage
