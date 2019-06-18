@@ -150,7 +150,7 @@ int main(int argc, char** argv)
     RppiSize srcSize, dstSize;
     unsigned int channel;
 
-    Rpp32f angleDeg = 45;
+    Rpp32f angleDeg = 65;
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");

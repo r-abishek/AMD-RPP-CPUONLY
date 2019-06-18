@@ -6,10 +6,10 @@ RppStatus not_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 {
     for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
     {
-        Rpp32s pixel = ~((Rpp32s) srcPtr[i]);
-        pixel = (pixel < (Rpp32s) 255) ? pixel : ((Rpp32s) 255);
-        pixel = (pixel > (Rpp32s) 0) ? pixel : ((Rpp32s) 0);
-        dstPtr[i] =(Rpp8u) pixel;
+        Rpp8u pixel = ~(srcPtr[i]);
+        pixel = (pixel < (Rpp8u) 255) ? pixel : ((Rpp8u) 255);
+        pixel = (pixel > (Rpp8u) 0) ? pixel : ((Rpp8u) 0);
+        dstPtr[i] = pixel;
     }
 
     return RPP_SUCCESS;
