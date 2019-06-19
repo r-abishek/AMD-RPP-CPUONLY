@@ -143,7 +143,7 @@ int main(int argc, char** argv)
 
     if (input == 1)
     {
-        dstSize.width = 2300;
+        dstSize.width = 2200;
         dstSize.height = 800;
         x1 = 320;
         x2 = 960;

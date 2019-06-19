@@ -8,6 +8,94 @@ RppStatus resize_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
     {
         return RPP_ERROR;
     }
+
+    Rpp32f hRatio = (((Rpp32f) dstSize.height) / ((Rpp32f) srcSize.height));
+    Rpp32f wRatio = (((Rpp32f) dstSize.width) / ((Rpp32f) srcSize.width));
+    Rpp32f srcLocI, srcLocJ;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int c = 0; c < channel; c++)
+        {
+            for (unsigned int i = 0; i < dstSize.height; i++)
+            {
+                for (unsigned int j = 0; j < dstSize.width; j++)
+                {
+                    srcLocI = ((Rpp32f) i) / hRatio;
+                    srcLocJ = ((Rpp32f) j) / wRatio;
+                    Rpp32s p = (Rpp32s) RPPFLOOR(srcLocI);
+                    Rpp32s q = (Rpp32s) RPPCEIL(srcLocI);
+                    Rpp32s r = (Rpp32s) RPPFLOOR(srcLocJ);
+                    Rpp32s s = (Rpp32s) RPPCEIL(srcLocJ);
+
+                    Rpp32f h = srcLocI - (Rpp32f) p;
+                    Rpp32f w = srcLocJ - (Rpp32f) r;
+
+                    Rpp32f pixel1 = (Rpp32f) srcPtr[(c * srcSize.height * srcSize.width) + (p * srcSize.width) + r];
+                    Rpp32f pixel2 = (Rpp32f) srcPtr[(c * srcSize.height * srcSize.width) + (p * srcSize.width) + s];
+                    Rpp32f pixel3 = (Rpp32f) srcPtr[(c * srcSize.height * srcSize.width) + (q * srcSize.width) + r];
+                    Rpp32f pixel4 = (Rpp32f) srcPtr[(c * srcSize.height * srcSize.width) + (q * srcSize.width) + s];
+                    
+                    Rpp32f pixel;
+                    pixel = ((pixel1) * (1 - w) * (1 - h)) + ((pixel2) * (w) * (1 - h)) + ((pixel3) * (h) * (1 - w)) + ((pixel4) * (w) * (h));
+                    pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
+                    pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
+                    dstPtr[(c * dstSize.height * dstSize.width) + (i * dstSize.width) + j] = (Rpp8u) round(pixel);
+                }
+            }
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        for (int c = 0; c < channel; c++)
+        {
+            for (unsigned int i = 0; i < dstSize.height; i++)
+            {
+                for (unsigned int j = 0; j < dstSize.width; j++)
+                {
+                    srcLocI = ((Rpp32f) i) / hRatio;
+                    srcLocJ = ((Rpp32f) j) / wRatio;
+                    Rpp32s p = (Rpp32s) RPPFLOOR(srcLocI);
+                    Rpp32s q = (Rpp32s) RPPCEIL(srcLocI);
+                    Rpp32s r = (Rpp32s) RPPFLOOR(srcLocJ);
+                    Rpp32s s = (Rpp32s) RPPCEIL(srcLocJ);
+
+                    Rpp32f h = srcLocI - (Rpp32f) p;
+                    Rpp32f w = srcLocJ - (Rpp32f) r;
+
+                    Rpp32f pixel1 = (Rpp32f) srcPtr[c + (channel * p * srcSize.width) + (channel * r)];
+                    Rpp32f pixel2 = (Rpp32f) srcPtr[c + (channel * p * srcSize.width) + (channel * s)];
+                    Rpp32f pixel3 = (Rpp32f) srcPtr[c + (channel * q * srcSize.width) + (channel * r)];
+                    Rpp32f pixel4 = (Rpp32f) srcPtr[c + (channel * q * srcSize.width) + (channel * s)];
+                    
+                    Rpp32f pixel;
+                    pixel = ((pixel1) * (1 - w) * (1 - h)) + ((pixel2) * (w) * (1 - h)) + ((pixel3) * (h) * (1 - w)) + ((pixel4) * (w) * (h));
+                    pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
+                    pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
+                    dstPtr[c + (channel * i * dstSize.width) + (channel * j)] = (Rpp8u) round(pixel);
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
     Rpp32f resize[6] = {0};
     resize[0] = (((Rpp32f) dstSize.height) / ((Rpp32f) srcSize.height));
     resize[1] = 0;
@@ -153,6 +241,6 @@ RppStatus resize_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
             }
         }
     }
-    
+    */
     return RPP_SUCCESS;
 }

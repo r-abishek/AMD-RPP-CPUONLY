@@ -139,8 +139,8 @@ int main(int argc, char** argv)
 
     if (input == 1)
     {
-        dstSize.width = 2200;
-        dstSize.height = 800;
+        dstSize.width = 1280;
+        dstSize.height = 720;
         if ( argc != 2 )
         {
             printf("usage: DisplayImage.out <Image_Path>\n");

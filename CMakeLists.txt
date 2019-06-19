@@ -154,7 +154,7 @@ target_link_libraries(
     rppi_rotate
     ${OpenCV_LIBS}
 )
-
+]]
 
 add_executable(
     rppi_scale
@@ -203,7 +203,7 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-]]
+#[[
 add_executable(
     rppi_median_filter
     src/imgaug/rppi_median_filter.cpp
@@ -219,7 +219,7 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-#[[
+
 add_executable(
     DisplayImage
     src/DisplayImage.cpp

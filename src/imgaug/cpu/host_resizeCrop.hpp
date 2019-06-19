@@ -48,6 +48,96 @@ RppStatus resizeCrop_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSi
             }
         }
     }
+    //printf("\nFound height = %d, Found width = %d", srcNewSize.height, srcNewSize.width);
+    //printf("\nDestination height = %d, Destination width = %d", dstSize.height, dstSize.width);
+
+    Rpp32f hRatio = (((Rpp32f) dstSize.height) / ((Rpp32f) srcNewSize.height));
+    Rpp32f wRatio = (((Rpp32f) dstSize.width) / ((Rpp32f) srcNewSize.width));
+    //printf("\nhRatio = %0.4f, wRatio = %0.4f", hRatio, wRatio);
+    Rpp32f srcLocI, srcLocJ;
+    /*
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int c = 0; c < channel; c++)
+        {
+            for (unsigned int i = 0; i < dstSize.height; i++)
+            {
+                for (unsigned int j = 0; j < dstSize.width; j++)
+                {
+                    srcLocI = ((Rpp32f) i) / hRatio;
+                    srcLocJ = ((Rpp32f) j) / wRatio;
+                    //printf("\nsrcLocI = %0.4f, srcLocJ = %0.4f", srcLocI, srcLocJ);
+                    Rpp32s p = (Rpp32s) RPPFLOOR(srcLocI);
+                    Rpp32s q = (Rpp32s) RPPCEIL(srcLocI);
+                    Rpp32s r = (Rpp32s) RPPFLOOR(srcLocJ);
+                    Rpp32s s = (Rpp32s) RPPCEIL(srcLocJ);
+                    //printf("\np = %d, q = %d, r = %d, s = %d\n", p, q, r, s);
+
+                    Rpp32f h = srcLocI - (Rpp32f) p;
+                    Rpp32f w = srcLocJ - (Rpp32f) r;
+                    //printf("\nh = %0.4f, w = %0.4f", h, w);
+
+                    Rpp32f pixel1 = (Rpp32f) srcNewPtr[(c * srcNewSize.height * srcNewSize.width) + (p * srcNewSize.width) + r];
+                    Rpp32f pixel2 = (Rpp32f) srcNewPtr[(c * srcNewSize.height * srcNewSize.width) + (p * srcNewSize.width) + s];
+                    Rpp32f pixel3 = (Rpp32f) srcNewPtr[(c * srcNewSize.height * srcNewSize.width) + (q * srcNewSize.width) + r];
+                    Rpp32f pixel4 = (Rpp32f) srcNewPtr[(c * srcNewSize.height * srcNewSize.width) + (q * srcNewSize.width) + s];
+                    
+                    Rpp32f pixel;
+                    pixel = ((pixel1) * (1 - w) * (1 - h)) + ((pixel2) * (w) * (1 - h)) + ((pixel3) * (h) * (1 - w)) + ((pixel4) * (w) * (h));
+                    pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
+                    pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
+                    dstPtr[(c * dstSize.height * dstSize.width) + (i * dstSize.width) + j] = (Rpp8u) round(pixel);
+                    //return RPP_SUCCESS;
+                }
+            }
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        for (int c = 0; c < channel; c++)
+        {
+            for (unsigned int i = 0; i < dstSize.height; i++)
+            {
+                for (unsigned int j = 0; j < dstSize.width; j++)
+                {
+                    srcLocI = ((Rpp32f) i) / hRatio;
+                    srcLocJ = ((Rpp32f) j) / wRatio;
+                    //printf("\nsrcLocI = %0.4f, srcLocJ = %0.4f", srcLocI, srcLocJ);
+                    Rpp32s p = (Rpp32s) RPPFLOOR(srcLocI);
+                    Rpp32s q = (Rpp32s) RPPCEIL(srcLocI);
+                    Rpp32s r = (Rpp32s) RPPFLOOR(srcLocJ);
+                    Rpp32s s = (Rpp32s) RPPCEIL(srcLocJ);
+                    //printf("\np = %d, q = %d, r = %d, s = %d\n", p, q, r, s);
+
+                    Rpp32f h = srcLocI - (Rpp32f) p;
+                    Rpp32f w = srcLocJ - (Rpp32f) r;
+                    //printf("\nh = %0.4f, w = %0.4f", h, w);
+
+                    Rpp32f pixel1 = (Rpp32f) srcNewPtr[c + (channel * p * srcNewSize.width) + (channel * r)];
+                    Rpp32f pixel2 = (Rpp32f) srcNewPtr[c + (channel * p * srcNewSize.width) + (channel * s)];
+                    Rpp32f pixel3 = (Rpp32f) srcNewPtr[c + (channel * q * srcNewSize.width) + (channel * r)];
+                    Rpp32f pixel4 = (Rpp32f) srcNewPtr[c + (channel * q * srcNewSize.width) + (channel * s)];
+                    
+                    Rpp32f pixel;
+                    pixel = ((pixel1) * (1 - w) * (1 - h)) + ((pixel2) * (w) * (1 - h)) + ((pixel3) * (h) * (1 - w)) + ((pixel4) * (w) * (h));
+                    pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
+                    pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
+                    dstPtr[c + (channel * i * dstSize.width) + (channel * j)] = (Rpp8u) round(pixel);
+                    //return RPP_SUCCESS;
+                }
+            }
+        }
+    }
+*/
+
+
+
+
+
+
+
+
+
 
     Rpp32f resize[6] = {0};
     resize[0] = (((Rpp32f) dstSize.height) / ((Rpp32f) srcNewSize.height));
@@ -194,6 +284,7 @@ RppStatus resizeCrop_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSi
             }
         }
     }
-    
+   
     return RPP_SUCCESS;
+    
 }
