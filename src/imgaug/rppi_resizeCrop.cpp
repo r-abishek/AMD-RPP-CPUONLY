@@ -7,10 +7,12 @@
 #include "rppdefs.h"
 #include "cpu/host_resizeCrop.hpp"
 #include "rppi_image_augumentation_functions.h"
+#include <chrono> 
  
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
+using namespace std::chrono;
 
 
 
@@ -143,12 +145,22 @@ int main(int argc, char** argv)
 
     if (input == 1)
     {
-        dstSize.width = 2200;
-        dstSize.height = 800;
+        dstSize.width = 2700;
+        dstSize.height = 1400;
         x1 = 320;
         x2 = 960;
         y1 = 648;
         y2 = 72;
+
+        //int xDiff = (int) x2 - (int) x1;
+        //int yDiff = (int) y2 - (int) y1;
+        //dstSize.width = (Rpp32u) RPPABS(xDiff);
+        //dstSize.height = (Rpp32u) RPPABS(yDiff);
+
+
+
+
+
         if ( argc != 2 )
         {
             printf("usage: DisplayImage.out <Image_Path>\n");
@@ -177,7 +189,12 @@ int main(int argc, char** argv)
         printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
+        auto start = high_resolution_clock::now();
         rppi_resizeCrop_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
+        auto stop = high_resolution_clock::now();
+        auto duration = duration_cast<milliseconds>(stop - start);
+        cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+        
         Mat imageOut(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
 
 
