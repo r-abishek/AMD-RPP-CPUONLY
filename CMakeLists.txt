@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
-#[[
+
 add_executable(
     rppi_brightness_contrast
     src/imgaug/rppi_brightness_contrast.cpp
@@ -154,7 +154,7 @@ target_link_libraries(
     rppi_rotate
     ${OpenCV_LIBS}
 )
-]]
+
 
 add_executable(
     rppi_scale
@@ -203,7 +203,7 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-#[[
+
 add_executable(
     rppi_median_filter
     src/imgaug/rppi_median_filter.cpp
@@ -406,4 +406,3 @@ target_include_directories(rppi_meanStdDev
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
-]]
