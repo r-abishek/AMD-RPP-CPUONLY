@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
 #include "rppdefs.h"
 #include "cpu/host_resizeCrop.hpp"
 #include "rppi_image_augumentation_functions.h"
@@ -143,23 +144,23 @@ int main(int argc, char** argv)
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
 
+    int type;
+    printf("\nEnter type of arrangement: 1 = planar, 2 = packed: ");
+    scanf("%d", &type);
+
     if (input == 1)
     {
-        dstSize.width = 2700;
-        dstSize.height = 1400;
+        //dstSize.width = 2700;
+        //dstSize.height = 1400;
         x1 = 320;
         x2 = 960;
         y1 = 648;
         y2 = 72;
 
-        //int xDiff = (int) x2 - (int) x1;
-        //int yDiff = (int) y2 - (int) y1;
-        //dstSize.width = (Rpp32u) RPPABS(xDiff);
-        //dstSize.height = (Rpp32u) RPPABS(yDiff);
-
-
-
-
+        int xDiff = (int) x2 - (int) x1;
+        int yDiff = (int) y2 - (int) y1;
+        dstSize.width = (Rpp32u) RPPABS(xDiff);
+        dstSize.height = (Rpp32u) RPPABS(yDiff);
 
         if ( argc != 2 )
         {
@@ -182,18 +183,35 @@ int main(int argc, char** argv)
         channel = imageIn.channels();
         Rpp8u *srcPtr = imageIn.data;
         
-        int xDiff = (int) x2 - (int) x1;
-        int yDiff = (int) y2 - (int) y1;
+        //int xDiff = (int) x2 - (int) x1;
+        //int yDiff = (int) y2 - (int) y1;
         printf("\nCropped Image Height - %d, Cropped Image Width - %d\n", (Rpp32u) RPPABS(yDiff), (Rpp32u) RPPABS(xDiff));
 
         printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
-        auto start = high_resolution_clock::now();
-        rppi_resizeCrop_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
-        auto stop = high_resolution_clock::now();
-        auto duration = duration_cast<milliseconds>(stop - start);
-        cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+        if (type == 1)
+        {
+            Rpp8u *srcPtrTemp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+            Rpp8u *dstPtrTemp = (Rpp8u *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp8u));
+            rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
+            
+            auto start = high_resolution_clock::now();
+            rppi_resizeCrop_u8_pkd3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, x1, y1, x2, y2);
+            auto stop = high_resolution_clock::now();
+            auto duration = duration_cast<milliseconds>(stop - start);
+            cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+
+            rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+        }
+        else if (type == 2)
+        {
+            auto start = high_resolution_clock::now();
+            rppi_resizeCrop_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
+            auto stop = high_resolution_clock::now();
+            auto duration = duration_cast<milliseconds>(stop - start);
+            cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+        }
         
         Mat imageOut(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
 
@@ -214,10 +232,6 @@ int main(int argc, char** argv)
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
 
-    int type;
-    printf("\nEnter type of arrangement: 1 = planar, 2 = packed: ");
-    scanf("%d", &type);
-    
     if (matrix == 1)
     {
         channel = 1;
@@ -246,12 +260,16 @@ int main(int argc, char** argv)
         channel = 3;
         srcSize.height = 3;
         srcSize.width = 4;
-        dstSize.height = 9;
-        dstSize.width = 10;
+        //dstSize.height = 9;
+        //dstSize.width = 10;
         x1 = 0;
         x2 = 1;
         y1 = 0;
         y2 = 1;
+        int xDiff = (int) x2 - (int) x1;
+        int yDiff = (int) y2 - (int) y1;
+        dstSize.width = (Rpp32u) RPPABS(xDiff);
+        dstSize.height = (Rpp32u) RPPABS(yDiff);
         printf("\nInput Height - %d, Input Width - %d\n", srcSize.height, srcSize.width);
         printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
         if (type == 1)

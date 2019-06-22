@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
 #include "rppdefs.h"
 #include "cpu/host_scale.hpp"
 #include "rppi_image_augumentation_functions.h"
@@ -160,6 +161,10 @@ int main(int argc, char** argv)
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
 
+    int type;
+    printf("\nEnter type of arrangement: 1 = planar, 2 = packed: ");
+    scanf("%d", &type);
+
     if (input == 1)
     {
         if ( argc != 2 )
@@ -187,11 +192,28 @@ int main(int argc, char** argv)
         printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
-        auto start = high_resolution_clock::now();
-        rppi_scale_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
-        auto stop = high_resolution_clock::now();
-        auto duration = duration_cast<milliseconds>(stop - start);
-        cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+        if (type == 1)
+        {
+            Rpp8u *srcPtrTemp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+            Rpp8u *dstPtrTemp = (Rpp8u *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp8u));
+            rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
+
+            auto start = high_resolution_clock::now();
+            rppi_scale_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, percentage);
+            auto stop = high_resolution_clock::now();
+            auto duration = duration_cast<milliseconds>(stop - start);
+            cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+
+            rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+        }
+        else if (type == 2)
+        {
+            auto start = high_resolution_clock::now();
+            rppi_scale_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, percentage);
+            auto stop = high_resolution_clock::now();
+            auto duration = duration_cast<milliseconds>(stop - start);
+            cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+        }
         
         Mat imageOut(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
 
@@ -210,10 +232,6 @@ int main(int argc, char** argv)
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
-
-    int type;
-    printf("\nEnter type of arrangement: 1 = planar, 2 = packed: ");
-    scanf("%d", &type);
     
     if (matrix == 1)
     {
