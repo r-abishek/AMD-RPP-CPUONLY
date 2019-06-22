@@ -67,11 +67,11 @@ RppStatus resizeCrop_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSi
             srcPtrTemp += ((srcSize.width - srcNewSize.width) * channel);
         }
     }
-    for (int i = 0; i < (channel * srcNewSize.width * srcNewSize.height); i++)
-    {
-        dstPtr[i] = srcNewPtr[i];
-    }
-/*
+    //for (int i = 0; i < (channel * srcNewSize.width * srcNewSize.height); i++)
+    //{
+    //    dstPtr[i] = srcNewPtr[i];
+    //}
+
     Rpp32f hRatio = (((Rpp32f) (dstSize.height - 1)) / ((Rpp32f) (srcNewSize.height - 1)));
     Rpp32f wRatio = (((Rpp32f) (dstSize.width - 1)) / ((Rpp32f) (srcNewSize.width - 1)));
     Rpp32f srcLocationRow, srcLocationColumn, pixel;
@@ -162,7 +162,7 @@ RppStatus resizeCrop_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSi
             }
         }
     }
-*/
+
     
     
     

@@ -150,17 +150,17 @@ int main(int argc, char** argv)
 
     if (input == 1)
     {
-        //dstSize.width = 2700;
-        //dstSize.height = 1400;
+        dstSize.width = 2700;
+        dstSize.height = 1400;
         x1 = 320;
         x2 = 960;
         y1 = 648;
         y2 = 72;
 
-        int xDiff = (int) x2 - (int) x1;
-        int yDiff = (int) y2 - (int) y1;
-        dstSize.width = (Rpp32u) RPPABS(xDiff);
-        dstSize.height = (Rpp32u) RPPABS(yDiff);
+        //int xDiff = (int) x2 - (int) x1;
+        //int yDiff = (int) y2 - (int) y1;
+        //dstSize.width = (Rpp32u) RPPABS(xDiff);
+        //dstSize.height = (Rpp32u) RPPABS(yDiff);
 
         if ( argc != 2 )
         {
@@ -183,8 +183,8 @@ int main(int argc, char** argv)
         channel = imageIn.channels();
         Rpp8u *srcPtr = imageIn.data;
         
-        //int xDiff = (int) x2 - (int) x1;
-        //int yDiff = (int) y2 - (int) y1;
+        int xDiff = (int) x2 - (int) x1;
+        int yDiff = (int) y2 - (int) y1;
         printf("\nCropped Image Height - %d, Cropped Image Width - %d\n", (Rpp32u) RPPABS(yDiff), (Rpp32u) RPPABS(xDiff));
 
         printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
@@ -197,7 +197,7 @@ int main(int argc, char** argv)
             rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
             
             auto start = high_resolution_clock::now();
-            rppi_resizeCrop_u8_pkd3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, x1, y1, x2, y2);
+            rppi_resizeCrop_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, x1, y1, x2, y2);
             auto stop = high_resolution_clock::now();
             auto duration = duration_cast<milliseconds>(stop - start);
             cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
