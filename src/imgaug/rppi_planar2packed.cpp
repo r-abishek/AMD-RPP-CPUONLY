@@ -2,14 +2,14 @@
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
+#include "rppdefs.h"
+#include "rppi_image_augumentation_functions.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "rppdefs.h"
-#include "cpu/host_planar2packed.hpp"
+#include <chrono>
+#include "cpu/rpp_cpu_inputAndDisplay.hpp"
 #include "cpu/host_packed2planar.hpp"
-#include "rppi_image_augumentation_functions.h"
-#include <chrono> 
-
+#include "cpu/host_planar2packed.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -54,69 +54,6 @@ rppi_packed2planar_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstP
 
 
 
-
-// Uncomment the segment below to get this standalone to work for basic unit testing
-
-void inputPlanar(int *intSrcPtr, RppiSize srcSize, unsigned int channel)
-{
-    int p = 0;
-    for(int c = 0; c < channel; c++)
-    {
-        printf("\n\nEnter %d elements for channel %d:\n", (srcSize.width * srcSize.height), c+1);
-        for (int i = 0; i < (srcSize.height * srcSize.width); i++)
-        {
-            scanf("%d", intSrcPtr + p);
-            p += 1;
-        }
-    }
-}
-
-void cast(int *intSrcPtr, Rpp8u *srcPtr, RppiSize srcSize, unsigned int channel)
-{
-    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
-    {
-        intSrcPtr[i] = (intSrcPtr[i] < 255) ? intSrcPtr[i] : 255;
-        intSrcPtr[i] = (intSrcPtr[i] > 0) ? intSrcPtr[i] : 0;
-        srcPtr[i] = (Rpp8u) intSrcPtr[i];
-
-    }
-}
-
-void displayPlanar(Rpp8u *pArr, RppiSize size, unsigned int channel)
-{
-    int p = 0;
-    for(int c = 0; c < channel; c++)
-    {
-        printf("\n\nChannel %d:\n", c+1);
-        for (int i = 0; i < (size.height * size.width); i++)
-        {
-            printf("%d\t\t", *(pArr + p));
-            if (((i + 1) % size.width) == 0)
-            {
-                printf("\n");
-            }
-            p += 1;
-        }
-    }
-}
-
-void displayPacked(Rpp8u *pArr, RppiSize size, unsigned int channel)
-{
-    int p = 0;
-    for (int i = 0; i < size.height; i++)
-    {
-        for (int c = 0; c < channel; c++)
-        {
-            for (int j = 0; j < size.width; j++)
-            {
-                printf("%d\t\t", *(pArr + p + c + (j * channel)));
-            }
-            printf("\n");
-        }
-        printf("\n");
-        p += (channel * size.width);
-    }
-}
 
 int main(int argc, char** argv)
 {

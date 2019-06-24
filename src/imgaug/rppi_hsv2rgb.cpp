@@ -2,11 +2,12 @@
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
+#include "rppdefs.h"
+#include "rppi_image_augumentation_functions.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "rppdefs.h"
+#include "cpu/rpp_cpu_inputAndDisplay.hpp"
 #include "cpu/host_hsv2rgb.hpp"
-#include "rppi_image_augumentation_functions.h"
  
 
 
@@ -35,140 +36,6 @@ rppi_hsv2rgb_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 
 
 
-
-// Uncomment the segment below to get this standalone to work for basic unit testing
-
-void inputPlanar(int *intSrcPtr, RppiSize srcSize, unsigned int channel)
-{
-    int p = 0;
-    for(int c = 0; c < channel; c++)
-    {
-        printf("\n\nEnter %d elements for channel %d:\n", (srcSize.width * srcSize.height), c+1);
-        for (int i = 0; i < (srcSize.height * srcSize.width); i++)
-        {
-            scanf("%d", intSrcPtr + p);
-            p += 1;
-        }
-    }
-}
-
-void inputPacked(int *intSrcPtr, RppiSize srcSize, unsigned int channel)
-{
-    int p = 0;
-    printf("\n\nEnter %d elements for the image:\n", (channel * srcSize.height * srcSize.width));
-    for (int i = 0; i < (srcSize.height * srcSize.width); i++)
-    {
-        for (int c = 0; c < channel; c++)
-        {
-            printf("Channel %d - ", c+1);
-            scanf("%d", intSrcPtr + p);
-            p += 1;
-        }
-        printf("\n");
-    }
-}
-
-void inputPlanarF(float *floatSrcPtr, RppiSize srcSize, unsigned int channel)
-{
-    int p = 0;
-    for(int c = 0; c < channel; c++)
-    {
-        printf("\n\nEnter %d elements for channel %d:\n", (srcSize.width * srcSize.height), c+1);
-        for (int i = 0; i < (srcSize.height * srcSize.width); i++)
-        {
-            scanf("%f", floatSrcPtr + p);
-            p += 1;
-        }
-    }
-}
-
-void inputPackedF(float *floatSrcPtr, RppiSize srcSize, unsigned int channel)
-{
-    int p = 0;
-    printf("\n\nEnter %d elements for the image:\n", (channel * srcSize.height * srcSize.width));
-    for (int i = 0; i < (srcSize.height * srcSize.width); i++)
-    {
-        for (int c = 0; c < channel; c++)
-        {
-            printf("Channel %d - ", c+1);
-            scanf("%f", floatSrcPtr + p);
-            p += 1;
-        }
-        printf("\n");
-    }
-}
-
-void displayPlanar(Rpp8u *pArr, RppiSize size, unsigned int channel)
-{
-    int p = 0;
-    for(int c = 0; c < channel; c++)
-    {
-        printf("\n\nChannel %d:\n", c+1);
-        for (int i = 0; i < (size.height * size.width); i++)
-        {
-            printf("%d\t\t", *(pArr + p));
-            if (((i + 1) % size.width) == 0)
-            {
-                printf("\n");
-            }
-            p += 1;
-        }
-    }
-}
-
-void displayPacked(Rpp8u *pArr, RppiSize size, unsigned int channel)
-{
-    int p = 0;
-    for (int i = 0; i < size.height; i++)
-    {
-        for (int c = 0; c < channel; c++)
-        {
-            for (int j = 0; j < size.width; j++)
-            {
-                printf("%d\t\t", *(pArr + p + c + (j * channel)));
-            }
-            printf("\n");
-        }
-        printf("\n");
-        p += (channel * size.width);
-    }
-}
-
-void displayPlanarF(Rpp32f *pArr, RppiSize size, unsigned int channel)
-{
-    int p = 0;
-    for(int c = 0; c < channel; c++)
-    {
-        printf("\n\nChannel %d:\n", c+1);
-        for (int i = 0; i < (size.height * size.width); i++)
-        {
-            printf("%0.2f\t\t", *(pArr + p));
-            if (((i + 1) % size.width) == 0)
-            {
-                printf("\n");
-            }
-            p += 1;
-        }
-    }
-}
-
-void displayPackedF(Rpp32f *pArr, RppiSize size, unsigned int channel)
-{
-    int p = 0;
-    for (int i = 0; i < size.height; i++)
-    {
-        for (int c = 0; c < channel; c++)
-        {
-            for (int j = 0; j < size.width; j++)
-            {
-                printf("%0.2f\t\t", *(pArr + p + c + (j * channel)));
-            }
-            printf("\n");
-        }
-        printf("\n");
-        p += (channel * size.width);
-    }
-}
 
 int main()
 {
