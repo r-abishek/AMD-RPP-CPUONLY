@@ -17,7 +17,7 @@ project(amd_rpp VERSION 0.1)
 
 
 
-#[[
+
 add_executable(
     rppi_brightness_contrast
     src/imgaug/rppi_brightness_contrast.cpp
@@ -116,7 +116,7 @@ target_include_directories(rppi_gamma_correction
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
 )
-]]
+
 
 add_executable(
     rppi_packed2planar
@@ -162,7 +162,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     rppi_flip
     src/imgaug/rppi_flip.cpp
@@ -177,7 +177,7 @@ target_link_libraries(
     rppi_flip
     ${OpenCV_LIBS}
 )
-]]
+
 
 add_executable(
     rppi_warp_affine
@@ -271,7 +271,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     rppi_blur
     src/imgaug/rppi_blur.cpp
@@ -378,10 +378,10 @@ target_include_directories(rppi_add
 
 
 add_executable(
-    rppi_sub
-    src/arithmetic/rppi_sub.cpp
+    rppi_subtract
+    src/arithmetic/rppi_subtract.cpp
 )
-target_include_directories(rppi_sub
+target_include_directories(rppi_subtract
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
@@ -389,10 +389,10 @@ target_include_directories(rppi_sub
 
 
 add_executable(
-    rppi_and
-    src/arithmetic/rppi_and.cpp
+    rppi_bitwise_AND
+    src/arithmetic/rppi_bitwise_AND.cpp
 )
-target_include_directories(rppi_and
+target_include_directories(rppi_bitwise_AND
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
@@ -400,10 +400,10 @@ target_include_directories(rppi_and
 
 
 add_executable(
-    rppi_or
-    src/arithmetic/rppi_or.cpp
+    rppi_inclusive_OR
+    src/arithmetic/rppi_inclusive_OR.cpp
 )
-target_include_directories(rppi_or
+target_include_directories(rppi_inclusive_OR
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
@@ -411,10 +411,10 @@ target_include_directories(rppi_or
 
 
 add_executable(
-    rppi_xor
-    src/arithmetic/rppi_xor.cpp
+    rppi_exclusive_OR
+    src/arithmetic/rppi_exclusive_OR.cpp
 )
-target_include_directories(rppi_xor
+target_include_directories(rppi_exclusive_OR
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
@@ -422,10 +422,10 @@ target_include_directories(rppi_xor
 
 
 add_executable(
-    rppi_not
-    src/arithmetic/rppi_not.cpp
+    rppi_bitwise_NOT
+    src/arithmetic/rppi_bitwise_NOT.cpp
 )
-target_include_directories(rppi_not
+target_include_directories(rppi_bitwise_NOT
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
@@ -524,4 +524,3 @@ target_link_libraries(
     DisplayImage
     ${OpenCV_LIBS}
 )
-]]

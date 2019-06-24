@@ -1,11 +1,11 @@
-// rppi_not
+// rppi_bitwise_NOT
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "rppdefs.h"
-#include "cpu/host_not.hpp"
+#include "cpu/host_bitwise_NOT.hpp"
 #include "rppi_arithmetic_and_logical_functions.h"
  
 using namespace std;
@@ -15,9 +15,9 @@ using namespace std;
 
 
 RppStatus
-rppi_not_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_bitwise_NOT_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    not_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+    bitwise_NOT_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     1);
 
     return RPP_SUCCESS;
@@ -25,9 +25,9 @@ rppi_not_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 }
 
 RppStatus
-rppi_not_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_bitwise_NOT_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    not_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+    bitwise_NOT_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     3);
 
     return RPP_SUCCESS;
@@ -35,9 +35,9 @@ rppi_not_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 }
 
 RppStatus
-rppi_not_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_bitwise_NOT_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    not_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+    bitwise_NOT_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     3);
 
     return RPP_SUCCESS;
@@ -149,8 +149,8 @@ int main()
         Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_not_u8_pln1_host(srcPtr, srcSize, dstPtr);
-        printf("\n\nOutput of not operation:\n");
+        rppi_bitwise_NOT_u8_pln1_host(srcPtr, srcSize, dstPtr);
+        printf("\n\nOutput of bitwise_NOT operation:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -164,8 +164,8 @@ int main()
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_not_u8_pln3_host(srcPtr, srcSize, dstPtr);
-            printf("\n\nOutput of not operation:\n");
+            rppi_bitwise_NOT_u8_pln3_host(srcPtr, srcSize, dstPtr);
+            printf("\n\nOutput of bitwise_NOT operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -174,8 +174,8 @@ int main()
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_not_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-            printf("\n\nOutput of not operation:\n");
+            rppi_bitwise_NOT_u8_pkd3_host(srcPtr, srcSize, dstPtr);
+            printf("\n\nOutput of bitwise_NOT operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -200,13 +200,13 @@ int main()
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_not_u8_pln1_host(srcPtr, srcSize, dstPtr);
+                rppi_bitwise_NOT_u8_pln1_host(srcPtr, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_not_u8_pln3_host(srcPtr, srcSize, dstPtr);
+                rppi_bitwise_NOT_u8_pln3_host(srcPtr, srcSize, dstPtr);
             }
-            printf("\n\nOutput of not operation:\n");
+            printf("\n\nOutput of bitwise_NOT operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -218,13 +218,13 @@ int main()
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_not_u8_pln1_host(srcPtr, srcSize, dstPtr);
+                rppi_bitwise_NOT_u8_pln1_host(srcPtr, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_not_u8_pkd3_host(srcPtr, srcSize, dstPtr);
+                rppi_bitwise_NOT_u8_pkd3_host(srcPtr, srcSize, dstPtr);
             }
-            printf("\n\nOutput of not operation:\n");
+            printf("\n\nOutput of bitwise_NOT operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }

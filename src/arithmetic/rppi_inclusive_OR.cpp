@@ -1,11 +1,11 @@
-// rppi_or
+// rppi_inclusive_inclusive_OR
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "rppdefs.h"
-#include "cpu/host_or.hpp"
+#include "cpu/host_inclusive_OR.hpp"
 #include "rppi_arithmetic_and_logical_functions.h"
  
 using namespace std;
@@ -15,9 +15,9 @@ using namespace std;
 
 
 RppStatus
-rppi_or_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_inclusive_OR_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    or_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    inclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     1);
 
     return RPP_SUCCESS;
@@ -25,9 +25,9 @@ rppi_or_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPt
 }
 
 RppStatus
-rppi_or_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_inclusive_OR_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    or_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    inclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     3);
 
     return RPP_SUCCESS;
@@ -35,9 +35,9 @@ rppi_or_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPt
 }
 
 RppStatus
-rppi_or_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_inclusive_OR_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    or_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    inclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     3);
 
     return RPP_SUCCESS;
@@ -152,8 +152,8 @@ int main()
         displayPlanar(srcPtr1, srcSize, channel);
         printf("\n\nInput 2:\n");
         displayPlanar(srcPtr2, srcSize, channel);
-        rppi_or_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-        printf("\n\nOutput of or operation:\n");
+        rppi_inclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+        printf("\n\nOutput of inclusive_OR operation:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -170,8 +170,8 @@ int main()
             displayPlanar(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPlanar(srcPtr2, srcSize, channel);
-            rppi_or_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of or operation:\n");
+            rppi_inclusive_OR_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+            printf("\n\nOutput of inclusive_OR operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -183,8 +183,8 @@ int main()
             displayPacked(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPacked(srcPtr2, srcSize, channel);
-            rppi_or_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of or operation:\n");
+            rppi_inclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+            printf("\n\nOutput of inclusive_OR operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -216,13 +216,13 @@ int main()
             displayPlanar(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_or_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_inclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_or_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_inclusive_OR_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of or operation:\n");
+            printf("\n\nOutput of inclusive_OR operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -239,13 +239,13 @@ int main()
             displayPacked(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_or_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_inclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_or_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_inclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of or operation:\n");
+            printf("\n\nOutput of inclusive_OR operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }

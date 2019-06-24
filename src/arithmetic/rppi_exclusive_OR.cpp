@@ -1,11 +1,11 @@
-// rppi_and
+// rppi_exclusive_OR
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "rppdefs.h"
-#include "cpu/host_and.hpp"
+#include "cpu/host_exclusive_OR.hpp"
 #include "rppi_arithmetic_and_logical_functions.h"
  
 using namespace std;
@@ -15,9 +15,9 @@ using namespace std;
 
 
 RppStatus
-rppi_and_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_exclusive_OR_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    and_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    exclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     1);
 
     return RPP_SUCCESS;
@@ -25,9 +25,9 @@ rppi_and_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppP
 }
 
 RppStatus
-rppi_and_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_exclusive_OR_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    and_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    exclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     3);
 
     return RPP_SUCCESS;
@@ -35,9 +35,9 @@ rppi_and_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppP
 }
 
 RppStatus
-rppi_and_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_exclusive_OR_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    and_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    exclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     3);
 
     return RPP_SUCCESS;
@@ -152,8 +152,8 @@ int main()
         displayPlanar(srcPtr1, srcSize, channel);
         printf("\n\nInput 2:\n");
         displayPlanar(srcPtr2, srcSize, channel);
-        rppi_and_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-        printf("\n\nOutput of and operation:\n");
+        rppi_exclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+        printf("\n\nOutput of exclusive_OR operation:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -170,8 +170,8 @@ int main()
             displayPlanar(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPlanar(srcPtr2, srcSize, channel);
-            rppi_and_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of and operation:\n");
+            rppi_exclusive_OR_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+            printf("\n\nOutput of exclusive_OR operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -183,8 +183,8 @@ int main()
             displayPacked(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPacked(srcPtr2, srcSize, channel);
-            rppi_and_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of and operation:\n");
+            rppi_exclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+            printf("\n\nOutput of exclusive_OR operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -216,13 +216,13 @@ int main()
             displayPlanar(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_and_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_exclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_and_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_exclusive_OR_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of and operation:\n");
+            printf("\n\nOutput of exclusive_OR operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -239,13 +239,13 @@ int main()
             displayPacked(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_and_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_exclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_and_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_exclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of and operation:\n");
+            printf("\n\nOutput of exclusive_OR operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }

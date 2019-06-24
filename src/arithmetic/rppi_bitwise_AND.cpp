@@ -1,11 +1,11 @@
-// rppi_sub
+// rppi_bitwise_AND
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "rppdefs.h"
-#include "cpu/host_sub.hpp"
+#include "cpu/host_bitwise_AND.hpp"
 #include "rppi_arithmetic_and_logical_functions.h"
  
 using namespace std;
@@ -15,9 +15,9 @@ using namespace std;
 
 
 RppStatus
-rppi_sub_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_bitwise_AND_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    sub_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    bitwise_AND_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     1);
 
     return RPP_SUCCESS;
@@ -25,9 +25,9 @@ rppi_sub_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppP
 }
 
 RppStatus
-rppi_sub_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_bitwise_AND_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    sub_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    bitwise_AND_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     3);
 
     return RPP_SUCCESS;
@@ -35,9 +35,9 @@ rppi_sub_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppP
 }
 
 RppStatus
-rppi_sub_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_bitwise_AND_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    sub_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    bitwise_AND_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     3);
 
     return RPP_SUCCESS;
@@ -152,8 +152,8 @@ int main()
         displayPlanar(srcPtr1, srcSize, channel);
         printf("\n\nInput 2:\n");
         displayPlanar(srcPtr2, srcSize, channel);
-        rppi_sub_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-        printf("\n\nOutput of Subtraction:\n");
+        rppi_bitwise_AND_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+        printf("\n\nOutput of bitwise_AND operation:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -170,8 +170,8 @@ int main()
             displayPlanar(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPlanar(srcPtr2, srcSize, channel);
-            rppi_sub_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of Subtraction:\n");
+            rppi_bitwise_AND_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+            printf("\n\nOutput of bitwise_AND operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -183,8 +183,8 @@ int main()
             displayPacked(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPacked(srcPtr2, srcSize, channel);
-            rppi_sub_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of Subtraction:\n");
+            rppi_bitwise_AND_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+            printf("\n\nOutput of bitwise_AND operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -216,13 +216,13 @@ int main()
             displayPlanar(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_sub_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_bitwise_AND_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_sub_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_bitwise_AND_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of Subtraction:\n");
+            printf("\n\nOutput of bitwise_AND operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -239,13 +239,13 @@ int main()
             displayPacked(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_sub_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_bitwise_AND_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_sub_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_bitwise_AND_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of Subtraction:\n");
+            printf("\n\nOutput of bitwise_AND operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }
