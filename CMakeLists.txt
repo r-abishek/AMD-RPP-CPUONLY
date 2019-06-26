@@ -330,6 +330,22 @@ target_link_libraries(
 
 
 add_executable(
+    rppi_box_filter
+    src/imgaug/rppi_box_filter.cpp
+)
+target_include_directories(rppi_box_filter
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_box_filter
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
     rppi_bilateral_filter
     src/arithmetic/rppi_bilateral_filter.cpp
 )
