@@ -112,7 +112,7 @@ int main(int argc, char** argv)
         Rpp8u *srcPtr = imageIn.data;
 
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
-        Rpp8u *dstPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
@@ -134,8 +134,8 @@ int main(int argc, char** argv)
             else if (channel == 3)
             {
                 printf("\nExecuting pln3...\n");
-                Rpp8u *srcPtrTemp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-                Rpp8u *dstPtrTemp = (Rpp8u *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp8u));
+                Rpp8u *srcPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+                Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
                 rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
@@ -236,9 +236,9 @@ int main(int argc, char** argv)
         printf("Enter width of image in pixels: ");
         scanf("%d", &srcSize.width);
         printf("Channels = %d, Height = %d, Width = %d", channel, srcSize.height, srcSize.width);
-        Rpp8u *srcPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-        Rpp8u *dstPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-        int *intSrcPtr = (int *)malloc(channel * srcSize.height * srcSize.width * sizeof(int));
+        Rpp8u *srcPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+        int *intSrcPtr = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
         if (type == 1)
         {
             printf("\n\n\n\nEnter elements in array of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);

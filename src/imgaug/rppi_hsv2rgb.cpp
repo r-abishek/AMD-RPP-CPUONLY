@@ -82,7 +82,7 @@ int main(int argc, char** argv)
         Rpp8u *srcPtr = imageIn.data;
 
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
-        Rpp8u *dstPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
@@ -92,9 +92,9 @@ int main(int argc, char** argv)
         if (type == 1)
         {   
             printf("\nExecuting pln3...\n");
-            Rpp8u *srcPtrTemp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-            Rpp32f *dstPtrTempHSV = (Rpp32f *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp32f));
-            Rpp8u *dstPtrTempRGB = (Rpp8u *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp8u));
+            Rpp8u *srcPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+            Rpp32f *dstPtrTempHSV = (Rpp32f *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp32f));
+            Rpp8u *dstPtrTempRGB = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
             rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
             rgb2hsv_host(srcPtrTemp, srcSize, dstPtrTempHSV, RPPI_CHN_PLANAR, 3);
@@ -110,7 +110,7 @@ int main(int argc, char** argv)
         else if (type == 2)
         {   
             printf("\nExecuting pkd3...\n");
-            Rpp32f *dstPtrHSV = (Rpp32f *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp32f));
+            Rpp32f *dstPtrHSV = (Rpp32f *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp32f));
             
             rgb2hsv_host(srcPtr, srcSize, dstPtrHSV, RPPI_CHN_PACKED, 3);
 
@@ -179,8 +179,8 @@ int main(int argc, char** argv)
         printf("Enter width of image in pixels: ");
         scanf("%d", &srcSize.width);
         printf("Channels = %d, Height = %d, Width = %d", channel, srcSize.height, srcSize.width);
-        Rpp32f *srcPtr = (Rpp32f *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp32f));
-        Rpp8u *dstPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+        Rpp32f *srcPtr = (Rpp32f *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp32f));
+        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         if (type == 1)
         {
             printf("\n\n\n\nEnter elements in array of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);

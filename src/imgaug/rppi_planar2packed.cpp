@@ -85,8 +85,8 @@ int main(int argc, char** argv)
         srcSize.width = imageIn.cols;
         channel = imageIn.channels();
         Rpp8u *srcPtr = imageIn.data;
-        Rpp8u *dstPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-        Rpp8u *srcPtrTemp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+        Rpp8u *srcPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
 
         rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, dstPtr);
 
@@ -166,9 +166,9 @@ int main(int argc, char** argv)
         printf("Enter width of image in pixels: ");
         scanf("%d", &srcSize.width);
         printf("Channels = %d, Height = %d, Width = %d", channel, srcSize.height, srcSize.width);
-        Rpp8u *srcPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-        Rpp8u *dstPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-        int *intSrcPtr = (int *)malloc(channel * srcSize.height * srcSize.width * sizeof(int));
+        Rpp8u *srcPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+        int *intSrcPtr = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
 
         printf("\n\n\n\nEnter elements in array of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);
         inputPlanar(intSrcPtr, srcSize, channel);
