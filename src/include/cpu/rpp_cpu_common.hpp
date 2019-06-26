@@ -18,5 +18,6 @@
 #define RPPINRANGE(a, x, y)     ((a >= x) && (a <= y) ? 1 : 0)
 #define RPPFLOOR(a)             ((int) a)
 #define RPPCEIL(a)              ((int) (a + 1.0))
+#define RPPISEVEN(a)            ((a % 2 == 0) ? 1 : 0)
 
 #endif //RPP_CPU_COMMON_H
