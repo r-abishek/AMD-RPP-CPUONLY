@@ -71,6 +71,11 @@ target_include_directories(rppi_rgb2hsv
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_rgb2hsv
+    ${OpenCV_LIBS}
 )
 
 
@@ -82,6 +87,11 @@ target_include_directories(rppi_hsv2rgb
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hsv2rgb
+    ${OpenCV_LIBS}
 )
 
 
@@ -93,6 +103,11 @@ target_include_directories(rppi_hue
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hue
+    ${OpenCV_LIBS}
 )
 
 
@@ -104,6 +119,11 @@ target_include_directories(rppi_saturation
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_saturation
+    ${OpenCV_LIBS}
 )
 
 
@@ -115,9 +135,14 @@ target_include_directories(rppi_gamma_correction
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_gamma_correction
+    ${OpenCV_LIBS}
 )
 
-
+#[[
 add_executable(
     rppi_packed2planar
     src/imgaug/rppi_packed2planar.cpp
@@ -148,7 +173,7 @@ target_link_libraries(
     rppi_planar2packed
     ${OpenCV_LIBS}
 )
-
+]]
 
 
 
@@ -244,17 +269,17 @@ target_link_libraries(
 
 
 add_executable(
-    rppi_resizeCrop
-    src/imgaug/rppi_resizeCrop.cpp
+    rppi_resize_crop
+    src/imgaug/rppi_resize_crop.cpp
 )
-target_include_directories(rppi_resizeCrop
+target_include_directories(rppi_resize_crop
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_resizeCrop
+    rppi_resize_crop
     ${OpenCV_LIBS}
 )
 
@@ -270,22 +295,6 @@ target_link_libraries(
 
 
 
-
-
-add_executable(
-    rppi_blur
-    src/imgaug/rppi_blur.cpp
-)
-target_include_directories(rppi_blur
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_blur
-    ${OpenCV_LIBS}
-)
 
 
 add_executable(
@@ -300,6 +309,22 @@ target_include_directories(rppi_median_filter
 )
 target_link_libraries(
     rppi_median_filter
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_blur
+    src/imgaug/rppi_blur.cpp
+)
+target_include_directories(rppi_blur
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_blur
     ${OpenCV_LIBS}
 )
 
@@ -334,6 +359,35 @@ target_link_libraries(
 
 
 add_executable(
+    rppi_blend
+    src/imgaug/rppi_blend.cpp
+)
+target_include_directories(rppi_blend
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_blend
+    ${OpenCV_LIBS}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+add_executable(
     rppi_absolute_difference
     src/arithmetic/rppi_absolute_difference.cpp
 )
@@ -341,6 +395,11 @@ target_include_directories(rppi_absolute_difference
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_absolute_difference
+    ${OpenCV_LIBS}
 )
 
 
@@ -352,6 +411,11 @@ target_include_directories(rppi_accumulate
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_accumulate
+    ${OpenCV_LIBS}
 )
 
 
@@ -363,6 +427,11 @@ target_include_directories(rppi_accumulate_weighted
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_accumulate_weighted
+    ${OpenCV_LIBS}
 )
 
 
@@ -374,6 +443,11 @@ target_include_directories(rppi_add
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_add
+    ${OpenCV_LIBS}
 )
 
 
@@ -385,6 +459,11 @@ target_include_directories(rppi_subtract
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_subtract
+    ${OpenCV_LIBS}
 )
 
 
@@ -396,6 +475,11 @@ target_include_directories(rppi_bitwise_AND
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_bitwise_AND
+    ${OpenCV_LIBS}
 )
 
 
@@ -407,6 +491,11 @@ target_include_directories(rppi_inclusive_OR
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_inclusive_OR
+    ${OpenCV_LIBS}
 )
 
 
@@ -418,6 +507,11 @@ target_include_directories(rppi_exclusive_OR
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_exclusive_OR
+    ${OpenCV_LIBS}
 )
 
 
@@ -429,6 +523,11 @@ target_include_directories(rppi_bitwise_NOT
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_bitwise_NOT
+    ${OpenCV_LIBS}
 )
 
 
@@ -444,7 +543,7 @@ target_include_directories(rppi_bitwise_NOT
 
 
 
-
+#[[
 add_executable(
     rppi_min
     src/statistical/rppi_min.cpp
@@ -453,6 +552,11 @@ target_include_directories(rppi_min
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_min
+    ${OpenCV_LIBS}
 )
 
 
@@ -464,6 +568,11 @@ target_include_directories(rppi_max
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_max
+    ${OpenCV_LIBS}
 )
 
 
@@ -475,6 +584,11 @@ target_include_directories(rppi_minMax
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_minMax
+    ${OpenCV_LIBS}
 )
 
 
@@ -486,6 +600,11 @@ target_include_directories(rppi_minMaxLoc
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_minMaxLoc
+    ${OpenCV_LIBS}
 )
 
 
@@ -497,6 +616,11 @@ target_include_directories(rppi_meanStdDev
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_meanStdDev
+    ${OpenCV_LIBS}
 )
 
 
@@ -524,3 +648,4 @@ target_link_libraries(
     DisplayImage
     ${OpenCV_LIBS}
 )
+]]

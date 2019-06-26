@@ -4,4 +4,4 @@ rm -rvf build
 mkdir build
 cd build
 cmake ..
-make
+make -j12

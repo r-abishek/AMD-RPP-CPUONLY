@@ -6,12 +6,14 @@
 #include "rppi_arithmetic_and_logical_functions.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <chrono>
 #include "cpu/rpp_cpu_inputAndDisplay.hpp"
+#include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
 #include "cpu/host_bilateral_filter.hpp"
- 
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
+using namespace std::chrono;
 
 
 
@@ -59,7 +61,7 @@ rppi_bilateral_filter_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
 
 int main(int argc, char** argv)
 {
-    RppiSize srcSize;
+    RppiSize srcSize, dstSize;
     unsigned int channel;
     Rpp32s diameter = 5;
     Rpp64f sigmaI = 80.0, sigmaS = 60.0;
@@ -67,6 +69,10 @@ int main(int argc, char** argv)
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
+
+    int type;
+    printf("\nEnter type of arrangement: 1 = planar, 2 = packed: ");
+    scanf("%d", &type);
 
     if (input == 1)
     {
@@ -76,8 +82,21 @@ int main(int argc, char** argv)
             return -1;
         }
 
+        do
+        {   printf("\nThe image input/inputs can be interpreted as 1 or 3 channel (greyscale or RGB). Please choose - only 1 or 3: ");
+            scanf("%d", &channel);
+        }while (channel != 1 && channel != 3);
+
         Mat imageIn;
-        imageIn = imread( argv[1], 1 );
+
+        if (channel == 1)
+        {
+            imageIn = imread( argv[1], 0 );
+        }
+        else if (channel ==3)
+        {
+            imageIn = imread( argv[1], 1 );
+        }
 
         if ( !imageIn.data )
         {
@@ -90,11 +109,72 @@ int main(int argc, char** argv)
 
         srcSize.height = imageIn.rows;
         srcSize.width = imageIn.cols;
-        channel = imageIn.channels();
+        dstSize.height = srcSize.height;
+        dstSize.width = srcSize.width;
+        
+        printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
+        
+        printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
         Rpp8u *dstPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-        rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
-        Mat imageOut(srcSize.height, srcSize.width, CV_8UC3, dstPtr);
+        
+        auto start = high_resolution_clock::now();
+        auto stop = high_resolution_clock::now();
+
+        Mat imageOut;
+
+        if (type == 1)
+        {   
+            if (channel == 1)
+            {
+                printf("\nExecuting pln1...\n");
+                start = high_resolution_clock::now();
+                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                
+            }
+            else if (channel == 3)
+            {
+                printf("\nExecuting pln3...\n");
+                Rpp8u *srcPtrTemp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+                Rpp8u *dstPtrTemp = (Rpp8u *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp8u));
+                rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
+
+                start = high_resolution_clock::now();
+                rppi_bilateral_filter_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, diameter, sigmaI, sigmaS);
+                stop = high_resolution_clock::now();
+
+                rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+            }
+        }
+        else if (type == 2)
+        {   
+            if (channel == 1)
+            {
+                printf("\nExecuting pln1 for pkd1...\n");
+                start = high_resolution_clock::now();
+                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+            }
+            else if (channel ==3)
+            {
+                printf("\nExecuting pkd3...\n");
+                start = high_resolution_clock::now();
+                rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+            }
+        }
+
+        auto duration = duration_cast<milliseconds>(stop - start);
+        cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
 
         Mat images(imageIn.rows, imageIn.cols*3, imageIn.type());
         imageIn.copyTo(images(cv::Rect(0,0, imageIn.cols, imageIn.rows)));
@@ -113,10 +193,6 @@ int main(int argc, char** argv)
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
 
-    int type;
-    printf("\nEnter type of arrangement: 1 = planar, 2 = packed: ");
-    scanf("%d", &type);
-    
     if (matrix == 1)
     {
         channel = 1;

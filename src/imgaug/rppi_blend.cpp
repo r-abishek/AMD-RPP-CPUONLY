@@ -1,15 +1,15 @@
-// rppi_inclusive_inclusive_OR
+// rppi_blend
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_arithmetic_and_logical_functions.h"
+#include "rppi_image_augumentation_functions.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
 #include "cpu/rpp_cpu_inputAndDisplay.hpp"
 #include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
-#include "cpu/host_inclusive_OR.hpp"
+#include "cpu/host_blend.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -20,9 +20,10 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_inclusive_OR_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_blend_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr, Rpp32f alpha)
 {
-    inclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    blend_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                    alpha,
                                     1);
 
     return RPP_SUCCESS;
@@ -30,9 +31,10 @@ rppi_inclusive_OR_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 }
 
 RppStatus
-rppi_inclusive_OR_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_blend_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr, Rpp32f alpha)
 {
-    inclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    blend_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                    alpha,
                                     3);
 
     return RPP_SUCCESS;
@@ -40,9 +42,10 @@ rppi_inclusive_OR_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 }
 
 RppStatus
-rppi_inclusive_OR_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_blend_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr, Rpp32f alpha)
 {
-    inclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    blend_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                    alpha,
                                     3);
 
     return RPP_SUCCESS;
@@ -55,8 +58,9 @@ rppi_inclusive_OR_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 
 int main(int argc, char** argv)
 {
-    RppiSize srcSize, dstSize;
+    RppiSize srcSize;
     unsigned int channel;
+    Rpp32f alpha = 0.5;
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -106,15 +110,13 @@ int main(int argc, char** argv)
 
         srcSize.height = imageIn1.rows;
         srcSize.width = imageIn1.cols;
-        dstSize.height = srcSize.height;
-        dstSize.width = srcSize.width;
         
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr1 = imageIn1.data;
         Rpp8u *srcPtr2 = imageIn2.data;
         
-        printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
-        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
+        printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", srcSize.height, srcSize.width, channel);
+        Rpp8u *dstPtr = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
@@ -127,10 +129,10 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_inclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_blend_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr, alpha);
                 stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_8UC1, dstPtr);
                 
             }
             else if (channel == 3)
@@ -138,17 +140,17 @@ int main(int argc, char** argv)
                 printf("\nExecuting pln3...\n");
                 Rpp8u *srcPtr1Temp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
                 Rpp8u *srcPtr2Temp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-                Rpp8u *dstPtrTemp = (Rpp8u *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp8u));
+                Rpp8u *dstPtrTemp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
                 rppi_packed2planar_u8_pkd3_host(srcPtr1, srcSize, srcPtr1Temp);
                 rppi_packed2planar_u8_pkd3_host(srcPtr2, srcSize, srcPtr2Temp);
 
                 start = high_resolution_clock::now();
-                rppi_inclusive_OR_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize, dstPtrTemp);
+                rppi_blend_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize, dstPtrTemp, alpha);
                 stop = high_resolution_clock::now();
 
-                rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+                rppi_planar2packed_u8_pln3_host(dstPtrTemp, srcSize, dstPtr);
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_8UC3, dstPtr);
             }
         }
         else if (type == 2)
@@ -157,19 +159,19 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_inclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_blend_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr, alpha);
                 stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_8UC1, dstPtr);
             }
             else if (channel ==3)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_inclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_blend_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr, alpha);
                 stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_8UC3, dstPtr);
             }
         }
 
@@ -195,7 +197,7 @@ int main(int argc, char** argv)
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
-    
+
     if (matrix == 1)
     {
         channel = 1;
@@ -208,8 +210,8 @@ int main(int argc, char** argv)
         displayPlanar(srcPtr1, srcSize, channel);
         printf("\n\nInput 2:\n");
         displayPlanar(srcPtr2, srcSize, channel);
-        rppi_inclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-        printf("\n\nOutput of inclusive_OR operation:\n");
+        rppi_blend_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr, alpha);
+        printf("\n\nOutput of Accumulate Weighted:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -226,8 +228,8 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPlanar(srcPtr2, srcSize, channel);
-            rppi_inclusive_OR_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of inclusive_OR operation:\n");
+            rppi_blend_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr, alpha);
+            printf("\n\nOutput of Accumulate Weighted:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -239,8 +241,8 @@ int main(int argc, char** argv)
             displayPacked(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPacked(srcPtr2, srcSize, channel);
-            rppi_inclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of inclusive_OR operation:\n");
+            rppi_blend_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr, alpha);
+            printf("\n\nOutput of Accumulate Weighted:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -272,13 +274,13 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_inclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_blend_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr, alpha);
             }
             else if (channel == 3)
             {
-                rppi_inclusive_OR_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_blend_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr, alpha);
             }
-            printf("\n\nOutput of inclusive_OR operation:\n");
+            printf("\n\nOutput of Accumulate Weighted:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -295,13 +297,13 @@ int main(int argc, char** argv)
             displayPacked(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_inclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_blend_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr, alpha);
             }
             else if (channel == 3)
             {
-                rppi_inclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_blend_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr, alpha);
             }
-            printf("\n\nOutput of inclusive_OR operation:\n");
+            printf("\n\nOutput of Accumulate Weighted:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }

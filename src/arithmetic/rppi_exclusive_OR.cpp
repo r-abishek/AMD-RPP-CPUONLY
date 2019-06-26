@@ -6,10 +6,14 @@
 #include "rppi_arithmetic_and_logical_functions.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <chrono>
 #include "cpu/rpp_cpu_inputAndDisplay.hpp"
+#include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
 #include "cpu/host_exclusive_OR.hpp"
- 
+#include "opencv2/opencv.hpp"
 using namespace std;
+using namespace cv;
+using namespace std::chrono;
 
 
 
@@ -49,18 +53,148 @@ rppi_exclusive_OR_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 
 
 
-int main()
+int main(int argc, char** argv)
 {
-    RppiSize srcSize;
+    RppiSize srcSize, dstSize;
     unsigned int channel;
-     
-    int matrix;
-    printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
-    scanf("%d", &matrix);
+
+    int input;
+    printf("\nEnter input: 1 = image, 2 = pixel values: ");
+    scanf("%d", &input);
 
     int type;
     printf("\nEnter type of arrangement: 1 = planar, 2 = packed: ");
     scanf("%d", &type);
+
+    if (input == 1)
+    {
+        if ( argc != 3 )
+        {
+            printf("usage: DisplayImage.out <Image1_Path> <Image2_Path>\n");
+            return -1;
+        }
+
+        do
+        {   printf("\nThe image input/inputs can be interpreted as 1 or 3 channel (greyscale or RGB). Please choose - only 1 or 3: ");
+            scanf("%d", &channel);
+        }while (channel != 1 && channel != 3);
+
+        Mat imageIn1, imageIn2;
+
+        if (channel == 1)
+        {
+            imageIn1 = imread( argv[1], 0 );
+            imageIn2 = imread( argv[2], 0 );
+        }
+        else if (channel ==3)
+        {
+            imageIn1 = imread( argv[1], 1 );
+            imageIn2 = imread( argv[2], 1 );
+        }
+
+        if ( !imageIn1.data || !imageIn2.data)
+        {
+            printf("No image data \n");
+            return -1;
+        }
+
+        if ((imageIn1.rows != imageIn2.rows) || (imageIn1.cols != imageIn2.cols) || (imageIn1.channels() != imageIn2.channels()))
+        {
+            printf("Both images must have the same height, width and channels \n");
+            return -1;
+        }
+
+        srcSize.height = imageIn1.rows;
+        srcSize.width = imageIn1.cols;
+        dstSize.height = srcSize.height;
+        dstSize.width = srcSize.width;
+        
+        printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
+        Rpp8u *srcPtr1 = imageIn1.data;
+        Rpp8u *srcPtr2 = imageIn2.data;
+        
+        printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
+        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
+        
+        auto start = high_resolution_clock::now();
+        auto stop = high_resolution_clock::now();
+
+        Mat imageOut;
+        
+        if (type == 1)
+        {   
+            if (channel == 1)
+            {
+                printf("\nExecuting pln1...\n");
+                start = high_resolution_clock::now();
+                rppi_exclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                
+            }
+            else if (channel == 3)
+            {
+                printf("\nExecuting pln3...\n");
+                Rpp8u *srcPtr1Temp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+                Rpp8u *srcPtr2Temp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+                Rpp8u *dstPtrTemp = (Rpp8u *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp8u));
+                rppi_packed2planar_u8_pkd3_host(srcPtr1, srcSize, srcPtr1Temp);
+                rppi_packed2planar_u8_pkd3_host(srcPtr2, srcSize, srcPtr2Temp);
+
+                start = high_resolution_clock::now();
+                rppi_exclusive_OR_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize, dstPtrTemp);
+                stop = high_resolution_clock::now();
+
+                rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+            }
+        }
+        else if (type == 2)
+        {   
+            if (channel == 1)
+            {
+                printf("\nExecuting pln1 for pkd1...\n");
+                start = high_resolution_clock::now();
+                rppi_exclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+            }
+            else if (channel ==3)
+            {
+                printf("\nExecuting pkd3...\n");
+                start = high_resolution_clock::now();
+                rppi_exclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+            }
+        }
+
+        auto duration = duration_cast<milliseconds>(stop - start);
+        cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+
+        Mat images(RPPMAX3(imageIn1.rows, imageIn2.rows, imageOut.rows), (imageIn1.cols + imageIn2.cols + imageOut.cols), imageIn1.type());
+        imageIn1.copyTo(images(cv::Rect(0,0, imageIn1.cols, imageIn1.rows)));
+        imageIn2.copyTo(images(cv::Rect(imageIn1.cols, 0, imageIn2.cols, imageIn2.rows)));
+        imageOut.copyTo(images(cv::Rect(imageIn1.cols + imageIn2.cols,0, imageOut.cols, imageOut.rows)));
+
+        namedWindow("2 Input Images and Output Image", WINDOW_NORMAL );
+        imshow("2 Input Images and Output Image", images);
+
+        waitKey(0);
+
+        return 0;
+    }
+
+
+
+     
+    int matrix;
+    printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
+    scanf("%d", &matrix);
     
     if (matrix == 1)
     {

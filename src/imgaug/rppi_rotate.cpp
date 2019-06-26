@@ -93,8 +93,21 @@ int main(int argc, char** argv)
             return -1;
         }
 
+        do
+        {   printf("\nThe image input/inputs can be interpreted as 1 or 3 channel (greyscale or RGB). Please choose - only 1 or 3: ");
+            scanf("%d", &channel);
+        }while (channel != 1 && channel != 3);
+
         Mat imageIn;
-        imageIn = imread( argv[1], 1 );
+
+        if (channel == 1)
+        {
+            imageIn = imread( argv[1], 0 );
+        }
+        else if (channel ==3)
+        {
+            imageIn = imread( argv[1], 1 );
+        }
 
         if ( !imageIn.data )
         {
@@ -104,36 +117,71 @@ int main(int argc, char** argv)
 
         srcSize.height = imageIn.rows;
         srcSize.width = imageIn.cols;
-        channel = imageIn.channels();
+        
+        printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
         
         rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
-        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
+        printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
+        Rpp8u *dstPtr = (Rpp8u *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp8u));
         
+        auto start = high_resolution_clock::now();
+        auto stop = high_resolution_clock::now();
+
+        Mat imageOut;
+
         if (type == 1)
-        {
-            Rpp8u *srcPtrTemp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
-            Rpp8u *dstPtrTemp = (Rpp8u *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp8u));
-            rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
+        {   
+            if (channel == 1)
+            {
+                printf("\nExecuting pln1...\n");
+                start = high_resolution_clock::now();
+                rppi_rotate_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, angleDeg);
+                stop = high_resolution_clock::now();
 
-            auto start = high_resolution_clock::now();
-            rppi_rotate_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, angleDeg);
-            auto stop = high_resolution_clock::now();
-            auto duration = duration_cast<milliseconds>(stop - start);
-            cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                
+            }
+            else if (channel == 3)
+            {
+                printf("\nExecuting pln3...\n");
+                Rpp8u *srcPtrTemp = (Rpp8u *)malloc(channel * srcSize.height * srcSize.width * sizeof(Rpp8u));
+                Rpp8u *dstPtrTemp = (Rpp8u *)malloc(channel * dstSize.height * dstSize.width * sizeof(Rpp8u));
+                rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
-            rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+                start = high_resolution_clock::now();
+                rppi_rotate_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, angleDeg);
+                stop = high_resolution_clock::now();
+
+                rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+            }
         }
         else if (type == 2)
-        {
-            auto start = high_resolution_clock::now();
-            rppi_rotate_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, angleDeg);
-            auto stop = high_resolution_clock::now();
-            auto duration = duration_cast<milliseconds>(stop - start);
-            cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+        {   
+            if (channel == 1)
+            {
+                printf("\nExecuting pln1 for pkd1...\n");
+                start = high_resolution_clock::now();
+                rppi_rotate_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, angleDeg);
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+            }
+            else if (channel ==3)
+            {
+                printf("\nExecuting pkd3...\n");
+                start = high_resolution_clock::now();
+                rppi_rotate_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, angleDeg);
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+            }
         }
-        
-        Mat imageOut(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+
+        auto duration = duration_cast<milliseconds>(stop - start);
+        cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
 
         Mat images(RPPMAX2(imageIn.rows, imageOut.rows), (imageIn.cols + imageOut.cols), imageIn.type());
         imageIn.copyTo(images(cv::Rect(0,0, imageIn.cols, imageIn.rows)));

@@ -1,4 +1,4 @@
-// rppi_blur
+// rppi_gaussianBlur
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
