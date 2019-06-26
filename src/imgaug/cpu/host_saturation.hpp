@@ -10,7 +10,7 @@ RppStatus saturation_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
         if (chnFormat == RPPI_CHN_PLANAR)
         {
             Rpp32u channel = 3;
-            Rpp32f *pHSV = (Rpp32f *)malloc(channel * srcSize.width * srcSize.height * sizeof(Rpp32f));
+            Rpp32f *pHSV = (Rpp32f *)calloc(channel * srcSize.width * srcSize.height, sizeof(Rpp32f));
             for (int i = 0; i < (srcSize.width * srcSize.height); i++)
             {
                 float rf, gf, bf, cmax, cmin, delta;
@@ -117,7 +117,7 @@ RppStatus saturation_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
         else if (chnFormat == RPPI_CHN_PACKED)
         {
             Rpp32u channel = 3;
-            Rpp32f *pHSV = (Rpp32f *)malloc(channel * srcSize.width * srcSize.height * sizeof(Rpp32f));
+            Rpp32f *pHSV = (Rpp32f *)calloc(channel * srcSize.width * srcSize.height, sizeof(Rpp32f));
             for (int i = 0; i < (3 * srcSize.width * srcSize.height); i += 3)
             {
                 float rf, gf, bf, cmax, cmin, delta;

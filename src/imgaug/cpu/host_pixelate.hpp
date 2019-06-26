@@ -154,7 +154,7 @@ RppStatus convolve_host(T* srcPtrMod, RppiSize srcSizeMod, T* dstPtr, RppiSize s
     {
         int count = 0;
         float pixel = 0.0;
-        int *convLocs = (int *)malloc(kernelSize * kernelSize * sizeof(int));
+        int *convLocs = (int *)calloc(kernelSize * kernelSize, sizeof(int));
         for (int c = 0; c < channel; c++)
         {
             for (int i = 0; i < srcSize.height; i++)
@@ -190,7 +190,7 @@ RppStatus convolve_host(T* srcPtrMod, RppiSize srcSizeMod, T* dstPtr, RppiSize s
     {
         int count = 0;
         float pixel = 0.0;
-        int *convLocs = (int *)malloc(kernelSize * kernelSize * sizeof(int));
+        int *convLocs = (int *)calloc(kernelSize * kernelSize, sizeof(int));
         int elementsInRow = srcSizeMod.width * channel;
         for (int i = 0; i < srcSize.height; i++)
         {
@@ -234,7 +234,7 @@ RppStatus blur_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     {
         return RPP_ERROR;
     }
-    Rpp32f *kernel = (Rpp32f *)malloc(kernelSize * kernelSize * sizeof(Rpp32f));
+    Rpp32f *kernel = (Rpp32f *)calloc(kernelSize * kernelSize, sizeof(Rpp32f));
     int bound = ((kernelSize - 1) / 2);
 
     generate_gaussian_kernel_host(stdDev, kernel, kernelSize);
@@ -242,7 +242,7 @@ RppStatus blur_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     RppiSize srcSizeMod;
     srcSizeMod.width = srcSize.width + (2 * bound);
     srcSizeMod.height = srcSize.height + (2 * bound);
-    Rpp8u *srcPtrMod = (Rpp8u *)malloc(srcSizeMod.width * srcSizeMod.height * channel * sizeof(Rpp8u));
+    Rpp8u *srcPtrMod = (Rpp8u *)calloc(srcSizeMod.width * srcSizeMod.height * channel, sizeof(Rpp8u));
 
     generate_evenly_padded_image_host(srcPtr, srcSize, srcPtrMod, srcSizeMod, chnFormat, channel);
     

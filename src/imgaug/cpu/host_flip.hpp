@@ -42,7 +42,7 @@ RppStatus flip_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         }
         else if (flipAxis == RPPI_BOTH_AXIS)
         {
-            Rpp8u *pInter = (Rpp8u *)malloc(channel * srcSize.width * srcSize.height * sizeof(Rpp8u));
+            Rpp8u *pInter = (Rpp8u *)calloc(channel * srcSize.width * srcSize.height, sizeof(Rpp8u));
             int srcLoc = 0, interLoc = 0;
             for (int i = (srcSize.height - 1); i >= 0; i--)
             {
@@ -111,7 +111,7 @@ RppStatus flip_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         }
         else if (flipAxis == RPPI_BOTH_AXIS)
         {
-            Rpp8u *pInter = (Rpp8u *)malloc(channel * srcSize.width * srcSize.height * sizeof(Rpp8u));
+            Rpp8u *pInter = (Rpp8u *)calloc(channel * srcSize.width * srcSize.height, sizeof(Rpp8u));
             int srcLoc = 0, interLoc = 0;
 
             for (int i = (srcSize.height - 1); i >= 0; i--)

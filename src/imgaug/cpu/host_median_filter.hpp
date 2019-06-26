@@ -14,7 +14,7 @@ RppStatus median_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     {
         dstPtr[i] = srcPtr[i];
     }
-    Rpp8u *kernel = (Rpp8u *)malloc(kernelSize * kernelSize * sizeof(Rpp8u));
+    Rpp8u *kernel = (Rpp8u *)calloc(kernelSize * kernelSize, sizeof(Rpp8u));
     if (chnFormat == RPPI_CHN_PLANAR)
     {
         for (int c = 0; c < channel; c++)
