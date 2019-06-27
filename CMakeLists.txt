@@ -390,6 +390,22 @@ target_link_libraries(
 )
 
 
+add_executable(
+    rppi_pixelate
+    src/imgaug/rppi_pixelate.cpp
+)
+target_include_directories(rppi_pixelate
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_pixelate
+    ${OpenCV_LIBS}
+)
+
+
 
 
 

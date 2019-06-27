@@ -107,12 +107,12 @@ int main(int argc, char** argv)
         dstSize.width = 256;
         dstSize.height = 256;
         //x1 = 320;
-        //x2 = 960;
         //y1 = 648;
+        //x2 = 960;
         //y2 = 72;
         x1 = 200;
-        x2 = 384;
         y1 = 200;
+        x2 = 384;
         y2 = 384;
         //int xDiff = (int) x2 - (int) x1;
         //int yDiff = (int) y2 - (int) y1;

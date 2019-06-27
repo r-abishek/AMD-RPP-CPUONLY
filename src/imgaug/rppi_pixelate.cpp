@@ -1,4 +1,4 @@
-// rppi_gaussianBlur
+// rppi_pixelate
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
@@ -9,7 +9,7 @@
 #include <chrono>
 #include "cpu/rpp_cpu_inputAndDisplay.hpp"
 #include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
-#include "cpu/host_blur.hpp"
+#include "cpu/host_pixelate.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -18,123 +18,33 @@ using namespace std::chrono;
 
 
 
-/*
+
 RppStatus
-rppi_blur3x3_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev)
+rppi_pixelate_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                             Rpp32u kernelSize, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2)
 {
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, 3,
+    pixelate_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                     kernelSize, x1, y1, x2, y2, 
                      RPPI_CHN_PLANAR, 1);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_blur3x3_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev)
+rppi_pixelate_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                             Rpp32u kernelSize, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2)
 {
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, 3,
+    pixelate_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                     kernelSize, x1, y1, x2, y2, 
                      RPPI_CHN_PLANAR, 3);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_blur3x3_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev)
+rppi_pixelate_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                             Rpp32u kernelSize, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2)
 {
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, 3,
-                     RPPI_CHN_PACKED, 3);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_blur5x5_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev)
-{
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, 5,
-                     RPPI_CHN_PLANAR, 1);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_blur5x5_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev)
-{
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, 5,
-                     RPPI_CHN_PLANAR, 3);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_blur5x5_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev)
-{
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, 5,
-                     RPPI_CHN_PACKED, 3);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_blur7x7_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev)
-{
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, 7,
-                     RPPI_CHN_PLANAR, 1);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_blur7x7_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev)
-{
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, 7,
-                     RPPI_CHN_PLANAR, 3);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_blur7x7_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev)
-{
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, 7,
-                     RPPI_CHN_PACKED, 3);
-    return RPP_SUCCESS;
-}
-*/
-RppStatus
-rppi_blur_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev, Rpp32u kernelSize)
-{
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, kernelSize,
-                     RPPI_CHN_PLANAR, 1);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_blur_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev, Rpp32u kernelSize)
-{
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, kernelSize,
-                     RPPI_CHN_PLANAR, 3);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_blur_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp32f stdDev, Rpp32u kernelSize)
-{
-    blur_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     stdDev, kernelSize,
+    pixelate_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                     kernelSize, x1, y1, x2, y2, 
                      RPPI_CHN_PACKED, 3);
     return RPP_SUCCESS;
 }
@@ -147,8 +57,8 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    Rpp32f stdDev = 0.84945;
-    unsigned int kernelSize = 11;
+    unsigned int kernelSize = 13;
+    unsigned int x1, y1, x2, y2;
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -192,6 +102,14 @@ int main(int argc, char** argv)
         srcSize.width = imageIn.cols;
         dstSize.height = srcSize.height;
         dstSize.width = srcSize.width;
+        x1 = 250;
+        y1 = 200;
+        x2 = 384;
+        y2 = 334;
+        //x1 = 640;
+        //y1 = 210;
+        //x2 = 700;
+        //y2 = 150;
 
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
@@ -210,7 +128,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_blur_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev, kernelSize);
+                rppi_pixelate_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, x1, y1, x2, y2);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -224,7 +142,7 @@ int main(int argc, char** argv)
                 rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_blur_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, stdDev, kernelSize);
+                rppi_pixelate_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, kernelSize, x1, y1, x2, y2);
                 stop = high_resolution_clock::now();
 
                 rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -238,7 +156,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_blur_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev, kernelSize);
+                rppi_pixelate_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, x1, y1, x2, y2);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -247,7 +165,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_blur_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev, kernelSize);
+                rppi_pixelate_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize, x1, y1, x2, y2);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -272,6 +190,10 @@ int main(int argc, char** argv)
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
+    x1 = 0;
+    y1 = 0;
+    x2 = 1;
+    y2 = 1;
 
     if (matrix == 1)
     {
@@ -282,22 +204,22 @@ int main(int argc, char** argv)
         Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_blur_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev, kernelSize);
+        rppi_pixelate_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, x1, y1, x2, y2);
         /*
         if (kernelSize == 3)
         {
-            rppi_blur3x3_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev);
+            rppi_pixelate3x3_u8_pln1_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
         }
         else if (kernelSize == 5)
         {
-            rppi_blur5x5_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev);
+            rppi_pixelate5x5_u8_pln1_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
         }
         else if (kernelSize == 7)
         {
-            rppi_blur7x7_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev);
+            rppi_pixelate7x7_u8_pln1_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
         }
         */
-        printf("\n\nOutput of Blur:\n");
+        printf("\n\nOutput of pixelate:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -311,22 +233,22 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_blur_u8_pln3_host(srcPtr, srcSize, dstPtr, stdDev, kernelSize);
+            rppi_pixelate_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize, x1, y1, x2, y2);
             /*
             if (kernelSize == 3)
             {
-                rppi_blur3x3_u8_pln3_host(srcPtr, srcSize, dstPtr, stdDev);
+                rppi_pixelate3x3_u8_pln3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
             }
             else if (kernelSize == 5)
             {
-                rppi_blur5x5_u8_pln3_host(srcPtr, srcSize, dstPtr, stdDev);
+                rppi_pixelate5x5_u8_pln3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
             }
             else if (kernelSize == 7)
             {
-                rppi_blur7x7_u8_pln3_host(srcPtr, srcSize, dstPtr, stdDev);
+                rppi_pixelate7x7_u8_pln3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
             }
             */
-            printf("\n\nOutput of Blur:\n");
+            printf("\n\nOutput of pixelate:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -335,22 +257,22 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_blur_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev, kernelSize);
+            rppi_pixelate_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize, x1, y1, x2, y2);
             /*
             if (kernelSize == 3)
             {
-                rppi_blur3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev);
+                rppi_pixelate3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
             }
             else if (kernelSize == 5)
             {
-                rppi_blur5x5_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev);
+                rppi_pixelate5x5_u8_pkd3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
             }
             else if (kernelSize == 7)
             {
-                rppi_blur7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev);
+                rppi_pixelate7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
             }
             */
-            printf("\n\nOutput of Blur:\n");
+            printf("\n\nOutput of pixelate:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -375,41 +297,41 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_blur_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev, kernelSize);
+                rppi_pixelate_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, x1, y1, x2, y2);
                 /*
                 if (kernelSize == 3)
                 {
-                    rppi_blur3x3_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate3x3_u8_pln1_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 else if (kernelSize == 5)
                 {
-                    rppi_blur5x5_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate5x5_u8_pln1_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 else if (kernelSize == 7)
                 {
-                    rppi_blur7x7_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate7x7_u8_pln1_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 */
             }
             else if (channel == 3)
             {
-                rppi_blur_u8_pln3_host(srcPtr, srcSize, dstPtr, stdDev, kernelSize);
+                rppi_pixelate_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize, x1, y1, x2, y2);
                 /*
                 if (kernelSize == 3)
                 {
-                    rppi_blur3x3_u8_pln3_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate3x3_u8_pln3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 else if (kernelSize == 5)
                 {
-                    rppi_blur5x5_u8_pln3_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate5x5_u8_pln3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 else if (kernelSize == 7)
                 {
-                    rppi_blur7x7_u8_pln3_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate7x7_u8_pln3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 */
             }
-            printf("\n\nOutput of Blur:\n");
+            printf("\n\nOutput of pixelate:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -421,41 +343,41 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_blur_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev, kernelSize);
+                rppi_pixelate_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, x1, y1, x2, y2);
                 /*
                 if (kernelSize == 3)
                 {
-                    rppi_blur3x3_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate3x3_u8_pln1_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 else if (kernelSize == 5)
                 {
-                    rppi_blur5x5_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate5x5_u8_pln1_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 else if (kernelSize == 7)
                 {
-                    rppi_blur7x7_u8_pln1_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate7x7_u8_pln1_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 */
             }
             else if (channel == 3)
             {
-                rppi_blur_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev, kernelSize);
+                rppi_pixelate_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize, x1, y1, x2, y2);
                 /*
                 if (kernelSize == 3)
                 {
-                    rppi_blur3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 else if (kernelSize == 5)
                 {
-                    rppi_blur5x5_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate5x5_u8_pkd3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 else if (kernelSize == 7)
                 {
-                    rppi_blur7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr, stdDev);
+                    rppi_pixelate7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr, x1, y1, x2, y2);
                 }
                 */
             }
-            printf("\n\nOutput of Blur:\n");
+            printf("\n\nOutput of pixelate:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }
