@@ -13,7 +13,8 @@ RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         return RPP_ERROR;
     }
 
-    T *srcPtrTemp, *dstPtrTemp, *srcPtrBeginJitter, *dstPtrBeginJitter;
+    T *srcPtrTemp, *dstPtrTemp;
+    T *srcPtrBeginJitter, *dstPtrBeginJitter;
     srcPtrTemp = srcPtr;
     dstPtrTemp = dstPtr;
     for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
@@ -23,15 +24,67 @@ RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         dstPtrTemp++;
     }
 
-    //int widthDiffPlanar = srcSize.width - srcSizeSubImage.width;
-    //int widthDiffPacked = (srcSize.width - srcSizeSubImage.width) * channel;
+    srand (time(NULL));
+    int jitteredPixelLocDiffX, jitteredPixelLocDiffY;
+    int jitterRangeX = 2 * maxJitterX;
+    int jitterRangeY = 2 * maxJitterY;
+    int channeledJitterRangeX = jitterRangeX * channel;
+    int channeledJitterRangeY = jitterRangeY * channel;
 
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        srand (time(NULL));
-        int jitteredPixelLocDiffX, jitteredPixelLocDiffY;
-        int jitterRangeX = 2 * maxJitterX;
-        int jitterRangeY = 2 * maxJitterY;
+        //srcPtrBeginJitter = srcPtr + (maxJitterY * srcSize.width) + maxJitterX;
+        //dstPtrBeginJitter = dstPtr + (maxJitterY * srcSize.width) + maxJitterX;
+        for (int c = 0; c < channel; c++)
+        {
+            srcPtrTemp = srcPtr + (c * srcSize.height * srcSize.width);
+            dstPtrTemp = dstPtr + (c * srcSize.height * srcSize.width);
+            for (int i = 0; i < srcSize.height; i++)
+            {
+                for (int j = 0; j < srcSize.width; j++)
+                {
+                    if (i < maxJitterY)
+                    {
+                        jitteredPixelLocDiffY = rand() % (maxJitterY + 1);
+                    }
+                    else if (i >= (srcSize.height - maxJitterY))
+                    {
+                        jitteredPixelLocDiffY = -1 * (rand() % (maxJitterY + 1));
+                    }
+                    else
+                    {
+                        jitteredPixelLocDiffY = (rand() % (jitterRangeY + 1)) - maxJitterY;
+                    }
+                    
+                    if (j < maxJitterX)
+                    {
+                        jitteredPixelLocDiffX = rand() % (maxJitterX + 1);
+                    }
+                    else if (j >= (srcSize.width - maxJitterX))
+                    {
+                        jitteredPixelLocDiffX = -1 * (rand() % (maxJitterX + 1));
+                    }
+                    else
+                    {
+                        jitteredPixelLocDiffX = (rand() % (jitterRangeX + 1)) - maxJitterX;
+                    }
+
+                    //printf("\njitteredPixelLocDiffX = %d", jitteredPixelLocDiffX);
+                    //printf("\njitteredPixelLocDiffY = %d", jitteredPixelLocDiffY);
+                    //return RPP_SUCCESS;
+
+                    *dstPtrTemp = *(srcPtrTemp + (jitteredPixelLocDiffY * (int) srcSize.width) + jitteredPixelLocDiffX);
+                    srcPtrTemp++;
+                    dstPtrTemp++;
+                }
+                srcPtrTemp += jitterRangeX;
+                dstPtrTemp += jitterRangeX;
+            }
+        }
+        
+        
+        
+        /*
         srcPtrBeginJitter = srcPtr + (maxJitterY * srcSize.width) + maxJitterX;
         dstPtrBeginJitter = dstPtr + (maxJitterY * srcSize.width) + maxJitterX;
         for (int c = 0; c < channel; c++)
@@ -42,14 +95,14 @@ RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
             {
                 for (int j = 0; j < srcSize.width - jitterRangeX; j++)
                 {
-                    jitteredPixelLocDiffX = rand() % (jitterRangeX);
-                    jitteredPixelLocDiffY = rand() % (jitterRangeY);
+                    jitteredPixelLocDiffX = (rand() % (jitterRangeX + 1)) - 1;
+                    jitteredPixelLocDiffY = (rand() % (jitterRangeY + 1)) - 1;
                     jitteredPixelLocDiffX -= maxJitterX;
                     jitteredPixelLocDiffY -= maxJitterY;
-                    printf("\njitteredPixelLocDiffX = %d", jitteredPixelLocDiffX);
-                    printf("\njitteredPixelLocDiffY = %d", jitteredPixelLocDiffY);
-                    return RPP_SUCCESS;
-                    //*dstPtrTemp = *(srcPtrTemp + (jitteredPixelLocDiffY * srcSize.width) + jitteredPixelLocDiffX);
+                    //printf("\njitteredPixelLocDiffX = %d", jitteredPixelLocDiffX);
+                    //printf("\njitteredPixelLocDiffY = %d", jitteredPixelLocDiffY);
+                    //return RPP_SUCCESS;
+                    *dstPtrTemp = *(srcPtrTemp + (jitteredPixelLocDiffY * (int) srcSize.width) + jitteredPixelLocDiffX);
                     srcPtrTemp++;
                     dstPtrTemp++;
                 }
@@ -57,18 +110,30 @@ RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                 dstPtrTemp += jitterRangeX;
             }
         }
+        */
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
-        for (int i = maxJitterY; i < srcSize.height - maxJitterY; i++)
+        int elementsInRow = (int)(srcSize.width * channel);
+        srcPtrBeginJitter = srcPtr + (maxJitterY * elementsInRow) + (maxJitterX * channel);
+        dstPtrBeginJitter = dstPtr + (maxJitterY * elementsInRow) + (maxJitterX * channel);
+        for (int i = 0; i < srcSize.height - jitterRangeY; i++)
         {
-            for (int j = maxJitterX; j < srcSize.width - maxJitterX; j++)
+            for (int j = 0; j < srcSize.width - jitterRangeX; j++)
             {
                 for (int c = 0; c < channel; c++)
                 {
-
+                    jitteredPixelLocDiffX = rand() % (jitterRangeX);
+                    jitteredPixelLocDiffY = rand() % (jitterRangeY);
+                    jitteredPixelLocDiffX -= maxJitterX;
+                    jitteredPixelLocDiffY -= maxJitterY;
+                    *dstPtrTemp = *(srcPtrTemp + (jitteredPixelLocDiffY * elementsInRow) + (jitteredPixelLocDiffX * (int) channel));
+                    srcPtrTemp++;
+                    dstPtrTemp++;
                 }
             }
+            srcPtrTemp += channeledJitterRangeX;
+            dstPtrTemp += channeledJitterRangeX;
         }
     }
     

@@ -101,8 +101,14 @@ int main(int argc, char** argv)
         srcSize.width = imageIn.cols;
         dstSize.height = srcSize.height;
         dstSize.width = srcSize.width;
-        maxJitterX = 4;
-        maxJitterY = 4;
+        //maxJitterX = 2;
+        //maxJitterY = 2;
+
+        printf("\nEnter maxJitterX: ");
+        scanf("%d", &maxJitterX);
+
+        printf("\nEnter maxJitterY: ");
+        scanf("%d", &maxJitterY);
 
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
