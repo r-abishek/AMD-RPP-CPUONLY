@@ -5,7 +5,7 @@
 RppStatus rotate_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
                                        Rpp32f angleDeg)
 {
-    Rpp32f angleRad = RAD(angleDeg);
+    Rpp32f angleRad = -RAD(angleDeg);
     Rpp32f rotate[4] = {0};
     rotate[0] = cos(angleRad);
     rotate[1] = sin(angleRad);
@@ -49,7 +49,7 @@ RppStatus rotate_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            Rpp32f angleDeg,
                            RppiChnFormat chnFormat, unsigned int channel)
 {
-    Rpp32f angleRad = RAD(angleDeg);
+    Rpp32f angleRad = -RAD(angleDeg);
     Rpp32f rotate[4] = {0};
     rotate[0] = cos(angleRad);
     rotate[1] = sin(angleRad);
