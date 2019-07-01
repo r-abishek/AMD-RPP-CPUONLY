@@ -39,9 +39,9 @@ RppStatus pixelate_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     generate_box_kernel_host(kernel, kernelSize);
 
 
-
+/*
     RppiSize srcSizeMod, srcSizeSubImage;
-    T *srcPtrMod, *dstPtrSubImage;
+    T *srcPtrMod, *srcPtrSubImage, *dstPtrSubImage;
 
     int yDiff = (int) y2 - (int) y1;
     int xDiff = (int) x2 - (int) x1;
@@ -53,15 +53,37 @@ RppStatus pixelate_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        srcPtrMod = srcPtr + ((RPPMIN2(y1, y2) - bound) * srcSize.width) + (RPPMIN2(x1, x2) - bound);
+        srcPtrSubImage = srcPtr + (RPPMIN2(y1, y2) * srcSize.width) + RPPMIN2(x1, x2);
+        srcPtrMod = srcPtrSubImage - (bound * srcSize.width) - bound;
+        //srcPtrMod = srcPtr + ((RPPMIN2(y1, y2) - bound) * srcSize.width) + (RPPMIN2(x1, x2) - bound);
         dstPtrSubImage = dstPtr + (RPPMIN2(y1, y2) * srcSize.width) + RPPMIN2(x1, x2);
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
-        srcPtrMod = srcPtr + ((RPPMIN2(y1, y2) - bound) * srcSize.width * channel) + ((RPPMIN2(x1, x2) - bound) * channel);
+        srcPtrSubImage = srcPtr + (RPPMIN2(y1, y2) * srcSize.width * channel) + (RPPMIN2(x1, x2) * channel);
+        srcPtrMod = srcPtrSubImage - (bound * srcSize.width * channel) - (bound * channel);
+        //srcPtrMod = srcPtr + ((RPPMIN2(y1, y2) - bound) * srcSize.width * channel) + ((RPPMIN2(x1, x2) - bound) * channel);
         dstPtrSubImage = dstPtr + (RPPMIN2(y1, y2) * srcSize.width * channel) + (RPPMIN2(x1, x2) * channel);
     }
+*/
+///*
+    RppiSize srcSizeMod, srcSizeSubImage;
+    T *srcPtrMod, *srcPtrSubImage, *dstPtrSubImage;
 
+    compute_subimage_location_host(srcPtr, &srcPtrSubImage, dstPtr, &dstPtrSubImage, srcSize, &srcSizeSubImage, x1, y1, x2, y2, chnFormat, channel);
+
+    srcSizeMod.height = srcSizeSubImage.height + (2 * bound);
+    srcSizeMod.width = srcSizeSubImage.width + (2* bound);
+
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        srcPtrMod = srcPtrSubImage - (bound * srcSize.width) - bound;
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        srcPtrMod = srcPtrSubImage - (bound * srcSize.width * channel) - (bound * channel);
+    }
+//*/
     convolve_subimage_host(srcPtrMod, srcSizeMod, dstPtrSubImage, srcSizeSubImage, srcSize, kernel, kernelSize, chnFormat, channel);
 
     return RPP_SUCCESS;
