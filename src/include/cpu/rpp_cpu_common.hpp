@@ -334,15 +334,15 @@ RppStatus generate_box_kernel_host(Rpp32f* kernel, unsigned int kernelSize)
 }
 
 template<typename T>
-RppStatus compute_subimage_location_host(T* srcPtr, T** srcPtrSubImage, T* dstPtr, T** dstPtrSubImage, 
-                                         RppiSize srcSize, RppiSize *srcSizeSubImage, 
+RppStatus compute_subimage_location_host(T* ptr, T** ptrSubImage, 
+                                         RppiSize size, RppiSize *sizeSubImage, 
                                          unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, 
                                          RppiChnFormat chnFormat, unsigned int channel)
 {
-    if ((RPPINRANGE(x1, 0, srcSize.width - 1) == 0) 
-        || (RPPINRANGE(x2, 0, srcSize.width - 1) == 0) 
-        || (RPPINRANGE(y1, 0, srcSize.height - 1) == 0) 
-        || (RPPINRANGE(y2, 0, srcSize.height - 1) == 0))
+    if ((RPPINRANGE(x1, 0, size.width - 1) == 0) 
+        || (RPPINRANGE(x2, 0, size.width - 1) == 0) 
+        || (RPPINRANGE(y1, 0, size.height - 1) == 0) 
+        || (RPPINRANGE(y2, 0, size.height - 1) == 0))
     {
         return RPP_ERROR;
     }
@@ -350,18 +350,16 @@ RppStatus compute_subimage_location_host(T* srcPtr, T** srcPtrSubImage, T* dstPt
     int yDiff = (int) y2 - (int) y1;
     int xDiff = (int) x2 - (int) x1;
 
-    srcSizeSubImage->height = (Rpp32u) RPPABS(yDiff) + 1;
-    srcSizeSubImage->width = (Rpp32u) RPPABS(xDiff) + 1;
+    sizeSubImage->height = (Rpp32u) RPPABS(yDiff) + 1;
+    sizeSubImage->width = (Rpp32u) RPPABS(xDiff) + 1;
 
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        *srcPtrSubImage = srcPtr + (RPPMIN2(y1, y2) * srcSize.width) + RPPMIN2(x1, x2);
-        *dstPtrSubImage = dstPtr + (RPPMIN2(y1, y2) * srcSize.width) + RPPMIN2(x1, x2);
+        *ptrSubImage = ptr + (RPPMIN2(y1, y2) * size.width) + RPPMIN2(x1, x2);
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
-        *srcPtrSubImage = srcPtr + (RPPMIN2(y1, y2) * srcSize.width * channel) + (RPPMIN2(x1, x2) * channel);
-        *dstPtrSubImage = dstPtr + (RPPMIN2(y1, y2) * srcSize.width * channel) + (RPPMIN2(x1, x2) * channel);
+        *ptrSubImage = ptr + (RPPMIN2(y1, y2) * size.width * channel) + (RPPMIN2(x1, x2) * channel);
     }
 
     return RPP_SUCCESS;
