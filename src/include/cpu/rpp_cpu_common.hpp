@@ -370,6 +370,7 @@ RppStatus histogram_kernel_host(T* srcPtr, RppiSize srcSize, Rpp32u* histogram,
                                 Rpp32u bins, Rpp32u increment, 
                                 RppiChnFormat chnFormat, unsigned int channel)
 {
+    Rpp32u packedIncrement = channel * increment;
     T *srcPtrTemp;
     srcPtrTemp = srcPtr;
     Rpp32u *histogramTemp;
@@ -378,29 +379,40 @@ RppStatus histogram_kernel_host(T* srcPtr, RppiSize srcSize, Rpp32u* histogram,
 
     Rpp32u elementsInBin = ((Rpp32u)(std::numeric_limits<T>::max()) + 1) / bins;
 
-    for (int i = 0; i < (srcSize.height * srcSize.width); i++)
+    for (int i = 0; i < srcSize.height; i++)
     {
-        flag = 0;
-        for (int binCheck = 0; binCheck < bins - 1; binCheck++)
+        for (int j = 0; j < srcSize.width; j++)
         {
-            if (*srcPtrTemp >= binCheck * elementsInBin && *srcPtrTemp <= ((binCheck + 1) * elementsInBin) - 1)
+            flag = 0;
+            for (int binCheck = 0; binCheck < bins - 1; binCheck++)
             {
-                *(histogramTemp + binCheck) += 1;
-                flag = 1;
-                break;
+                if (*srcPtrTemp >= binCheck * elementsInBin && *srcPtrTemp <= ((binCheck + 1) * elementsInBin) - 1)
+                {
+                    *(histogramTemp + binCheck) += 1;
+                    flag = 1;
+                    break;
+                }
             }
-        }
-        if (flag == 0)
-        {
-            *(histogramTemp + bins - 1) += 1;
+            if (flag == 0)
+            {
+                *(histogramTemp + bins - 1) += 1;
+            }
+            if (chnFormat == RPPI_CHN_PLANAR)
+            {
+                srcPtrTemp++;
+            }
+            else if (chnFormat == RPPI_CHN_PACKED)
+            {
+                srcPtrTemp += channel;
+            }
         }
         if (chnFormat == RPPI_CHN_PLANAR)
         {
-            srcPtrTemp++;
+            srcPtrTemp += increment;
         }
         else if (chnFormat == RPPI_CHN_PACKED)
         {
-            srcPtrTemp += channel;
+            srcPtrTemp += packedIncrement;
         }
     }
 

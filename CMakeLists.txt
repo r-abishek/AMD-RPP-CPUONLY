@@ -704,6 +704,22 @@ target_link_libraries(
 )
 
 
+add_executable(
+    rppi_histogram_subimage
+    src/statistical/rppi_histogram_subimage.cpp
+)
+target_include_directories(rppi_histogram_subimage
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_histogram_subimage
+    ${OpenCV_LIBS}
+)
+
+
 
 
 
