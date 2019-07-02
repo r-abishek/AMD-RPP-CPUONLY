@@ -591,7 +591,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     rppi_min
     src/statistical/rppi_min.cpp
@@ -672,6 +672,20 @@ target_link_libraries(
 )
 
 
+add_executable(
+    rppi_histogram
+    src/statistical/rppi_histogram.cpp
+)
+target_include_directories(rppi_histogram
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_histogram
+    ${OpenCV_LIBS}
+)
 
 
 
@@ -685,6 +699,8 @@ target_link_libraries(
 
 
 
+
+#[[
 add_executable(
     DisplayImage
     src/DisplayImage.cpp
