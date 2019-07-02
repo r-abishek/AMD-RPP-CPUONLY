@@ -12,7 +12,7 @@ RppStatus histogram_host(T* srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, T
     outputHistogramTemp = outputHistogram;
     int flag = 0;
 
-    Rpp32u elementsInBin = ((Rpp32u)(std::numeric_limits<unsigned char>::max()) + 1) / bins;
+    Rpp32u elementsInBin = ((Rpp32u)(std::numeric_limits<T>::max()) + 1) / bins;
 
     if (chnFormat == RPPI_CHN_PLANAR)
     {
