@@ -1,4 +1,4 @@
-// rppi_meanStd
+// rppi_meanStdDev
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
@@ -16,9 +16,9 @@ using namespace std;
 
 
 RppStatus
-rppi_meanStd_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32f* mean, Rpp32f* stdDev)
+rppi_meanStdDev_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32f* mean, Rpp32f* stdDev)
 {
-    meanStd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, 
+    meanStdDev_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, 
                        mean, stdDev, 
                        RPPI_CHN_PLANAR, 1);
 
@@ -27,9 +27,9 @@ rppi_meanStd_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32f* mean, Rpp32
 }
 
 RppStatus
-rppi_meanStd_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32f* mean, Rpp32f* stdDev)
+rppi_meanStdDev_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32f* mean, Rpp32f* stdDev)
 {
-    meanStd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, 
+    meanStdDev_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, 
                        mean, stdDev, 
                        RPPI_CHN_PLANAR, 3);
 
@@ -38,9 +38,9 @@ rppi_meanStd_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32f* mean, Rpp32
 }
 
 RppStatus
-rppi_meanStd_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32f* mean, Rpp32f* stdDev)
+rppi_meanStdDev_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32f* mean, Rpp32f* stdDev)
 {
-    meanStd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, 
+    meanStdDev_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, 
                        mean, stdDev, 
                        RPPI_CHN_PACKED, 3);
 
@@ -76,8 +76,8 @@ int main()
         //Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_meanStd_u8_pln1_host(srcPtr, srcSize, &mean, &stdDev);
-        printf("\n\nOutput of meanStd operation:\n");
+        rppi_meanStdDev_u8_pln1_host(srcPtr, srcSize, &mean, &stdDev);
+        printf("\n\nOutput of meanStdDev operation:\n");
         printf("\nMean = %f, StdDev = %f\n", mean, stdDev);
         //displayPlanar(dstPtr, srcSize, channel);
     }
@@ -93,8 +93,8 @@ int main()
             //Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_meanStd_u8_pln3_host(srcPtr, srcSize, &mean, &stdDev);
-            printf("\n\nOutput of meanStd operation:\n");
+            rppi_meanStdDev_u8_pln3_host(srcPtr, srcSize, &mean, &stdDev);
+            printf("\n\nOutput of meanStdDev operation:\n");
             printf("\nMean = %f, StdDev = %f\n", mean, stdDev);
             //displayPlanar(dstPtr, srcSize, channel);
         }
@@ -105,8 +105,8 @@ int main()
             //Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_meanStd_u8_pkd3_host(srcPtr, srcSize, &mean, &stdDev);
-            printf("\n\nOutput of meanStd operation:\n");
+            rppi_meanStdDev_u8_pkd3_host(srcPtr, srcSize, &mean, &stdDev);
+            printf("\n\nOutput of meanStdDev operation:\n");
             printf("\nMean = %f, StdDev = %f\n", mean, stdDev);
             //displayPacked(dstPtr, srcSize, channel);
         } 
@@ -132,13 +132,13 @@ int main()
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_meanStd_u8_pln1_host(srcPtr, srcSize, &mean, &stdDev);
+                rppi_meanStdDev_u8_pln1_host(srcPtr, srcSize, &mean, &stdDev);
             }
             else if (channel == 3)
             {
-                rppi_meanStd_u8_pln3_host(srcPtr, srcSize, &mean, &stdDev);
+                rppi_meanStdDev_u8_pln3_host(srcPtr, srcSize, &mean, &stdDev);
             }
-            printf("\n\nOutput of meanStd operation:\n");
+            printf("\n\nOutput of meanStdDev operation:\n");
             printf("\nMean = %f, StdDev = %f\n", mean, stdDev);
             //displayPlanar(dstPtr, srcSize, channel);
         }
@@ -151,13 +151,13 @@ int main()
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_meanStd_u8_pln1_host(srcPtr, srcSize, &mean, &stdDev);
+                rppi_meanStdDev_u8_pln1_host(srcPtr, srcSize, &mean, &stdDev);
             }
             else if (channel == 3)
             {
-                rppi_meanStd_u8_pkd3_host(srcPtr, srcSize, &mean, &stdDev);
+                rppi_meanStdDev_u8_pkd3_host(srcPtr, srcSize, &mean, &stdDev);
             }
-            printf("\n\nOutput of meanStd operation:\n");
+            printf("\n\nOutput of meanStdDev operation:\n");
             printf("\nMean = %f, StdDev = %f\n", mean, stdDev);
             //displayPacked(dstPtr, srcSize, channel);
         }

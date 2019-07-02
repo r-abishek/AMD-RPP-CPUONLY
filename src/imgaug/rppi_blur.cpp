@@ -147,8 +147,8 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    Rpp32f stdDev = 0.84945;
-    unsigned int kernelSize = 11;
+    Rpp32f stdDev = 30.84945;
+    unsigned int kernelSize = 9;
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
