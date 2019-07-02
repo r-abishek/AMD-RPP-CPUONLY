@@ -688,6 +688,22 @@ target_link_libraries(
 )
 
 
+add_executable(
+    rppi_equalize_histogram
+    src/statistical/rppi_equalize_histogram.cpp
+)
+target_include_directories(rppi_equalize_histogram
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_equalize_histogram
+    ${OpenCV_LIBS}
+)
+
+
 
 
 

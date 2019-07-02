@@ -2,91 +2,36 @@
 #include <limits>
 
 template <typename T>
-RppStatus histogram_host(T* srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, T* maskPtr, Rpp32u bins, 
+RppStatus histogram_host(T* srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
                          RppiChnFormat chnFormat, unsigned int channel)
 {
-    T *srcPtrTemp, *maskPtrTemp;
+    T *srcPtrTemp;
     srcPtrTemp = srcPtr;
-    maskPtrTemp = maskPtr;
+    Rpp32u *histogram = (Rpp32u *) calloc(bins, sizeof(Rpp32u));
     Rpp32u *outputHistogramTemp;
     outputHistogramTemp = outputHistogram;
-    int flag = 0;
-
-    Rpp32u elementsInBin = ((Rpp32u)(std::numeric_limits<T>::max()) + 1) / bins;
-
-    if (chnFormat == RPPI_CHN_PLANAR)
+    for (int c = 0; c < channel; c++)
     {
-        for (int c = 0; c < channel; c++)
+        memset (histogram,0,bins * sizeof(Rpp32u));
+
+        Rpp32u *histogramTemp;
+        histogramTemp = histogram;
+
+        histogram_kernel_host(srcPtrTemp, srcSize, histogram, bins, 0, chnFormat, channel);
+
+        for (int i = 0; i < bins; i++)
         {
-            for (int i = 0; i < (srcSize.height * srcSize.width); i++)
-            {
-                if (*maskPtrTemp != 0 && *maskPtrTemp != 1)
-                {
-                    return RPP_ERROR;
-                }
-                if (*maskPtrTemp == 0)
-                {
-                    srcPtrTemp++;
-                    maskPtrTemp++;
-                }
-                else if (*maskPtrTemp == 1)
-                {
-                    flag = 0;
-                    for (int binCheck = 0; binCheck < bins - 1; binCheck++)
-                    {
-                        if (*srcPtrTemp >= binCheck * elementsInBin && *srcPtrTemp <= ((binCheck + 1) * elementsInBin) - 1)
-                        {
-                            *(outputHistogramTemp + binCheck) += 1;
-                            flag = 1;
-                            break;
-                        }
-                    }
-                    if (flag == 0)
-                    {
-                        *(outputHistogramTemp + bins - 1) += 1;
-                    }
-                    srcPtrTemp++;
-                    maskPtrTemp++;
-                }
-            }
-            outputHistogramTemp += bins;
+            *outputHistogramTemp = *histogramTemp;
+            outputHistogramTemp++;
+            histogramTemp++;
         }
-    }
-    else if (chnFormat == RPPI_CHN_PACKED)
-    {
-        for (int i = 0; i < (srcSize.height * srcSize.width); i++)
+        if (chnFormat == RPPI_CHN_PLANAR)
         {
-            for (int c = 0; c < channel; c++)
-            {
-                if (*maskPtrTemp != 0 && *maskPtrTemp != 1)
-                {
-                    return RPP_ERROR;
-                }
-                if (*maskPtrTemp == 0)
-                {
-                    srcPtrTemp++;
-                    maskPtrTemp++;
-                }
-                else if (*maskPtrTemp == 1)
-                {
-                    flag = 0;
-                    for (int binCheck = 0; binCheck < bins - 1; binCheck++)
-                    {
-                        if (*srcPtrTemp >= binCheck * elementsInBin && *srcPtrTemp <= ((binCheck + 1) * elementsInBin) - 1)
-                        {
-                            *(outputHistogramTemp + (c * bins) + binCheck) += 1;
-                            flag = 1;
-                            break;
-                        }
-                    }
-                    if (flag == 0)
-                    {
-                        *(outputHistogramTemp + (c * bins) + bins - 1) += 1;
-                    }
-                    srcPtrTemp++;
-                    maskPtrTemp++;
-                }
-            }
+            srcPtrTemp += (srcSize.height * srcSize.width);
+        }
+        else if (chnFormat == RPPI_CHN_PACKED)
+        {
+            srcPtrTemp += channel;
         }
     }
 

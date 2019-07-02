@@ -339,6 +339,14 @@ RppStatus compute_subimage_location_host(T* srcPtr, T** srcPtrSubImage, T* dstPt
                                          unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, 
                                          RppiChnFormat chnFormat, unsigned int channel)
 {
+    if ((RPPINRANGE(x1, 0, srcSize.width - 1) == 0) 
+        || (RPPINRANGE(x2, 0, srcSize.width - 1) == 0) 
+        || (RPPINRANGE(y1, 0, srcSize.height - 1) == 0) 
+        || (RPPINRANGE(y2, 0, srcSize.height - 1) == 0))
+    {
+        return RPP_ERROR;
+    }
+    
     int yDiff = (int) y2 - (int) y1;
     int xDiff = (int) x2 - (int) x1;
 
@@ -354,6 +362,48 @@ RppStatus compute_subimage_location_host(T* srcPtr, T** srcPtrSubImage, T* dstPt
     {
         *srcPtrSubImage = srcPtr + (RPPMIN2(y1, y2) * srcSize.width * channel) + (RPPMIN2(x1, x2) * channel);
         *dstPtrSubImage = dstPtr + (RPPMIN2(y1, y2) * srcSize.width * channel) + (RPPMIN2(x1, x2) * channel);
+    }
+
+    return RPP_SUCCESS;
+}
+
+template<typename T>
+RppStatus histogram_kernel_host(T* srcPtr, RppiSize srcSize, Rpp32u* histogram, 
+                                Rpp32u bins, Rpp32u increment, 
+                                RppiChnFormat chnFormat, unsigned int channel)
+{
+    T *srcPtrTemp;
+    srcPtrTemp = srcPtr;
+    Rpp32u *histogramTemp;
+    histogramTemp = histogram;
+    int flag = 0;
+
+    Rpp32u elementsInBin = ((Rpp32u)(std::numeric_limits<T>::max()) + 1) / bins;
+
+    for (int i = 0; i < (srcSize.height * srcSize.width); i++)
+    {
+        flag = 0;
+        for (int binCheck = 0; binCheck < bins - 1; binCheck++)
+        {
+            if (*srcPtrTemp >= binCheck * elementsInBin && *srcPtrTemp <= ((binCheck + 1) * elementsInBin) - 1)
+            {
+                *(histogramTemp + binCheck) += 1;
+                flag = 1;
+                break;
+            }
+        }
+        if (flag == 0)
+        {
+            *(histogramTemp + bins - 1) += 1;
+        }
+        if (chnFormat == RPPI_CHN_PLANAR)
+        {
+            srcPtrTemp++;
+        }
+        else if (chnFormat == RPPI_CHN_PACKED)
+        {
+            srcPtrTemp += channel;
+        }
     }
 
     return RPP_SUCCESS;

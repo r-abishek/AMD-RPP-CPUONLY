@@ -20,10 +20,10 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_histogram_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, RppPtr_t maskPtr, Rpp32u bins)
+rppi_histogram_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins)
 {
     histogram_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, 
-                          outputHistogram, static_cast<Rpp8u*>(maskPtr), bins, 
+                          outputHistogram, bins, 
                           RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
@@ -31,10 +31,10 @@ rppi_histogram_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHis
 }
 
 RppStatus
-rppi_histogram_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, RppPtr_t maskPtr, Rpp32u bins)
+rppi_histogram_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins)
 {
     histogram_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, 
-                          outputHistogram, static_cast<Rpp8u*>(maskPtr), bins, 
+                          outputHistogram, bins, 
                           RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
@@ -42,10 +42,10 @@ rppi_histogram_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHis
 }
 
 RppStatus
-rppi_histogram_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, RppPtr_t maskPtr, Rpp32u bins)
+rppi_histogram_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins)
 {
     histogram_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, 
-                          outputHistogram, static_cast<Rpp8u*>(maskPtr), bins, 
+                          outputHistogram, bins, 
                           RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
@@ -60,7 +60,8 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize;
     unsigned int channel;
-    Rpp32u bins = 16;
+    Rpp32u bins = 8;
+    int count = 0;
     
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -108,9 +109,6 @@ int main(int argc, char** argv)
 
         Rpp32u *outputHistogram = (Rpp32u *) calloc (bins * channel, sizeof(Rpp32u));
 
-        Rpp8u *maskPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
-        memset (maskPtr,1,channel * srcSize.height * srcSize.width);
-
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
 
@@ -122,7 +120,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_histogram_u8_pln1_host(srcPtr, srcSize, outputHistogram, maskPtr, bins);
+                rppi_histogram_u8_pln1_host(srcPtr, srcSize, outputHistogram, bins);
                 stop = high_resolution_clock::now();
             }
             else if (channel == 3)
@@ -132,7 +130,7 @@ int main(int argc, char** argv)
                 rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_histogram_u8_pln3_host(srcPtrTemp, srcSize, outputHistogram, maskPtr, bins);
+                rppi_histogram_u8_pln3_host(srcPtrTemp, srcSize, outputHistogram, bins);
                 stop = high_resolution_clock::now();
             }
         }
@@ -142,14 +140,14 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_histogram_u8_pln1_host(srcPtr, srcSize, outputHistogram, maskPtr, bins);
+                rppi_histogram_u8_pln1_host(srcPtr, srcSize, outputHistogram, bins);
                 stop = high_resolution_clock::now();
             }
             else if (channel ==3)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_histogram_u8_pkd3_host(srcPtr, srcSize, outputHistogram, maskPtr, bins);
+                rppi_histogram_u8_pkd3_host(srcPtr, srcSize, outputHistogram, bins);
                 stop = high_resolution_clock::now();
             }
         }
@@ -162,11 +160,17 @@ int main(int argc, char** argv)
         outputHistogramTemp = outputHistogram;
         for (int c = 0; c < channel; c++)
         {
+            count = 1;
             printf("\nChannel %d:\n", c+1);
-            for (int i = 0; i < bins; i++)
+            for (int i = 0; i < bins; i++, count++)
             {
                 printf("%d\t", *outputHistogramTemp);
                 outputHistogramTemp++;
+                if (count == 25)
+                {
+                    printf("\n");
+                    count = 0;
+                }
             }
             printf("\n");
         }
@@ -184,24 +188,28 @@ int main(int argc, char** argv)
         srcSize.height = 3;
         srcSize.width = 4;
         Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
-        Rpp8u maskPtr[12] = {0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0};
         Rpp32u *outputHistogram = (Rpp32u *) calloc (bins * channel, sizeof(Rpp32u));
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        printf("\n\nMask:\n");
-        displayPlanar(maskPtr, srcSize, channel);
-        rppi_histogram_u8_pln1_host(srcPtr, srcSize, outputHistogram, maskPtr, bins);
+        rppi_histogram_u8_pln1_host(srcPtr, srcSize, outputHistogram, bins);
+        
         printf("\n\nOutput of histogram operation:\n");
         printf("\n%d bin histogram for the image is:\n", bins);
         Rpp32u *outputHistogramTemp;
         outputHistogramTemp = outputHistogram;
         for (int c = 0; c < channel; c++)
         {
+            count = 1;
             printf("\nChannel %d:\n", c+1);
-            for (int i = 0; i < bins; i++)
+            for (int i = 0; i < bins; i++, count++)
             {
                 printf("%d\t", *outputHistogramTemp);
                 outputHistogramTemp++;
+                if (count == 25)
+                {
+                    printf("\n");
+                    count = 0;
+                }
             }
             printf("\n");
         }
@@ -214,24 +222,28 @@ int main(int argc, char** argv)
         if (type == 1)
         {
             Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
-            Rpp8u maskPtr[36] = {0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0};
             Rpp32u *outputHistogram = (Rpp32u *) calloc (bins * channel, sizeof(Rpp32u));
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            printf("\n\nMask:\n");
-            displayPlanar(maskPtr, srcSize, channel);
-            rppi_histogram_u8_pln3_host(srcPtr, srcSize, outputHistogram, maskPtr, bins);
+            rppi_histogram_u8_pln3_host(srcPtr, srcSize, outputHistogram, bins);
+            
             printf("\n\nOutput of histogram operation:\n");
             printf("\n%d bin histogram for the image is:\n", bins);
             Rpp32u *outputHistogramTemp;
             outputHistogramTemp = outputHistogram;
             for (int c = 0; c < channel; c++)
             {
+                count = 1;
                 printf("\nChannel %d:\n", c+1);
-                for (int i = 0; i < bins; i++)
+                for (int i = 0; i < bins; i++, count++)
                 {
                     printf("%d\t", *outputHistogramTemp);
                     outputHistogramTemp++;
+                    if (count == 25)
+                    {
+                        printf("\n");
+                        count = 0;
+                    }
                 }
                 printf("\n");
             }
@@ -239,24 +251,28 @@ int main(int argc, char** argv)
         else if (type == 2)
         {
             Rpp8u srcPtr[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
-            Rpp8u maskPtr[36] = {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             Rpp32u *outputHistogram = (Rpp32u *) calloc (bins * channel, sizeof(Rpp32u));
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            printf("\n\nMask:\n");
-            displayPacked(maskPtr, srcSize, channel);
-            rppi_histogram_u8_pkd3_host(srcPtr, srcSize, outputHistogram, maskPtr, bins);
+            rppi_histogram_u8_pkd3_host(srcPtr, srcSize, outputHistogram, bins);
+            
             printf("\n\nOutput of histogram operation:\n");
             printf("\n%d bin histogram for the image is:\n", bins);
             Rpp32u *outputHistogramTemp;
             outputHistogramTemp = outputHistogram;
             for (int c = 0; c < channel; c++)
             {
+                count = 1;
                 printf("\nChannel %d:\n", c+1);
-                for (int i = 0; i < bins; i++)
+                for (int i = 0; i < bins; i++, count++)
                 {
                     printf("%d\t", *outputHistogramTemp);
                     outputHistogramTemp++;
+                    if (count == 25)
+                    {
+                        printf("\n");
+                        count = 0;
+                    }
                 }
                 printf("\n");
             }
@@ -273,9 +289,7 @@ int main(int argc, char** argv)
         printf("Channels = %d, Height = %d, Width = %d", channel, srcSize.height, srcSize.width);
         Rpp8u *srcPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         Rpp32u *outputHistogram = (Rpp32u *) calloc (bins * channel, sizeof(Rpp32u));
-        Rpp8u *maskPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         int *intSrcPtr = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
-        int *intMaskPtr = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
         if (type == 1)
         {
             printf("\n\n\n\nEnter elements in array of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);
@@ -283,30 +297,32 @@ int main(int argc, char** argv)
             cast(intSrcPtr, srcPtr, srcSize, channel);
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            printf("\n\n\n\nEnter elements in mask of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);
-            inputPlanar(intMaskPtr, srcSize, channel);
-            cast(intMaskPtr, maskPtr, srcSize, channel);
-            printf("\n\nMask:\n");
-            displayPlanar(maskPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_histogram_u8_pln1_host(srcPtr, srcSize, outputHistogram, maskPtr, bins);
+                rppi_histogram_u8_pln1_host(srcPtr, srcSize, outputHistogram, bins);
             }
             else if (channel == 3)
             {
-                rppi_histogram_u8_pln3_host(srcPtr, srcSize, outputHistogram, maskPtr, bins);
+                rppi_histogram_u8_pln3_host(srcPtr, srcSize, outputHistogram, bins);
             }
+            
             printf("\n\nOutput of histogram operation:\n");
             printf("\n%d bin histogram for the image is:\n", bins);
             Rpp32u *outputHistogramTemp;
             outputHistogramTemp = outputHistogram;
             for (int c = 0; c < channel; c++)
             {
+                count = 1;
                 printf("\nChannel %d:\n", c+1);
-                for (int i = 0; i < bins; i++)
+                for (int i = 0; i < bins; i++, count++)
                 {
                     printf("%d\t", *outputHistogramTemp);
                     outputHistogramTemp++;
+                    if (count == 25)
+                    {
+                        printf("\n");
+                        count = 0;
+                    }
                 }
                 printf("\n");
             }
@@ -318,30 +334,32 @@ int main(int argc, char** argv)
             cast(intSrcPtr, srcPtr, srcSize, channel);
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            printf("\n\n\n\nEnter elements in mask of size %d x %d x %d in packed format: \n", channel, srcSize.height, srcSize.width);
-            inputPacked(intMaskPtr, srcSize, channel);
-            cast(intMaskPtr, maskPtr, srcSize, channel);
-            printf("\n\nMask:\n");
-            displayPacked(maskPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_histogram_u8_pln1_host(srcPtr, srcSize, outputHistogram, maskPtr, bins);
+                rppi_histogram_u8_pln1_host(srcPtr, srcSize, outputHistogram, bins);
             }
             else if (channel == 3)
             {
-                rppi_histogram_u8_pkd3_host(srcPtr, srcSize, outputHistogram, maskPtr, bins);
+                rppi_histogram_u8_pkd3_host(srcPtr, srcSize, outputHistogram, bins);
             }
+            
             printf("\n\nOutput of histogram operation:\n");
             printf("\n%d bin histogram for the image is:\n", bins);
             Rpp32u *outputHistogramTemp;
             outputHistogramTemp = outputHistogram;
             for (int c = 0; c < channel; c++)
             {
+                count = 1;
                 printf("\nChannel %d:\n", c+1);
-                for (int i = 0; i < bins; i++)
+                for (int i = 0; i < bins; i++, count++)
                 {
                     printf("%d\t", *outputHistogramTemp);
                     outputHistogramTemp++;
+                    if (count == 25)
+                    {
+                        printf("\n");
+                        count = 0;
+                    }
                 }
                 printf("\n");
             }
