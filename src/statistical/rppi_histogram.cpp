@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize;
     unsigned int channel;
-    Rpp32u bins = 8;
+    Rpp32u bins = 16;
     
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -110,7 +110,6 @@ int main(int argc, char** argv)
 
         Rpp8u *maskPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         memset (maskPtr,1,channel * srcSize.height * srcSize.width);
-        displayPlanar(maskPtr, srcSize, channel);
 
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
