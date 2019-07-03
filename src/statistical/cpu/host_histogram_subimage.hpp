@@ -9,7 +9,6 @@ RppStatus histogram_subimage_host(T* srcPtr, RppiSize srcSize, Rpp32u* outputHis
     T *srcPtrSubImage;
     RppiSize srcSizeSubImage;
     compute_subimage_location_host(srcPtr, &srcPtrSubImage, srcSize, &srcSizeSubImage, x1, y1, x2, y2, chnFormat, channel);
-    printf("\nSUBIMAGE-> Height = %d, Width = %d", srcSizeSubImage.height, srcSizeSubImage.width);
 
     Rpp32u increment = srcSize.width - srcSizeSubImage.width;
 
