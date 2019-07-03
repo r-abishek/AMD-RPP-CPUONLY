@@ -2,7 +2,7 @@
 #include <limits>
 
 template <typename T>
-RppStatus histogram_subimage_host(T* srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
+RppStatus histogram_subimage_perChannel_host(T* srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
                                   unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, 
                                   RppiChnFormat chnFormat, unsigned int channel)
 {
@@ -24,7 +24,7 @@ RppStatus histogram_subimage_host(T* srcPtr, RppiSize srcSize, Rpp32u* outputHis
         Rpp32u *histogramTemp;
         histogramTemp = histogram;
 
-        histogram_kernel_host(srcPtrTemp, srcSizeSubImage, histogram, bins, increment, chnFormat, channel);
+        histogram_kernel_perChannel_host(srcPtrTemp, srcSizeSubImage, histogram, bins, increment, chnFormat, channel);
 
         for (int i = 0; i < bins; i++)
         {

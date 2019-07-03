@@ -673,6 +673,54 @@ target_link_libraries(
 
 
 add_executable(
+    rppi_histogram_perChannel
+    src/statistical/rppi_histogram_perChannel.cpp
+)
+target_include_directories(rppi_histogram_perChannel
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_histogram_perChannel
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_equalize_histogram_perChannel
+    src/statistical/rppi_equalize_histogram_perChannel.cpp
+)
+target_include_directories(rppi_equalize_histogram_perChannel
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_equalize_histogram_perChannel
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_histogram_subimage_perChannel
+    src/statistical/rppi_histogram_subimage_perChannel.cpp
+)
+target_include_directories(rppi_histogram_subimage_perChannel
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_histogram_subimage_perChannel
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
     rppi_histogram
     src/statistical/rppi_histogram.cpp
 )
@@ -700,22 +748,6 @@ target_include_directories(rppi_equalize_histogram
 )
 target_link_libraries(
     rppi_equalize_histogram
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_histogram_subimage
-    src/statistical/rppi_histogram_subimage.cpp
-)
-target_include_directories(rppi_histogram_subimage
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_histogram_subimage
     ${OpenCV_LIBS}
 )
 

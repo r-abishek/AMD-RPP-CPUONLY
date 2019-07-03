@@ -366,7 +366,7 @@ RppStatus compute_subimage_location_host(T* ptr, T** ptrSubImage,
 }
 
 template<typename T>
-RppStatus histogram_kernel_host(T* srcPtr, RppiSize srcSize, Rpp32u* histogram, 
+RppStatus histogram_kernel_perChannel_host(T* srcPtr, RppiSize srcSize, Rpp32u* histogram, 
                                 Rpp32u bins, Rpp32u increment, 
                                 RppiChnFormat chnFormat, unsigned int channel)
 {
@@ -414,6 +414,41 @@ RppStatus histogram_kernel_host(T* srcPtr, RppiSize srcSize, Rpp32u* histogram,
         {
             srcPtrTemp += packedIncrement;
         }
+    }
+
+    return RPP_SUCCESS;
+}
+
+template<typename T>
+RppStatus histogram_kernel_host(T* srcPtr, RppiSize srcSize, Rpp32u* histogram, 
+                                Rpp32u bins, 
+                                unsigned int channel)
+{
+    Rpp32u elementsInBin = ((Rpp32u)(std::numeric_limits<T>::max()) + 1) / bins;
+    int flag = 0;
+
+    T *srcPtrTemp;
+    srcPtrTemp = srcPtr;
+    Rpp32u *histogramTemp;
+    histogramTemp = histogram;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+    {
+        flag = 0;
+        for (int binCheck = 0; binCheck < bins - 1; binCheck++)
+        {
+            if (*srcPtrTemp >= binCheck * elementsInBin && *srcPtrTemp <= ((binCheck + 1) * elementsInBin) - 1)
+            {
+                *(histogramTemp + binCheck) += 1;
+                flag = 1;
+                break;
+            }
+        }
+        if (flag == 0)
+        {
+            *(histogramTemp + bins - 1) += 1;
+        }
+        srcPtrTemp++;
     }
 
     return RPP_SUCCESS;
