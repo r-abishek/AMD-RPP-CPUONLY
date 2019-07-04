@@ -21,10 +21,10 @@ using namespace std::chrono;
 
 RppStatus
 rppi_bilateral_filter_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                             Rpp32u kernelSize, Rpp64f sigmaI, Rpp64f sigmaS)
+                             Rpp32s diameter, Rpp64f sigmaI, Rpp64f sigmaS)
 {
     bilateral_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                                    kernelSize, sigmaI, sigmaS,
+                                    diameter, sigmaI, sigmaS,
                                     RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
@@ -33,10 +33,10 @@ rppi_bilateral_filter_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
 
 RppStatus
 rppi_bilateral_filter_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                             Rpp32u kernelSize, Rpp64f sigmaI, Rpp64f sigmaS)
+                             Rpp32s diameter, Rpp64f sigmaI, Rpp64f sigmaS)
 {
     bilateral_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                                    kernelSize, sigmaI, sigmaS,
+                                    diameter, sigmaI, sigmaS,
                                     RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
@@ -45,10 +45,10 @@ rppi_bilateral_filter_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
 
 RppStatus
 rppi_bilateral_filter_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                             Rpp32u kernelSize, Rpp64f sigmaI, Rpp64f sigmaS)
+                             Rpp32s diameter, Rpp64f sigmaI, Rpp64f sigmaS)
 {
     bilateral_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                                    kernelSize, sigmaI, sigmaS,
+                                    diameter, sigmaI, sigmaS,
                                     RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
@@ -63,8 +63,8 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    Rpp32u kernelSize = 15;
-    Rpp64f sigmaI = 80.0, sigmaS = 20.0;
+    Rpp32s diameter = 5;
+    Rpp64f sigmaI = 80.0, sigmaS = 60.0;
      
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -105,7 +105,7 @@ int main(int argc, char** argv)
         }
 
         Mat imageOutOpenCV;
-        bilateralFilter(imageIn, imageOutOpenCV, kernelSize, sigmaI, sigmaS);
+        bilateralFilter(imageIn, imageOutOpenCV, diameter, sigmaI, sigmaS);
 
         srcSize.height = imageIn.rows;
         srcSize.width = imageIn.cols;
@@ -129,7 +129,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, sigmaI, sigmaS);
+                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
                 rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_bilateral_filter_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, kernelSize, sigmaI, sigmaS);
+                rppi_bilateral_filter_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, diameter, sigmaI, sigmaS);
                 stop = high_resolution_clock::now();
 
                 rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -157,7 +157,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, sigmaI, sigmaS);
+                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -166,7 +166,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize, sigmaI, sigmaS);
+                rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -202,7 +202,7 @@ int main(int argc, char** argv)
         Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, sigmaI, sigmaS);
+        rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
         printf("\n\nOutput of bilateral filtering:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
@@ -217,7 +217,7 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_bilateral_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize, sigmaI, sigmaS);
+            rppi_bilateral_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
             printf("\n\nOutput of bilateral filtering:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
@@ -227,7 +227,7 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize, sigmaI, sigmaS);
+            rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
             printf("\n\nOutput of bilateral filtering:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
@@ -253,11 +253,11 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, sigmaI, sigmaS);
+                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
             }
             else if (channel == 3)
             {
-                rppi_bilateral_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize, sigmaI, sigmaS);
+                rppi_bilateral_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
             }
             printf("\n\nOutput of bilateral filtering:\n");
             displayPlanar(dstPtr, srcSize, channel);
@@ -271,11 +271,11 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, sigmaI, sigmaS);
+                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
             }
             else if (channel == 3)
             {
-                rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize, sigmaI, sigmaS);
+                rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
             }
             printf("\n\nOutput of bilateral filtering:\n");
             displayPacked(dstPtr, srcSize, channel);
