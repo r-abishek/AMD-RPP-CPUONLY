@@ -21,7 +21,7 @@ using namespace std::chrono;
 
 RppStatus
 rppi_bilateral_filter_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                             Rpp32u kernelSize, Rpp64f sigmaI, Rpp64f sigmaS)
+                             Rpp32u kernelSize, Rpp32f sigmaI, Rpp32f sigmaS)
 {
     bilateral_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     kernelSize, sigmaI, sigmaS,
@@ -33,7 +33,7 @@ rppi_bilateral_filter_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
 
 RppStatus
 rppi_bilateral_filter_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                             Rpp32u kernelSize, Rpp64f sigmaI, Rpp64f sigmaS)
+                             Rpp32u kernelSize, Rpp32f sigmaI, Rpp32f sigmaS)
 {
     bilateral_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     kernelSize, sigmaI, sigmaS,
@@ -45,7 +45,7 @@ rppi_bilateral_filter_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
 
 RppStatus
 rppi_bilateral_filter_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                             Rpp32u kernelSize, Rpp64f sigmaI, Rpp64f sigmaS)
+                             Rpp32u kernelSize, Rpp32f sigmaI, Rpp32f sigmaS)
 {
     bilateral_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     kernelSize, sigmaI, sigmaS,
@@ -63,8 +63,26 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
+    //Rpp32u kernelSize = 15;
+    //Rpp32f sigmaI = 80.0, sigmaS = 20.0;
     Rpp32u kernelSize = 15;
-    Rpp64f sigmaI = 80.0, sigmaS = 20.0;
+    Rpp32f sigmaI = 15.0, sigmaS = 20.0;
+
+
+
+    printf("\nEnter kernelSize: ");
+    scanf("%d", &kernelSize);
+/*   
+    printf("\nEnter sigmaI: ");
+    scanf("%d", &sigmaI);
+
+    printf("\nEnter sigmaS: ");
+    scanf("%d", &sigmaS);
+*/
+
+
+
+
      
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -104,9 +122,6 @@ int main(int argc, char** argv)
             return -1;
         }
 
-        Mat imageOutOpenCV;
-        bilateralFilter(imageIn, imageOutOpenCV, kernelSize, sigmaI, sigmaS);
-
         srcSize.height = imageIn.rows;
         srcSize.width = imageIn.cols;
         dstSize.height = srcSize.height;
@@ -120,6 +135,14 @@ int main(int argc, char** argv)
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
+
+        Mat imageOutOpenCV;
+        start = high_resolution_clock::now();
+        bilateralFilter(imageIn, imageOutOpenCV, kernelSize, sigmaI, sigmaS);
+        stop = high_resolution_clock::now();
+
+        auto durationOpenCV = duration_cast<milliseconds>(stop - start);
+        cout << "\nTime taken for OpenCV function (milliseconds) = " << durationOpenCV.count() << endl;
 
         Mat imageOut;
 
