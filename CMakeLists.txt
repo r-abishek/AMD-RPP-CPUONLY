@@ -4,6 +4,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
+add_executable(
+    rppi_exposure
+    src/imgaug/rppi_exposure.cpp
+)
+target_include_directories(rppi_exposure
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_exposure
+    ${OpenCV_LIBS}
+)
 
 
 
@@ -16,8 +30,7 @@ project(amd_rpp VERSION 0.1)
 
 
 
-
-
+#[[
 add_executable(
     rppi_brightness_contrast
     src/imgaug/rppi_brightness_contrast.cpp
@@ -142,7 +155,7 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-#[[
+
 add_executable(
     rppi_packed2planar
     src/imgaug/rppi_packed2planar.cpp
@@ -173,7 +186,7 @@ target_link_libraries(
     rppi_planar2packed
     ${OpenCV_LIBS}
 )
-]]
+
 
 
 
@@ -418,6 +431,22 @@ target_include_directories(rppi_jitterAdd
 )
 target_link_libraries(
     rppi_jitterAdd
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_exposure
+    src/imgaug/rppi_exposure.cpp
+)
+target_include_directories(rppi_exposure
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_exposure
     ${OpenCV_LIBS}
 )
 
@@ -764,7 +793,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     DisplayImage
     src/DisplayImage.cpp
