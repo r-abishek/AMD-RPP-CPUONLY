@@ -50,7 +50,8 @@ RppStatus generate_bilateral_kernel_host(Rpp32f multiplierI, Rpp32f multiplierS,
                                          RppiChnFormat chnFormat, unsigned int channel)
 {
     Rpp32f sum = 0.0;
-    unsigned int count = 0;
+    Rpp32f* kernelTemp;
+    kernelTemp = kernel;
     
     T *srcPtrWindowTemp, *srcPtrWindowCenter;
     srcPtrWindowTemp = srcPtrWindow;
@@ -64,9 +65,10 @@ RppStatus generate_bilateral_kernel_host(Rpp32f multiplierI, Rpp32f multiplierS,
             {
                 T pixel = *srcPtrWindowCenter - *srcPtrWindowTemp;
                 pixel = RPPABS(pixel);
-                kernel[count] = multiplier * exp((multiplierS * (i*i + j*j)) + (multiplierI * pixel));
-                sum += kernel[count];
-                count += 1;
+                pixel = pixel * pixel;
+                *kernelTemp = multiplier * exp((multiplierS * (i*i + j*j)) + (multiplierI * pixel));
+                sum = sum + *kernelTemp;
+                kernelTemp++;
                 srcPtrWindowTemp++;
             }
             srcPtrWindowTemp += remainingElementsInRow;
@@ -80,18 +82,21 @@ RppStatus generate_bilateral_kernel_host(Rpp32f multiplierI, Rpp32f multiplierS,
             {
                 T pixel = *srcPtrWindowCenter - *srcPtrWindowTemp;
                 pixel = RPPABS(pixel);
-                kernel[count] = exp((multiplierS * (i*i + j*j)) + (multiplierI * pixel));
-                sum += kernel[count];
-                count += 1;
+                pixel = pixel * pixel;
+                *kernelTemp = multiplier * exp((multiplierS * (i*i + j*j)) + (multiplierI * pixel));
+                sum = sum + *kernelTemp;
+                kernelTemp++;
                 srcPtrWindowTemp += channel;
             }
             srcPtrWindowTemp += remainingElementsInRow;
         }
     }
 
+    kernelTemp = kernel;
     for (int i = 0; i < (kernelSize * kernelSize); i++)
     {
-        kernel[i] /= sum;
+        *kernelTemp = *kernelTemp / sum;
+        kernelTemp++;
     }
     
     return RPP_SUCCESS;
