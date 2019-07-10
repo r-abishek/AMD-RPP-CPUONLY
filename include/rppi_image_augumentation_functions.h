@@ -213,6 +213,43 @@ rppi_resize_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp
                          Rpp32f percentage);
 
 
+
+// --------------------
+// Resize Crop
+// --------------------
+
+// Host function declarations
+
+RppStatus
+rppi_resizeCrop_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
+
+RppStatus
+rppi_resizeCrop_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
+
+RppStatus
+rppi_resizeCrop_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
+
+
+
+// --------------------
+// Random Crop Letter Box
+// --------------------
+
+// Host function declarations
+
+RppStatus
+rppi_random_crop_letterbox_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+                                        Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
+
+RppStatus
+rppi_random_crop_letterbox_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+                                        Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
+
+RppStatus
+rppi_random_crop_letterbox_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+                                        Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
+
+
 //------------------------- Color Space Conversions -------------------------
 
 

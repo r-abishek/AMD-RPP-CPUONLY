@@ -5,17 +5,17 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 add_executable(
-    rppi_color_temperature
-    src/imgaug/rppi_color_temperature.cpp
+    rppi_random_crop_letterbox
+    src/imgaug/rppi_random_crop_letterbox.cpp
 )
-target_include_directories(rppi_color_temperature
+target_include_directories(rppi_random_crop_letterbox
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_color_temperature
+    rppi_random_crop_letterbox
     ${OpenCV_LIBS}
 )
 
@@ -310,6 +310,21 @@ target_include_directories(rppi_transpose
 )
 target_link_libraries(
     rppi_transpose
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_random_crop_letterbox
+    src/imgaug/rppi_random_crop_letterbox.cpp
+)
+target_include_directories(rppi_random_crop_letterbox
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_random_crop_letterbox
     ${OpenCV_LIBS}
 )
 
