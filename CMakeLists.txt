@@ -5,17 +5,32 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 add_executable(
-    rppi_exposure
-    src/imgaug/rppi_exposure.cpp
+    rppi_vignette
+    src/imgaug/rppi_vignette.cpp
 )
-target_include_directories(rppi_exposure
+target_include_directories(rppi_vignette
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_exposure
+    rppi_vignette
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_multiply
+    src/arithmetic/rppi_multiply.cpp
+)
+target_include_directories(rppi_multiply
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_multiply
     ${OpenCV_LIBS}
 )
 
@@ -296,6 +311,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_transpose
+    src/imgaug/rppi_transpose.cpp
+)
+target_include_directories(rppi_transpose
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_transpose
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -447,6 +477,21 @@ target_include_directories(rppi_exposure
 )
 target_link_libraries(
     rppi_exposure
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_vignette
+    src/imgaug/rppi_vignette.cpp
+)
+target_include_directories(rppi_vignette
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_vignette
     ${OpenCV_LIBS}
 )
 
