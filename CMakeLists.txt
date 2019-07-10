@@ -5,34 +5,21 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 add_executable(
-    rppi_vignette
-    src/imgaug/rppi_vignette.cpp
+    rppi_color_temperature
+    src/imgaug/rppi_color_temperature.cpp
 )
-target_include_directories(rppi_vignette
+target_include_directories(rppi_color_temperature
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_vignette
+    rppi_color_temperature
     ${OpenCV_LIBS}
 )
 
-add_executable(
-    rppi_multiply
-    src/arithmetic/rppi_multiply.cpp
-)
-target_include_directories(rppi_multiply
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_multiply
-    ${OpenCV_LIBS}
-)
+
 
 
 
@@ -649,6 +636,21 @@ target_include_directories(rppi_bitwise_NOT
 )
 target_link_libraries(
     rppi_bitwise_NOT
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_multiply
+    src/arithmetic/rppi_multiply.cpp
+)
+target_include_directories(rppi_multiply
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_multiply
     ${OpenCV_LIBS}
 )
 
