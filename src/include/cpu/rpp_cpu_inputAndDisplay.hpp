@@ -113,7 +113,7 @@ void displayPlanarF(Rpp32f *pArr, RppiSize size, unsigned int channel)
         printf("\n\nChannel %d:\n", c+1);
         for (int i = 0; i < (size.height * size.width); i++)
         {
-            printf("%0.2f\t\t", *(pArr + p));
+            printf("%0.6f\t\t", *(pArr + p));
             if (((i + 1) % size.width) == 0)
             {
                 printf("\n");
@@ -132,7 +132,7 @@ void displayPackedF(Rpp32f *pArr, RppiSize size, unsigned int channel)
         {
             for (int j = 0; j < size.width; j++)
             {
-                printf("%0.2f\t\t", *(pArr + p + c + (j * channel)));
+                printf("%0.6f\t\t", *(pArr + p + c + (j * channel)));
             }
             printf("\n");
         }
