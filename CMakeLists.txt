@@ -34,6 +34,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_lens_correction
+    src/imgaug/rppi_lens_correction.cpp
+)
+target_include_directories(rppi_lens_correction
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_lens_correction
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -524,6 +539,21 @@ target_include_directories(rppi_fish_eye_effect
 )
 target_link_libraries(
     rppi_fish_eye_effect
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_lens_correction
+    src/imgaug/rppi_lens_correction.cpp
+)
+target_include_directories(rppi_lens_correction
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_lens_correction
     ${OpenCV_LIBS}
 )
 
