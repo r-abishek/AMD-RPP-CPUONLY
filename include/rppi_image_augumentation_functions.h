@@ -370,6 +370,22 @@ RppStatus
 rppi_color_temperature_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                           Rpp8s adjustmentValue);
 
+
+// --------------------
+// Fish Eye Effect
+// --------------------
+
+// Host function declarations
+
+RppStatus
+rppi_fish_eye_effect_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr);
+
+RppStatus
+rppi_fish_eye_effect_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr);
+
+RppStatus
+rppi_fish_eye_effect_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr);
+
 #ifdef __cplusplus
 }
 #endif

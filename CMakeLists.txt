@@ -5,17 +5,32 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 add_executable(
-    rppi_random_crop_letterbox
-    src/imgaug/rppi_random_crop_letterbox.cpp
+    rppi_fish_eye_effect
+    src/imgaug/rppi_fish_eye_effect.cpp
 )
-target_include_directories(rppi_random_crop_letterbox
+target_include_directories(rppi_fish_eye_effect
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_random_crop_letterbox
+    rppi_fish_eye_effect
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_vignette
+    src/imgaug/rppi_vignette.cpp
+)
+target_include_directories(rppi_vignette
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_vignette
     ${OpenCV_LIBS}
 )
 
@@ -494,6 +509,21 @@ target_include_directories(rppi_vignette
 )
 target_link_libraries(
     rppi_vignette
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_fish_eye_effect
+    src/imgaug/rppi_fish_eye_effect.cpp
+)
+target_include_directories(rppi_fish_eye_effect
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_fish_eye_effect
     ${OpenCV_LIBS}
 )
 
