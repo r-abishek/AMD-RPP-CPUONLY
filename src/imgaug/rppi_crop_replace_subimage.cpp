@@ -1,4 +1,4 @@
-// rppi_resize_crop
+// rppi_crop_replace_subimage
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
@@ -9,7 +9,7 @@
 #include <chrono>
 #include "cpu/rpp_cpu_inputAndDisplay.hpp"
 #include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
-#include "cpu/host_resize_crop.hpp"
+#include "cpu/host_crop_replace_subimage.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -20,36 +20,33 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_resize_crop_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2)
+rppi_crop_replace_subimage_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                             unsigned int occlusionHeight, unsigned int occlusionWidth)
 {
-    resize_crop_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            x1, y1, x2, y2,
-                            RPPI_CHN_PLANAR, 1);
-
+    crop_replace_subimage_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                     occlusionHeight, occlusionWidth, 
+                     RPPI_CHN_PLANAR, 1);
     return RPP_SUCCESS;
-
 }
 
 RppStatus
-rppi_resize_crop_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2)
+rppi_crop_replace_subimage_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                             unsigned int occlusionHeight, unsigned int occlusionWidth)
 {
-    resize_crop_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            x1, y1, x2, y2,
-                            RPPI_CHN_PLANAR, 3);
-
+    crop_replace_subimage_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                     occlusionHeight, occlusionWidth, 
+                     RPPI_CHN_PLANAR, 3);
     return RPP_SUCCESS;
-
 }
 
 RppStatus
-rppi_resize_crop_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2)
+rppi_crop_replace_subimage_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                             unsigned int occlusionHeight, unsigned int occlusionWidth)
 {
-    resize_crop_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            x1, y1, x2, y2,
-                            RPPI_CHN_PACKED, 3);
-
+    crop_replace_subimage_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                     occlusionHeight, occlusionWidth, 
+                     RPPI_CHN_PACKED, 3);
     return RPP_SUCCESS;
-
 }
 
 
@@ -60,7 +57,7 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    unsigned int x1, y1, x2, y2;
+    unsigned int occlusionHeight, occlusionWidth;
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -102,32 +99,22 @@ int main(int argc, char** argv)
 
         srcSize.height = imageIn.rows;
         srcSize.width = imageIn.cols;
-        dstSize.width = 2700;
-        dstSize.height = 1400;
-        //dstSize.width = 256;
-        //dstSize.height = 256;
-        x1 = 320;
-        y1 = 648;
-        x2 = 960;
-        y2 = 72;
-        //x1 = 200;
-        //y1 = 200;
-        //x2 = 384;
-        //y2 = 384;
-        //int xDiff = (int) x2 - (int) x1;
-        //int yDiff = (int) y2 - (int) y1;
-        //dstSize.width = (Rpp32u) RPPABS(xDiff);
-        //dstSize.height = (Rpp32u) RPPABS(yDiff);
+        dstSize.height = srcSize.height;
+        dstSize.width = srcSize.width;
+        //occlusionHeight = 2;
+        //occlusionWidth = 2;
+
+        printf("\nEnter occlusionHeight: ");
+        scanf("%d", &occlusionHeight);
+
+        printf("\nEnter occlusionWidth: ");
+        scanf("%d", &occlusionWidth);
 
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
         
-        int xDiff = (int) x2 - (int) x1;
-        int yDiff = (int) y2 - (int) y1;
-        printf("\nCropped Image Height - %d, Cropped Image Width - %d\n", (Rpp32u) RPPABS(yDiff), (Rpp32u) RPPABS(xDiff));
-
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
-        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
+        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
@@ -140,7 +127,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_resize_crop_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
+                rppi_crop_replace_subimage_u8_pln1_host(srcPtr, srcSize, dstPtr, occlusionHeight, occlusionWidth);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -154,7 +141,7 @@ int main(int argc, char** argv)
                 rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_resize_crop_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, x1, y1, x2, y2);
+                rppi_crop_replace_subimage_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, occlusionHeight, occlusionWidth);
                 stop = high_resolution_clock::now();
 
                 rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -168,7 +155,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_resize_crop_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
+                rppi_crop_replace_subimage_u8_pln1_host(srcPtr, srcSize, dstPtr, occlusionHeight, occlusionWidth);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -177,7 +164,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_resize_crop_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
+                rppi_crop_replace_subimage_u8_pkd3_host(srcPtr, srcSize, dstPtr, occlusionHeight, occlusionWidth);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -187,9 +174,9 @@ int main(int argc, char** argv)
         auto duration = duration_cast<milliseconds>(stop - start);
         cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
 
-        Mat images(RPPMAX2(imageIn.rows, imageOut.rows), (imageIn.cols + imageOut.cols), imageIn.type());
+        Mat images(imageIn.rows, imageIn.cols*2, imageIn.type());
         imageIn.copyTo(images(cv::Rect(0,0, imageIn.cols, imageIn.rows)));
-        imageOut.copyTo(images(cv::Rect(imageIn.cols,0, imageOut.cols, imageOut.rows)));
+        imageOut.copyTo(images(cv::Rect(imageIn.cols,0, imageIn.cols, imageIn.rows)));
 
         namedWindow("Input and Output Images", WINDOW_NORMAL );
         imshow("Input and Output Images", images);
@@ -198,74 +185,50 @@ int main(int argc, char** argv)
 
         return 0;
     }
-
+     
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
+    occlusionHeight = 1;
+    occlusionWidth = 1;
 
     if (matrix == 1)
     {
         channel = 1;
         srcSize.height = 3;
         srcSize.width = 4;
-        dstSize.height = 6;
-        dstSize.width = 8;
-        x1 = 0;
-        x2 = 1;
-        y1 = 0;
-        y2 = 1;
-        printf("\nInput Height - %d, Input Width - %d\n", srcSize.height, srcSize.width);
-        printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
         Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
-        
-        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-        
+        Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_resize_crop_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
-        printf("\n\nOutput of resize_crop:\n");
-        displayPlanar(dstPtr, dstSize, channel);
+        rppi_crop_replace_subimage_u8_pln1_host(srcPtr, srcSize, dstPtr, occlusionHeight, occlusionWidth);
+        printf("\n\nOutput of crop_replace_subimage:\n");
+        displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
     {
         channel = 3;
         srcSize.height = 3;
         srcSize.width = 4;
-        //dstSize.height = 9;
-        //dstSize.width = 10;
-        x1 = 0;
-        x2 = 1;
-        y1 = 0;
-        y2 = 1;
-        int xDiff = (int) x2 - (int) x1;
-        int yDiff = (int) y2 - (int) y1;
-        dstSize.width = (Rpp32u) RPPABS(xDiff);
-        dstSize.height = (Rpp32u) RPPABS(yDiff);
-        printf("\nInput Height - %d, Input Width - %d\n", srcSize.height, srcSize.width);
-        printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
         if (type == 1)
         {
             Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
-            
-            Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-
+            Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_resize_crop_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
-            printf("\n\nOutput of resize_crop:\n");
-            displayPlanar(dstPtr, dstSize, channel);
+            rppi_crop_replace_subimage_u8_pln3_host(srcPtr, srcSize, dstPtr, occlusionHeight, occlusionWidth);
+            printf("\n\nOutput of crop_replace_subimage:\n");
+            displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
         {
             Rpp8u srcPtr[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
-            
-            Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-
+            Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_resize_crop_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
-            printf("\n\nOutput of resize_crop:\n");
-            displayPacked(dstPtr, dstSize, channel);
+            rppi_crop_replace_subimage_u8_pkd3_host(srcPtr, srcSize, dstPtr, occlusionHeight, occlusionWidth);
+            printf("\n\nOutput of crop_replace_subimage:\n");
+            displayPacked(dstPtr, srcSize, channel);
         } 
     }
     else if (matrix == 3)
@@ -276,25 +239,10 @@ int main(int argc, char** argv)
         scanf("%d", &srcSize.height);
         printf("Enter width of image in pixels: ");
         scanf("%d", &srcSize.width);
-        printf("Enter height of output in pixels: ");
-        scanf("%d", &dstSize.height);
-        printf("Enter width of output in pixels: ");
-        scanf("%d", &dstSize.width);
-
-        x1 = 0;
-        x2 = 1;
-        y1 = 0;
-        y2 = 1;
-
-        printf("\nInput Height - %d, Input Width - %d\n", srcSize.height, srcSize.width);
-        printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
-
         printf("Channels = %d, Height = %d, Width = %d", channel, srcSize.height, srcSize.width);
         Rpp8u *srcPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         int *intSrcPtr = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
-        
-        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-
         if (type == 1)
         {
             printf("\n\n\n\nEnter elements in array of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);
@@ -304,14 +252,14 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_resize_crop_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
+                rppi_crop_replace_subimage_u8_pln1_host(srcPtr, srcSize, dstPtr, occlusionHeight, occlusionWidth);
             }
             else if (channel == 3)
             {
-                rppi_resize_crop_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
+                rppi_crop_replace_subimage_u8_pln3_host(srcPtr, srcSize, dstPtr, occlusionHeight, occlusionWidth);
             }
-            printf("\n\nOutput of resize_crop:\n");
-            displayPlanar(dstPtr, dstSize, channel);
+            printf("\n\nOutput of crop_replace_subimage:\n");
+            displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
         {
@@ -322,14 +270,14 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_resize_crop_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
+                rppi_crop_replace_subimage_u8_pln1_host(srcPtr, srcSize, dstPtr, occlusionHeight, occlusionWidth);
             }
             else if (channel == 3)
             {
-                rppi_resize_crop_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, x1, y1, x2, y2);
+                rppi_crop_replace_subimage_u8_pkd3_host(srcPtr, srcSize, dstPtr, occlusionHeight, occlusionWidth);
             }
-            printf("\n\nOutput of resize_crop:\n");
-            displayPacked(dstPtr, dstSize, channel);
+            printf("\n\nOutput of crop_replace_subimage:\n");
+            displayPacked(dstPtr, srcSize, channel);
         }
     }
 }

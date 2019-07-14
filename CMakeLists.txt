@@ -49,6 +49,66 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_occlusionAdd
+    src/imgaug/rppi_occlusionAdd.cpp
+)
+target_include_directories(rppi_occlusionAdd
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_occlusionAdd
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_crop_replace_subimage
+    src/imgaug/rppi_crop_replace_subimage.cpp
+)
+target_include_directories(rppi_crop_replace_subimage
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_crop_replace_subimage
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_resize_crop
+    src/imgaug/rppi_resize_crop.cpp
+)
+target_include_directories(rppi_resize_crop
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_resize_crop
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_resize
+    src/imgaug/rppi_resize.cpp
+)
+target_include_directories(rppi_resize
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_resize
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -557,6 +617,35 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_occlusionAdd
+    src/imgaug/rppi_occlusionAdd.cpp
+)
+target_include_directories(rppi_occlusionAdd
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_occlusionAdd
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_crop_replace_subimage
+    src/imgaug/rppi_crop_replace_subimage.cpp
+)
+target_include_directories(rppi_crop_replace_subimage
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_crop_replace_subimage
+    ${OpenCV_LIBS}
+)
 
 
 
