@@ -113,6 +113,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_random_shadow
+    src/imgaug/rppi_random_shadow.cpp
+)
+target_include_directories(rppi_random_shadow
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_random_shadow
+    ${OpenCV_LIBS}
+)
+
 
 
 

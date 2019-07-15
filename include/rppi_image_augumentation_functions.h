@@ -402,6 +402,65 @@ rppi_lens_correction_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t ds
 RppStatus
 rppi_lens_correction_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32f strength, Rpp32f zoom);
 
+
+// --------------------
+// Occlusion Add
+// --------------------
+
+// Host function declarations
+
+RppStatus
+rppi_occlusionAdd_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
+                               Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
+                               Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2);
+
+RppStatus
+rppi_occlusionAdd_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
+                               Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
+                               Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2);
+
+RppStatus
+rppi_occlusionAdd_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
+                               Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
+                               Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2);
+
+
+// --------------------
+// Snowy
+// --------------------
+
+// Host function declarations
+
+RppStatus
+rppi_snowyRGB_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp32f strength);
+
+RppStatus
+rppi_snowyRGB_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp32f strength);
+
+
+// --------------------
+// Random Shadow
+// --------------------
+
+// Host function declarations
+
+RppStatus
+rppi_random_shadow_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
+                                Rpp32u numberOfShadows, Rpp32u maxSizeX, Rpp32u maxSizeY);
+
+RppStatus
+rppi_random_shadow_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
+                                Rpp32u numberOfShadows, Rpp32u maxSizeX, Rpp32u maxSizeY);
+
+RppStatus
+rppi_random_shadow_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
+                                Rpp32u numberOfShadows, Rpp32u maxSizeX, Rpp32u maxSizeY);
+
 #ifdef __cplusplus
 }
 #endif
