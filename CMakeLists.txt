@@ -5,107 +5,111 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 add_executable(
-    rppi_fish_eye_effect
-    src/imgaug/rppi_fish_eye_effect.cpp
+    rppi_rgb2hsv
+    src/imgaug/rppi_rgb2hsv.cpp
 )
-target_include_directories(rppi_fish_eye_effect
+target_include_directories(rppi_rgb2hsv
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_fish_eye_effect
+    rppi_rgb2hsv
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_hsv2rgb
+    src/imgaug/rppi_hsv2rgb.cpp
+)
+target_include_directories(rppi_hsv2rgb
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hsv2rgb
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_hue
+    src/imgaug/rppi_hue.cpp
+)
+target_include_directories(rppi_hue
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hue
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_saturation
+    src/imgaug/rppi_saturation.cpp
+)
+target_include_directories(rppi_saturation
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_saturation
     ${OpenCV_LIBS}
 )
 
 add_executable(
-    rppi_vignette
-    src/imgaug/rppi_vignette.cpp
+    rppi_rgb2hsl
+    src/imgaug/rppi_rgb2hsl.cpp
 )
-target_include_directories(rppi_vignette
+target_include_directories(rppi_rgb2hsl
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_vignette
+    rppi_rgb2hsl
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_hsl2rgb
+    src/imgaug/rppi_hsl2rgb.cpp
+)
+target_include_directories(rppi_hsl2rgb
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hsl2rgb
     ${OpenCV_LIBS}
 )
 
 add_executable(
-    rppi_lens_correction
-    src/imgaug/rppi_lens_correction.cpp
+    rppi_snowy
+    src/imgaug/rppi_snowy.cpp
 )
-target_include_directories(rppi_lens_correction
+target_include_directories(rppi_snowy
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_lens_correction
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_occlusionAdd
-    src/imgaug/rppi_occlusionAdd.cpp
-)
-target_include_directories(rppi_occlusionAdd
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_occlusionAdd
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_crop_replace_subimage
-    src/imgaug/rppi_crop_replace_subimage.cpp
-)
-target_include_directories(rppi_crop_replace_subimage
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_crop_replace_subimage
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_resize_crop
-    src/imgaug/rppi_resize_crop.cpp
-)
-target_include_directories(rppi_resize_crop
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_resize_crop
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_resize
-    src/imgaug/rppi_resize.cpp
-)
-target_include_directories(rppi_resize
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_resize
+    rppi_snowy
     ${OpenCV_LIBS}
 )
 

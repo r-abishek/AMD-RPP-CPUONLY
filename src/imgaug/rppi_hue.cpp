@@ -73,7 +73,7 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel = 3;
-    Rpp32f hueShift = -30;
+    Rpp32f hueShift = -60;
 
     int format;
     printf("\nEnter input matrix format: 1 = RGB, 2 = HSV: ");

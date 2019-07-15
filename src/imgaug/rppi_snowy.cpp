@@ -1,4 +1,4 @@
-// rppi_saturation
+// rppi_snowy
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
@@ -9,9 +9,11 @@
 #include <chrono>
 #include "cpu/rpp_cpu_inputAndDisplay.hpp"
 #include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
-#include "cpu/host_saturation.hpp"
+#include "cpu/host_snowy.hpp"
 #include "cpu/host_hsv2rgb.hpp"
 #include "cpu/host_rgb2hsv.hpp"
+#include "cpu/host_hsl2rgb.hpp"
+#include "cpu/host_rgb2hsl.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -22,45 +24,45 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_saturationRGB_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                         Rpp32f saturationFactor)
+rppi_snowyRGB_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp32f strength)
 {
 
-    saturation_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                           saturationFactor,
+    snowy_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                           strength,
                            RPPI_CHN_PLANAR, 3, RGB);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_saturationRGB_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                         Rpp32f saturationFactor)
+rppi_snowyRGB_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp32f strength)
 {
 
-    saturation_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                           saturationFactor,
+    snowy_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                           strength,
                            RPPI_CHN_PACKED, 3, RGB);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_saturationHSV_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                         Rpp32f saturationFactor)
+rppi_snowyHSV_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp32f strength)
 {
 
-    saturation_host<Rpp32f>(static_cast<Rpp32f*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr),
-                           saturationFactor,
+    snowy_host<Rpp32f>(static_cast<Rpp32f*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr),
+                           strength,
                            RPPI_CHN_PLANAR, 3, HSV);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_saturationHSV_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                         Rpp32f saturationFactor)
+rppi_snowyHSV_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp32f strength)
 {
 
-    saturation_host<Rpp32f>(static_cast<Rpp32f*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr),
-                           saturationFactor,
+    snowy_host<Rpp32f>(static_cast<Rpp32f*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr),
+                           strength,
                            RPPI_CHN_PACKED, 3, HSV);
     return RPP_SUCCESS;
 }
@@ -73,7 +75,13 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel = 3;
-    Rpp32f saturationFactor = 2.5;
+    Rpp32f strength;
+
+    do
+    {
+        printf("\nEnter strength: ");
+        scanf("%f", &strength);
+    } while (strength < 0 || strength > 1);
 
     int format;
     printf("\nEnter input matrix format: 1 = RGB, 2 = HSV: ");
@@ -128,7 +136,7 @@ int main(int argc, char** argv)
                 rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_saturationRGB_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, saturationFactor);
+                rppi_snowyRGB_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, strength);
                 stop = high_resolution_clock::now();
 
                 rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -140,7 +148,7 @@ int main(int argc, char** argv)
                 printf("\nExecuting pkd3...\n");
 
                 start = high_resolution_clock::now();
-                rppi_saturationRGB_u8_pkd3_host(srcPtr, srcSize, dstPtr, saturationFactor);
+                rppi_snowyRGB_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -160,7 +168,7 @@ int main(int argc, char** argv)
                 rgb2hsv_host(srcPtrTempRGB, srcSize, srcPtrTempHSV, RPPI_CHN_PLANAR, 3);
 
                 start = high_resolution_clock::now();
-                rppi_saturationHSV_u8_pln3_host(srcPtrTempHSV, srcSize, dstPtrTempHSV, saturationFactor);
+                rppi_snowyHSV_u8_pln3_host(srcPtrTempHSV, srcSize, dstPtrTempHSV, strength);
                 stop = high_resolution_clock::now();
 
                 hsv2rgb_host(dstPtrTempHSV, dstSize, dstPtrTempRGB, RPPI_CHN_PLANAR, 3);
@@ -178,7 +186,7 @@ int main(int argc, char** argv)
                 rgb2hsv_host(srcPtr, srcSize, srcPtrHSV, RPPI_CHN_PACKED, 3);
 
                 start = high_resolution_clock::now();
-                rppi_saturationHSV_u8_pkd3_host(srcPtrHSV, srcSize, dstPtrHSV, saturationFactor);
+                rppi_snowyHSV_u8_pkd3_host(srcPtrHSV, srcSize, dstPtrHSV, strength);
                 stop = high_resolution_clock::now();
 
                 hsv2rgb_host(dstPtrHSV, dstSize, dstPtr, RPPI_CHN_PACKED, 3);
@@ -238,8 +246,8 @@ int main(int argc, char** argv)
                 Rpp8u dstPtr[36] = {0};
                 printf("\n\nInput:\n");
                 displayPlanar(srcPtr, srcSize, channel);
-                rppi_saturationRGB_u8_pln3_host(srcPtr, srcSize, dstPtr, saturationFactor);
-                printf("\n\nOutput of saturation Modification:\n");
+                rppi_snowyRGB_u8_pln3_host(srcPtr, srcSize, dstPtr, strength);
+                printf("\n\nOutput of snowy Modification:\n");
                 displayPlanar(dstPtr, srcSize, channel);
             }
             else if (type == 2)
@@ -248,8 +256,8 @@ int main(int argc, char** argv)
                 Rpp8u dstPtr[36] = {0};
                 printf("\n\nInput:\n");
                 displayPacked(srcPtr, srcSize, channel);
-                rppi_saturationRGB_u8_pkd3_host(srcPtr, srcSize, dstPtr, saturationFactor);
-                printf("\n\nOutput of saturation Modification:\n");
+                rppi_snowyRGB_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
+                printf("\n\nOutput of snowy Modification:\n");
                 displayPacked(dstPtr, srcSize, channel);
             } 
         }
@@ -278,9 +286,9 @@ int main(int argc, char** argv)
                 }
                 else if (channel == 3)
                 {
-                    rppi_saturationRGB_u8_pln3_host(srcPtr, srcSize, dstPtr, saturationFactor);
+                    rppi_snowyRGB_u8_pln3_host(srcPtr, srcSize, dstPtr, strength);
                 }
-                printf("\n\nOutput of saturation Modification:\n");
+                printf("\n\nOutput of snowy Modification:\n");
                 displayPlanar(dstPtr, srcSize, channel);
             }
             else if (type == 2)
@@ -296,9 +304,9 @@ int main(int argc, char** argv)
                 }
                 else if (channel == 3)
                 {
-                    rppi_saturationRGB_u8_pkd3_host(srcPtr, srcSize, dstPtr, saturationFactor);
+                    rppi_snowyRGB_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
                 }
-                printf("\n\nOutput of saturation Modification:\n");
+                printf("\n\nOutput of snowy Modification:\n");
                 displayPacked(dstPtr, srcSize, channel);
             }
         }
@@ -320,8 +328,8 @@ int main(int argc, char** argv)
                 Rpp32f dstPtr[36] = {0};
                 printf("\n\nInput:\n");
                 displayPlanarF(srcPtr, srcSize, channel);
-                rppi_saturationHSV_u8_pln3_host(srcPtr, srcSize, dstPtr, saturationFactor);
-                printf("\n\nOutput of saturation Modification:\n");
+                rppi_snowyHSV_u8_pln3_host(srcPtr, srcSize, dstPtr, strength);
+                printf("\n\nOutput of snowy Modification:\n");
                 displayPlanarF(dstPtr, srcSize, channel);
             }
             else if (type == 2)
@@ -330,8 +338,8 @@ int main(int argc, char** argv)
                 Rpp32f dstPtr[36] = {0};
                 printf("\n\nInput:\n");
                 displayPackedF(srcPtr, srcSize, channel);
-                rppi_saturationHSV_u8_pkd3_host(srcPtr, srcSize, dstPtr, saturationFactor);
-                printf("\n\nOutput of saturation Modification:\n");
+                rppi_snowyHSV_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
+                printf("\n\nOutput of snowy Modification:\n");
                 displayPackedF(dstPtr, srcSize, channel);
             }
         }
@@ -358,9 +366,9 @@ int main(int argc, char** argv)
                 }
                 else if (channel == 3)
                 {
-                    rppi_saturationHSV_u8_pln3_host(srcPtr, srcSize, dstPtr, saturationFactor);
+                    rppi_snowyHSV_u8_pln3_host(srcPtr, srcSize, dstPtr, strength);
                 }
-                printf("\n\nOutput of saturation Modification:\n");
+                printf("\n\nOutput of snowy Modification:\n");
                 displayPlanarF(dstPtr, srcSize, channel);
             }
             else if (type == 2)
@@ -375,9 +383,9 @@ int main(int argc, char** argv)
                 }
                 else if (channel == 3)
                 {
-                    rppi_saturationHSV_u8_pkd3_host(srcPtr, srcSize, dstPtr, saturationFactor);
+                    rppi_snowyHSV_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
                 }
-                printf("\n\nOutput of saturation Modification:\n");
+                printf("\n\nOutput of snowy Modification:\n");
                 displayPackedF(dstPtr, srcSize, channel);
             }
         }
