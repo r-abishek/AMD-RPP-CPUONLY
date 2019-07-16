@@ -883,7 +883,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     rppi_packed_to_planar
     src/pixel_arrangement_conversions/rppi_packed_to_planar.cpp
@@ -914,4 +914,3 @@ target_link_libraries(
     rppi_planar_to_packed
     ${OpenCV_LIBS}
 )
-]]
