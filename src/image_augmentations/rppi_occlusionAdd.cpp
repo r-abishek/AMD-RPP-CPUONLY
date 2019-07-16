@@ -3,7 +3,7 @@
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_arithmetic_operations.h"
+#include "rppi_image_augumentations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>

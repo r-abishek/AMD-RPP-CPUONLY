@@ -1,5 +1,5 @@
-#ifndef RPPI_IMAGE_AUGMENTATIONS.H
-#define RPPI_IMAGE_AUGMENTATIONS.H
+#ifndef RPPI_IMAGE_AUGMENTATIONS_H
+#define RPPI_IMAGE_AUGMENTATIONS_H
  
 #include "rppdefs.h"
 #ifdef __cplusplus
@@ -96,35 +96,6 @@ rppi_gamma_correction_u8_pln3_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dst
 
 RppStatus
 rppi_gamma_correction_u8_pkd3_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dstPtr,Rpp32f gamma);
-
-// ----------------------------------------
-// Host exposure functions declaration 
-// ----------------------------------------
-/* Changes exposure of an image.
-param[in] srcPtr input image
-*param[in] srcSize dimensions of the image
-*param[out] dstPtr output image
-param[in] exposureFactor factor used in exposure correction
-*returns a  RppStatus enumeration. 
-*retval RPP_SUCCESS : No error succesful completion
-*retval RPP_ERROR : Error 
-*/
-
-RppStatus
-rppi_exposureRGB_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                         Rpp32f exposureFactor);
-
-RppStatus
-rppi_exposureRGB_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                         Rpp32f exposureFactor);
-
-RppStatus
-rppi_exposureHSV_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                         Rpp32f exposureFactor);
-
-RppStatus
-rppi_exposureHSV_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                         Rpp32f exposureFactor);
 
 // ----------------------------------------
 // Host color_temperature functions declaration 
@@ -312,7 +283,7 @@ rppi_occlusionAdd_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 // ----------------------------------------
 // Host snowy functions declaration 
 // ----------------------------------------
-/* Introduces vignette effect in the entire image
+/* Introduces snowy effect in the entire image
 *param[in] srcPtr input image
 *param[in] srcSize dimensions of the input images
 *param[out] dstPtr output image
@@ -330,10 +301,68 @@ RppStatus
 rppi_snowyRGB_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f strength);
 
+// ----------------------------------------
+// Host random_shadow functions declaration 
+// ----------------------------------------
+/* Introduces random shadow effect in the image
+*param[in] srcPtr input image
+*param[in] srcSize dimensions of the input images
+*param[out] dstPtr output image
+*param[in] x1 x1 value of roi
+*param[in] y1 y1 value of roi
+*param[in] x2 x2 value of roi
+*param[in] y2 y2 value of roi
+*param[in] numberOfShadows total number of shadows desired
+*param[in] maxSizeX maximum x dimension of shadow
+*param[in] maxSizeY maximum y dimension of shadow
+*returns a  RppStatus enumeration. 
+*retval RPP_SUCCESS : No error succesful completion
+*retval RPP_ERROR : Error 
+*/
+
+RppStatus
+rppi_random_shadow_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
+                                Rpp32u numberOfShadows, Rpp32u maxSizeX, Rpp32u maxSizeY);
+
+RppStatus
+rppi_random_shadow_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
+                                Rpp32u numberOfShadows, Rpp32u maxSizeX, Rpp32u maxSizeY);
+
 RppStatus
 rppi_random_shadow_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                                 Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
                                 Rpp32u numberOfShadows, Rpp32u maxSizeX, Rpp32u maxSizeY);
+
+// ----------------------------------------
+// Host blend functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_blend_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr, Rpp32f alpha);
+
+RppStatus
+rppi_blend_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr, Rpp32f alpha);
+
+RppStatus
+rppi_blend_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr, Rpp32f alpha);
+
+// ----------------------------------------
+// Host crop_replace_subimage functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_crop_replace_subimage_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                             unsigned int occlusionHeight, unsigned int occlusionWidth);
+
+RppStatus
+rppi_crop_replace_subimage_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                             unsigned int occlusionHeight, unsigned int occlusionWidth);
+
+RppStatus
+rppi_crop_replace_subimage_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                             unsigned int occlusionHeight, unsigned int occlusionWidth);
  
 #ifdef __cplusplus
 }

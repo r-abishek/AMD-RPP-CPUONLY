@@ -642,31 +642,25 @@ target_link_libraries(
 
 
 
-
-
-
-
-
-#[[
 add_executable(
-    rppi_brightness_contrast
-    src/imgaug/rppi_brightness_contrast.cpp
+    rppi_blur
+    src/image_augmentations/rppi_blur.cpp
 )
-target_include_directories(rppi_brightness_contrast
+target_include_directories(rppi_blur
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_brightness_contrast
+    rppi_blur
     ${OpenCV_LIBS}
 )
 
 
 add_executable(
     rppi_contrast
-    src/imgaug/rppi_contrast.cpp
+    src/image_augmentations/rppi_contrast.cpp
 )
 target_include_directories(rppi_contrast
     PUBLIC
@@ -680,25 +674,25 @@ target_link_libraries(
 )
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+add_executable(
+    rppi_brightness
+    src/image_augmentations/rppi_brightness.cpp
+)
+target_include_directories(rppi_brightness
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_brightness
+    ${OpenCV_LIBS}
+)
 
 
 add_executable(
     rppi_gamma_correction
-    src/imgaug/rppi_gamma_correction.cpp
+    src/image_augmentations/rppi_gamma_correction.cpp
 )
 target_include_directories(rppi_gamma_correction
     PUBLIC
@@ -713,114 +707,24 @@ target_link_libraries(
 
 
 add_executable(
-    rppi_packed_to_planar
-    src/imgaug/rppi_packed_to_planar.cpp
+    rppi_color_temperature
+    src/image_augmentations/rppi_color_temperature.cpp
 )
-target_include_directories(rppi_packed_to_planar
+target_include_directories(rppi_color_temperature
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_packed_to_planar
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_planar_to_packed
-    src/imgaug/rppi_planar_to_packed.cpp
-)
-target_include_directories(rppi_planar_to_packed
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_planar_to_packed
-    ${OpenCV_LIBS}
-)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-add_executable(
-    rppi_blur
-    src/imgaug/rppi_blur.cpp
-)
-target_include_directories(rppi_blur
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_blur
-    ${OpenCV_LIBS}
-)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-add_executable(
-    rppi_blend
-    src/imgaug/rppi_blend.cpp
-)
-target_include_directories(rppi_blend
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_blend
+    rppi_color_temperature
     ${OpenCV_LIBS}
 )
 
 
 add_executable(
     rppi_pixelate
-    src/imgaug/rppi_pixelate.cpp
+    src/image_augmentations/rppi_pixelate.cpp
 )
 target_include_directories(rppi_pixelate
     PUBLIC
@@ -836,7 +740,7 @@ target_link_libraries(
 
 add_executable(
     rppi_jitterAdd
-    src/imgaug/rppi_jitterAdd.cpp
+    src/image_augmentations/rppi_jitterAdd.cpp
 )
 target_include_directories(rppi_jitterAdd
     PUBLIC
@@ -851,7 +755,7 @@ target_link_libraries(
 
 add_executable(
     rppi_vignette
-    src/imgaug/rppi_vignette.cpp
+    src/image_augmentations/rppi_vignette.cpp
 )
 target_include_directories(rppi_vignette
     PUBLIC
@@ -866,7 +770,7 @@ target_link_libraries(
 
 add_executable(
     rppi_fish_eye_effect
-    src/imgaug/rppi_fish_eye_effect.cpp
+    src/image_augmentations/rppi_fish_eye_effect.cpp
 )
 target_include_directories(rppi_fish_eye_effect
     PUBLIC
@@ -881,7 +785,7 @@ target_link_libraries(
 
 add_executable(
     rppi_lens_correction
-    src/imgaug/rppi_lens_correction.cpp
+    src/image_augmentations/rppi_lens_correction.cpp
 )
 target_include_directories(rppi_lens_correction
     PUBLIC
@@ -896,7 +800,7 @@ target_link_libraries(
 
 add_executable(
     rppi_occlusionAdd
-    src/imgaug/rppi_occlusionAdd.cpp
+    src/image_augmentations/rppi_occlusionAdd.cpp
 )
 target_include_directories(rppi_occlusionAdd
     PUBLIC
@@ -910,23 +814,8 @@ target_link_libraries(
 )
 
 add_executable(
-    rppi_crop_replace_subimage
-    src/imgaug/rppi_crop_replace_subimage.cpp
-)
-target_include_directories(rppi_crop_replace_subimage
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_crop_replace_subimage
-    ${OpenCV_LIBS}
-)
-
-add_executable(
     rppi_snowy
-    src/imgaug/rppi_snowy.cpp
+    src/image_augmentations/rppi_snowy.cpp
 )
 target_include_directories(rppi_snowy
     PUBLIC
@@ -941,7 +830,7 @@ target_link_libraries(
 
 add_executable(
     rppi_random_shadow
-    src/imgaug/rppi_random_shadow.cpp
+    src/image_augmentations/rppi_random_shadow.cpp
 )
 target_include_directories(rppi_random_shadow
     PUBLIC
@@ -953,11 +842,38 @@ target_link_libraries(
     rppi_random_shadow
     ${OpenCV_LIBS}
 )
-]]
 
 
+add_executable(
+    rppi_blend
+    src/image_augmentations/rppi_blend.cpp
+)
+target_include_directories(rppi_blend
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_blend
+    ${OpenCV_LIBS}
+)
 
 
+add_executable(
+    rppi_crop_replace_subimage
+    src/image_augmentations/rppi_crop_replace_subimage.cpp
+)
+target_include_directories(rppi_crop_replace_subimage
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_crop_replace_subimage
+    ${OpenCV_LIBS}
+)
 
 
 
@@ -969,14 +885,33 @@ target_link_libraries(
 
 #[[
 add_executable(
-    DisplayImage
-    src/DisplayImage.cpp
+    rppi_packed_to_planar
+    src/pixel_arrangement_conversions/rppi_packed_to_planar.cpp
 )
-include_directories(
-    ${OPENCV_INCLUDE_DIRS}
+target_include_directories(rppi_packed_to_planar
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    DisplayImage
+    rppi_packed_to_planar
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_planar_to_packed
+    src/pixel_arrangement_conversions/rppi_planar_to_packed.cpp
+)
+target_include_directories(rppi_planar_to_packed
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_planar_to_packed
     ${OpenCV_LIBS}
 )
 ]]

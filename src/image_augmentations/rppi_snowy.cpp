@@ -3,17 +3,17 @@
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_image_augumentation_functions.h"
+#include "rppi_image_augumentations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
 #include "cpu/rpp_cpu_input_and_display.hpp"
 #include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
 #include "cpu/host_snowy.hpp"
-#include "cpu/host_hsv_to_rgb.hpp"
-#include "cpu/host_rgb_to_hsv.hpp"
-#include "cpu/host_hsl_to_rgb.hpp"
-#include "cpu/host_rgb_to_hsl.hpp"
+#include "../color_model_conversions/cpu/host_rgb_to_hsv.hpp"
+#include "../color_model_conversions/cpu/host_hsv_to_rgb.hpp"
+#include "../color_model_conversions/cpu/host_rgb_to_hsl.hpp"
+#include "../color_model_conversions/cpu/host_hsl_to_rgb.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;

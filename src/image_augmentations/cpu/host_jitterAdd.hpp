@@ -1,5 +1,4 @@
 #include <cpu/rpp_cpu_common.hpp>
-#include "host_resize_crop.hpp"
 #include <stdlib.h>
 #include <time.h>
 
@@ -57,7 +56,7 @@ RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
             }
         }
 
-        resize_crop_host<Rpp8u>(static_cast<Rpp8u*>(dstPtrForJitter), srcSize, static_cast<Rpp8u*>(dstPtr), srcSize,
+        resize_crop_kernel_host<Rpp8u>(static_cast<Rpp8u*>(dstPtrForJitter), srcSize, static_cast<Rpp8u*>(dstPtr), srcSize,
                             maxJitterX, maxJitterY, srcSize.width - maxJitterX - 1, srcSize.height - maxJitterY - 1,
                             RPPI_CHN_PLANAR, channel);
     }
@@ -88,7 +87,7 @@ RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
             srcPtrTemp += channeledJitterRangeX;
             dstPtrTemp += channeledJitterRangeX;
         }
-        resize_crop_host<Rpp8u>(static_cast<Rpp8u*>(dstPtrForJitter), srcSize, static_cast<Rpp8u*>(dstPtr), srcSize,
+        resize_crop_kernel_host<Rpp8u>(static_cast<Rpp8u*>(dstPtrForJitter), srcSize, static_cast<Rpp8u*>(dstPtr), srcSize,
                             maxJitterX, maxJitterY, srcSize.width - maxJitterX - 1, srcSize.height - maxJitterY - 1,
                             RPPI_CHN_PACKED, channel);
     }

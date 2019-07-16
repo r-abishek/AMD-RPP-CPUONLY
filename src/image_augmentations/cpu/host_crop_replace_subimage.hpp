@@ -1,5 +1,4 @@
 #include <cpu/rpp_cpu_common.hpp>
-#include "host_resize_crop.hpp"
 #include <stdlib.h>
 #include <time.h>
 
