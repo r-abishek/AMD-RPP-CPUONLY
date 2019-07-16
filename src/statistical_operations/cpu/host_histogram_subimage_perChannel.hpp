@@ -19,11 +19,17 @@ RppStatus histogram_subimage_perChannel_host(T* srcPtr, RppiSize srcSize, Rpp32u
     outputHistogramTemp = outputHistogram;
     for (int c = 0; c < channel; c++)
     {
-        memset (histogram,0,bins * sizeof(Rpp32u));
+        //memset (histogram,0,bins * sizeof(Rpp32u));
 
         Rpp32u *histogramTemp;
         histogramTemp = histogram;
 
+        for (int i = 0; i < bins; i++)
+        {
+            *histogramTemp = (Rpp32u) 0;
+        }
+
+        histogramTemp = histogram;
         histogram_kernel_perChannel_host(srcPtrTemp, srcSizeSubImage, histogram, bins, increment, chnFormat, channel);
 
         for (int i = 0; i < bins; i++)
