@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
-#include "cpu/rpp_cpu_inputAndDisplay.hpp"
-#include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
+#include "cpu/rpp_cpu_input_and_display.hpp"
+#include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
 #include "cpu/host_accumulate.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
@@ -137,14 +137,14 @@ int main(int argc, char** argv)
                 printf("\nExecuting pln3...\n");
                 Rpp8u *srcPtr1Temp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
                 Rpp8u *srcPtr2Temp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
-                rppi_packed2planar_u8_pkd3_host(srcPtr1, srcSize, srcPtr1Temp);
-                rppi_packed2planar_u8_pkd3_host(srcPtr2, srcSize, srcPtr2Temp);
+                rppi_packed_to_planar_u8_pkd3_host(srcPtr1, srcSize, srcPtr1Temp);
+                rppi_packed_to_planar_u8_pkd3_host(srcPtr2, srcSize, srcPtr2Temp);
 
                 start = high_resolution_clock::now();
                 rppi_accumulate_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize);
                 stop = high_resolution_clock::now();
 
-                rppi_planar2packed_u8_pln3_host(srcPtr1Temp, srcSize, srcPtr1);
+                rppi_planar_to_packed_u8_pln3_host(srcPtr1Temp, srcSize, srcPtr1);
 
                 imageOut = Mat(srcSize.height, srcSize.width, CV_8UC3, srcPtr1);
             }

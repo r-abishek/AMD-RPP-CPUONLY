@@ -115,38 +115,7 @@ rppi_subtract_u8_pln3_host(RppPtr_t srcPtr1,RppPtr_t srcPtr2,RppiSize srcSize,Rp
 
 RppStatus
 rppi_subtract_u8_pkd3_host(RppPtr_t srcPtr1,RppPtr_t srcPtr2,RppiSize srcSize,RppPtr_t dstPtr);
-
-
-
-
-
-
-
-
-
-
-// ----------------------------------------
-// Host multiply functions declaration 
-// ----------------------------------------
-/* Computes the multiplication between two images.
-*param[in] srcPtr1 input image1
-*param[in] srcPtr2 input image2 
-*param[in] srcSize dimensions of the images
-*param[out] dstPtr output image
-*returns a  RppStatus enumeration. 
-*retval RPP_SUCCESS : No error succesful completion
-*retval RPP_ERROR : Error 
-*/
-
-RppStatus
-rppi_multiply_u8_pln1_host(RppPtr_t srcPtr1,RppPtr_t srcPtr2,RppiSize srcSize,RppPtr_t dstPtr);
-
-RppStatus
-rppi_multiply_u8_pln3_host(RppPtr_t srcPtr1,RppPtr_t srcPtr2,RppiSize srcSize,RppPtr_t dstPtr);
-
-RppStatus
-rppi_multiply_u8_pkd3_host(RppPtr_t srcPtr1,RppPtr_t srcPtr2,RppiSize srcSize,RppPtr_t dstPtr);
-
+ 
 #ifdef __cplusplus
 }
 #endif

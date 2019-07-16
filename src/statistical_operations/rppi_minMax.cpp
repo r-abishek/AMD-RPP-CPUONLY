@@ -3,10 +3,10 @@
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_statistics_functions.h"
+#include "rppi_statistical_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "cpu/rpp_cpu_inputAndDisplay.hpp"
+#include "cpu/rpp_cpu_input_and_display.hpp"
 #include "cpu/host_minMax.hpp"
 
 using namespace std;

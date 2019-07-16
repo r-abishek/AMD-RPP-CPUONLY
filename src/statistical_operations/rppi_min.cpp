@@ -3,12 +3,12 @@
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_statistics_functions.h"
+#include "rppi_statistical_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
-#include "cpu/rpp_cpu_inputAndDisplay.hpp"
-#include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
+#include "cpu/rpp_cpu_input_and_display.hpp"
+#include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
 #include "cpu/host_min.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
@@ -125,14 +125,14 @@ int main(int argc, char** argv)
                 Rpp8u *srcPtr1Temp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
                 Rpp8u *srcPtr2Temp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
                 Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-                rppi_packed2planar_u8_pkd3_host(srcPtr1, srcSize, srcPtr1Temp);
-                rppi_packed2planar_u8_pkd3_host(srcPtr2, srcSize, srcPtr2Temp);
+                rppi_packed_to_planar_u8_pkd3_host(srcPtr1, srcSize, srcPtr1Temp);
+                rppi_packed_to_planar_u8_pkd3_host(srcPtr2, srcSize, srcPtr2Temp);
 
                 start = high_resolution_clock::now();
                 rppi_min_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize, dstPtrTemp);
                 stop = high_resolution_clock::now();
 
-                rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+                rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
             }

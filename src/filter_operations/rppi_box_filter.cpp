@@ -3,12 +3,12 @@
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_image_augumentation_functions.h"
+#include "rppi_filter_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
-#include "cpu/rpp_cpu_inputAndDisplay.hpp"
-#include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
+#include "cpu/rpp_cpu_input_and_display.hpp"
+#include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
 #include "cpu/host_box_filter.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
@@ -18,88 +18,6 @@ using namespace std::chrono;
 
 
 
-/*
-RppStatus
-rppi_box_filter3x3_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
-{
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     3,
-                     RPPI_CHN_PLANAR, 1);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_box_filter3x3_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
-{
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     3,
-                     RPPI_CHN_PLANAR, 3);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_box_filter3x3_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
-{
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     3,
-                     RPPI_CHN_PACKED, 3);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_box_filter5x5_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
-{
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     5,
-                     RPPI_CHN_PLANAR, 1);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_box_filter5x5_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
-{
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     5,
-                     RPPI_CHN_PLANAR, 3);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_box_filter5x5_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
-{
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     5,
-                     RPPI_CHN_PACKED, 3);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_box_filter7x7_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
-{
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     7,
-                     RPPI_CHN_PLANAR, 1);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_box_filter7x7_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
-{
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     7,
-                     RPPI_CHN_PLANAR, 3);
-    return RPP_SUCCESS;
-}
-
-RppStatus
-rppi_box_filter7x7_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
-{
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     7,
-                     RPPI_CHN_PACKED, 3);
-    return RPP_SUCCESS;
-}
-*/
 RppStatus
 rppi_box_filter_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u kernelSize)
 {
@@ -208,13 +126,13 @@ int main(int argc, char** argv)
                 printf("\nExecuting pln3...\n");
                 Rpp8u *srcPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
                 Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-                rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
+                rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
                 rppi_box_filter_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, kernelSize);
                 stop = high_resolution_clock::now();
 
-                rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+                rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
             }

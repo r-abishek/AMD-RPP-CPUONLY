@@ -3,12 +3,12 @@
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_statistics_functions.h"
+#include "rppi_statistical_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
-#include "cpu/rpp_cpu_inputAndDisplay.hpp"
-#include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
+#include "cpu/rpp_cpu_input_and_display.hpp"
+#include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
 #include "cpu/host_histogram.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
@@ -127,7 +127,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln3...\n");
                 Rpp8u *srcPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
-                rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
+                rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
                 rppi_histogram_u8_pln3_host(srcPtrTemp, srcSize, outputHistogram, bins);

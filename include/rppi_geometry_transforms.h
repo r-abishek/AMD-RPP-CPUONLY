@@ -161,6 +161,39 @@ rppi_warp_affine_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
 RppStatus
 rppi_warp_affine_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
                               RppPtr_t affine);
+
+// ----------------------------------------
+// Host scale functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_scale_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
+                             Rpp32f percentage);
+
+RppStatus
+rppi_scale_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+                         Rpp32f percentage);
+
+RppStatus
+rppi_scale_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+                         Rpp32f percentage);
+
+RppStatus
+rppi_scale_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+                         Rpp32f percentage);
+
+// ----------------------------------------
+// Host transpose functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_transpose_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize);
+
+RppStatus
+rppi_transpose_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize);
+
+RppStatus
+rppi_transpose_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize);
  
 #ifdef __cplusplus
 }
