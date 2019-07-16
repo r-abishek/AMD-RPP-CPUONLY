@@ -1,15 +1,15 @@
-// rppi_bilateral_filter
+// rppi_bitwise_NOT
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_arithmetic_and_logical_functions.h"
+#include "rppi_logical_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
 #include "cpu/rpp_cpu_inputAndDisplay.hpp"
 #include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
-#include "cpu/host_bilateral_filter.hpp"
+#include "cpu/host_bitwise_NOT.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -20,36 +20,30 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_bilateral_filter_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                             Rpp32s diameter, Rpp64f sigmaI, Rpp64f sigmaS)
+rppi_bitwise_NOT_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    bilateral_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                                    diameter, sigmaI, sigmaS,
-                                    RPPI_CHN_PLANAR, 1);
+    bitwise_NOT_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                    1);
 
     return RPP_SUCCESS;
 
 }
 
 RppStatus
-rppi_bilateral_filter_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                             Rpp32s diameter, Rpp64f sigmaI, Rpp64f sigmaS)
+rppi_bitwise_NOT_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    bilateral_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                                    diameter, sigmaI, sigmaS,
-                                    RPPI_CHN_PLANAR, 3);
+    bitwise_NOT_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                    3);
 
     return RPP_SUCCESS;
 
 }
 
 RppStatus
-rppi_bilateral_filter_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                             Rpp32s diameter, Rpp64f sigmaI, Rpp64f sigmaS)
+rppi_bitwise_NOT_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    bilateral_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                                    diameter, sigmaI, sigmaS,
-                                    RPPI_CHN_PACKED, 3);
+    bitwise_NOT_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                    3);
 
     return RPP_SUCCESS;
 
@@ -63,9 +57,7 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    Rpp32s diameter = 5;
-    Rpp64f sigmaI = 80.0, sigmaS = 60.0;
-     
+
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
@@ -104,9 +96,6 @@ int main(int argc, char** argv)
             return -1;
         }
 
-        Mat imageOutOpenCV;
-        bilateralFilter(imageIn, imageOutOpenCV, diameter, sigmaI, sigmaS);
-
         srcSize.height = imageIn.rows;
         srcSize.width = imageIn.cols;
         dstSize.height = srcSize.height;
@@ -129,7 +118,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
+                rppi_bitwise_NOT_u8_pln1_host(srcPtr, srcSize, dstPtr);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -143,7 +132,7 @@ int main(int argc, char** argv)
                 rppi_packed2planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_bilateral_filter_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, diameter, sigmaI, sigmaS);
+                rppi_bitwise_NOT_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp);
                 stop = high_resolution_clock::now();
 
                 rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -157,7 +146,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
+                rppi_bitwise_NOT_u8_pln1_host(srcPtr, srcSize, dstPtr);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -166,7 +155,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
+                rppi_bitwise_NOT_u8_pkd3_host(srcPtr, srcSize, dstPtr);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -176,23 +165,22 @@ int main(int argc, char** argv)
         auto duration = duration_cast<milliseconds>(stop - start);
         cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
 
-        Mat images(imageIn.rows, imageIn.cols*3, imageIn.type());
+        Mat images(RPPMAX2(imageIn.rows, imageOut.rows), (imageIn.cols + imageOut.cols), imageIn.type());
         imageIn.copyTo(images(cv::Rect(0,0, imageIn.cols, imageIn.rows)));
-        imageOutOpenCV.copyTo(images(cv::Rect(imageIn.cols,0, imageIn.cols, imageIn.rows)));
-        imageOut.copyTo(images(cv::Rect(imageIn.cols*2,0, imageIn.cols, imageIn.rows)));
+        imageOut.copyTo(images(cv::Rect(imageIn.cols,0, imageOut.cols, imageOut.rows)));
 
-        namedWindow("Input, OpenCV function Output, Created function Output", WINDOW_NORMAL );
-        imshow("Input, OpenCV function Output, Created function Output", images);
+        namedWindow("Input and Output Images", WINDOW_NORMAL );
+        imshow("Input and Output Images", images);
 
         waitKey(0);
 
         return 0;
     }
-
+     
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
-
+    
     if (matrix == 1)
     {
         channel = 1;
@@ -202,8 +190,8 @@ int main(int argc, char** argv)
         Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
-        printf("\n\nOutput of bilateral filtering:\n");
+        rppi_bitwise_NOT_u8_pln1_host(srcPtr, srcSize, dstPtr);
+        printf("\n\nOutput of bitwise_NOT operation:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -217,8 +205,8 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_bilateral_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
-            printf("\n\nOutput of bilateral filtering:\n");
+            rppi_bitwise_NOT_u8_pln3_host(srcPtr, srcSize, dstPtr);
+            printf("\n\nOutput of bitwise_NOT operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -227,8 +215,8 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
-            printf("\n\nOutput of bilateral filtering:\n");
+            rppi_bitwise_NOT_u8_pkd3_host(srcPtr, srcSize, dstPtr);
+            printf("\n\nOutput of bitwise_NOT operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -253,13 +241,13 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
+                rppi_bitwise_NOT_u8_pln1_host(srcPtr, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_bilateral_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
+                rppi_bitwise_NOT_u8_pln3_host(srcPtr, srcSize, dstPtr);
             }
-            printf("\n\nOutput of bilateral filtering:\n");
+            printf("\n\nOutput of bitwise_NOT operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -271,13 +259,13 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_bilateral_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
+                rppi_bitwise_NOT_u8_pln1_host(srcPtr, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_bilateral_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, diameter, sigmaI, sigmaS);
+                rppi_bitwise_NOT_u8_pkd3_host(srcPtr, srcSize, dstPtr);
             }
-            printf("\n\nOutput of bilateral filtering:\n");
+            printf("\n\nOutput of bitwise_NOT operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }

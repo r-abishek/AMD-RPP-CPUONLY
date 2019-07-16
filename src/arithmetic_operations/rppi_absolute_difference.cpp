@@ -1,15 +1,15 @@
-// rppi_exclusive_OR
+// rppi_absolute_difference
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_arithmetic_and_logical_functions.h"
+#include "rppi_arithmetic_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
 #include "cpu/rpp_cpu_inputAndDisplay.hpp"
 #include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
-#include "cpu/host_exclusive_OR.hpp"
+#include "cpu/host_absolute_difference.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -20,9 +20,9 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_exclusive_OR_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_absolute_difference_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    exclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    absolute_difference_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     1);
 
     return RPP_SUCCESS;
@@ -30,9 +30,9 @@ rppi_exclusive_OR_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 }
 
 RppStatus
-rppi_exclusive_OR_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_absolute_difference_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    exclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    absolute_difference_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     3);
 
     return RPP_SUCCESS;
@@ -40,9 +40,9 @@ rppi_exclusive_OR_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 }
 
 RppStatus
-rppi_exclusive_OR_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_absolute_difference_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    exclusive_OR_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    absolute_difference_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     3);
 
     return RPP_SUCCESS;
@@ -91,6 +91,7 @@ int main(int argc, char** argv)
             imageIn1 = imread( argv[1], 1 );
             imageIn2 = imread( argv[2], 1 );
         }
+            
 
         if ( !imageIn1.data || !imageIn2.data)
         {
@@ -127,7 +128,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_exclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_absolute_difference_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -143,7 +144,7 @@ int main(int argc, char** argv)
                 rppi_packed2planar_u8_pkd3_host(srcPtr2, srcSize, srcPtr2Temp);
 
                 start = high_resolution_clock::now();
-                rppi_exclusive_OR_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize, dstPtrTemp);
+                rppi_absolute_difference_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize, dstPtrTemp);
                 stop = high_resolution_clock::now();
 
                 rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -157,7 +158,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_exclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_absolute_difference_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -166,7 +167,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_exclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_absolute_difference_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -190,7 +191,6 @@ int main(int argc, char** argv)
     }
 
 
-
      
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
@@ -208,8 +208,8 @@ int main(int argc, char** argv)
         displayPlanar(srcPtr1, srcSize, channel);
         printf("\n\nInput 2:\n");
         displayPlanar(srcPtr2, srcSize, channel);
-        rppi_exclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-        printf("\n\nOutput of exclusive_OR operation:\n");
+        rppi_absolute_difference_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+        printf("\n\nOutput of Absolute Difference:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -226,8 +226,8 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPlanar(srcPtr2, srcSize, channel);
-            rppi_exclusive_OR_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of exclusive_OR operation:\n");
+            rppi_absolute_difference_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+            printf("\n\nOutput of Absolute Difference:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -239,8 +239,8 @@ int main(int argc, char** argv)
             displayPacked(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPacked(srcPtr2, srcSize, channel);
-            rppi_exclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of exclusive_OR operation:\n");
+            rppi_absolute_difference_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+            printf("\n\nOutput of Absolute Difference:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -272,13 +272,13 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_exclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_absolute_difference_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_exclusive_OR_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_absolute_difference_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of exclusive_OR operation:\n");
+            printf("\n\nOutput of Absolute Difference:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -295,13 +295,13 @@ int main(int argc, char** argv)
             displayPacked(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_exclusive_OR_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_absolute_difference_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_exclusive_OR_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_absolute_difference_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of exclusive_OR operation:\n");
+            printf("\n\nOutput of Absolute Difference:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }

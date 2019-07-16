@@ -1,15 +1,15 @@
-// rppi_add
+// rppi_accumulate
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_arithmetic_and_logical_functions.h"
+#include "rppi_arithmetic_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
 #include "cpu/rpp_cpu_inputAndDisplay.hpp"
 #include <cpu/rpp_cpu_pixelArrangementConversions.hpp>
-#include "cpu/host_add.hpp"
+#include "cpu/host_accumulate.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -20,9 +20,9 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_add_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_accumulate_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize)
 {
-    add_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    accumulate_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize,
                                     1);
 
     return RPP_SUCCESS;
@@ -30,9 +30,9 @@ rppi_add_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppP
 }
 
 RppStatus
-rppi_add_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_accumulate_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize)
 {
-    add_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    accumulate_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize,
                                     3);
 
     return RPP_SUCCESS;
@@ -40,9 +40,9 @@ rppi_add_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppP
 }
 
 RppStatus
-rppi_add_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
+rppi_accumulate_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize)
 {
-    add_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+    accumulate_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize,
                                     3);
 
     return RPP_SUCCESS;
@@ -55,7 +55,7 @@ rppi_add_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppP
 
 int main(int argc, char** argv)
 {
-    RppiSize srcSize, dstSize;
+    RppiSize srcSize;
     unsigned int channel;
 
     int input;
@@ -92,6 +92,8 @@ int main(int argc, char** argv)
             imageIn2 = imread( argv[2], 1 );
         }
 
+        Mat imageIn1Copy = imageIn1.clone();
+
         if ( !imageIn1.data || !imageIn2.data)
         {
             printf("No image data \n");
@@ -106,15 +108,12 @@ int main(int argc, char** argv)
 
         srcSize.height = imageIn1.rows;
         srcSize.width = imageIn1.cols;
-        dstSize.height = srcSize.height;
-        dstSize.width = srcSize.width;
         
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr1 = imageIn1.data;
         Rpp8u *srcPtr2 = imageIn2.data;
         
-        printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
-        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
+        printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", srcSize.height, srcSize.width, channel);
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
@@ -127,10 +126,10 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_add_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_accumulate_u8_pln1_host(srcPtr1, srcPtr2, srcSize);
                 stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_8UC1, srcPtr1);
                 
             }
             else if (channel == 3)
@@ -138,17 +137,16 @@ int main(int argc, char** argv)
                 printf("\nExecuting pln3...\n");
                 Rpp8u *srcPtr1Temp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
                 Rpp8u *srcPtr2Temp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
-                Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
                 rppi_packed2planar_u8_pkd3_host(srcPtr1, srcSize, srcPtr1Temp);
                 rppi_packed2planar_u8_pkd3_host(srcPtr2, srcSize, srcPtr2Temp);
 
                 start = high_resolution_clock::now();
-                rppi_add_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize, dstPtrTemp);
+                rppi_accumulate_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize);
                 stop = high_resolution_clock::now();
 
-                rppi_planar2packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+                rppi_planar2packed_u8_pln3_host(srcPtr1Temp, srcSize, srcPtr1);
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_8UC3, srcPtr1);
             }
         }
         else if (type == 2)
@@ -157,19 +155,19 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_add_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_accumulate_u8_pln1_host(srcPtr1, srcPtr2, srcSize);
                 stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_8UC1, srcPtr1);
             }
             else if (channel ==3)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_add_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_accumulate_u8_pkd3_host(srcPtr1, srcPtr2, srcSize);
                 stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_8UC3, srcPtr1);
             }
         }
 
@@ -177,7 +175,7 @@ int main(int argc, char** argv)
         cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
 
         Mat images(RPPMAX3(imageIn1.rows, imageIn2.rows, imageOut.rows), (imageIn1.cols + imageIn2.cols + imageOut.cols), imageIn1.type());
-        imageIn1.copyTo(images(cv::Rect(0,0, imageIn1.cols, imageIn1.rows)));
+        imageIn1Copy.copyTo(images(cv::Rect(0,0, imageIn1.cols, imageIn1.rows)));
         imageIn2.copyTo(images(cv::Rect(imageIn1.cols, 0, imageIn2.cols, imageIn2.rows)));
         imageOut.copyTo(images(cv::Rect(imageIn1.cols + imageIn2.cols,0, imageOut.cols, imageOut.rows)));
 
@@ -188,7 +186,11 @@ int main(int argc, char** argv)
 
         return 0;
     }
-    
+
+
+
+
+     
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
@@ -200,14 +202,13 @@ int main(int argc, char** argv)
         srcSize.width = 4;
         Rpp8u srcPtr1[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
         Rpp8u srcPtr2[12] = {65, 66, 67, 68, 69, 70, 249, 248, 247, 246, 245, 244};
-        Rpp8u dstPtr[12] = {0};
         printf("\n\nInput 1:\n");
         displayPlanar(srcPtr1, srcSize, channel);
         printf("\n\nInput 2:\n");
         displayPlanar(srcPtr2, srcSize, channel);
-        rppi_add_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-        printf("\n\nOutput of Addition:\n");
-        displayPlanar(dstPtr, srcSize, channel);
+        rppi_accumulate_u8_pln1_host(srcPtr1, srcPtr2, srcSize);
+        printf("\n\nOutput of Accumulate:\n");
+        displayPlanar(srcPtr1, srcSize, channel);
     }
     else if (matrix == 2)
     {
@@ -218,27 +219,25 @@ int main(int argc, char** argv)
         {
             Rpp8u srcPtr1[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
             Rpp8u srcPtr2[36] = {16, 15, 24, 13, 72, 71, 70, 69, 68, 67, 66, 65, 108, 100, 111, 127, 121, 113, 117, 126, 127, 128, 129, 130, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255};
-            Rpp8u dstPtr[36] = {0};
             printf("\n\nInput 1:\n");
             displayPlanar(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPlanar(srcPtr2, srcSize, channel);
-            rppi_add_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of Addition:\n");
-            displayPlanar(dstPtr, srcSize, channel);
+            rppi_accumulate_u8_pln3_host(srcPtr1, srcPtr2, srcSize);
+            printf("\n\nOutput of Accumulate:\n");
+            displayPlanar(srcPtr1, srcSize, channel);
         }
         else if (type == 2)
         {
             Rpp8u srcPtr1[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
             Rpp8u srcPtr2[36] = {16, 108, 244, 15, 100, 245, 24, 111, 246, 13, 127, 247, 72, 121, 248, 71, 113, 249, 70, 117, 250, 69, 126, 251, 68, 127, 252, 67, 128, 253, 66, 129, 254, 65, 130, 255};
-            Rpp8u dstPtr[36] = {0};
             printf("\n\nInput 1:\n");
             displayPacked(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPacked(srcPtr2, srcSize, channel);
-            rppi_add_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
-            printf("\n\nOutput of Addition:\n");
-            displayPacked(dstPtr, srcSize, channel);
+            rppi_accumulate_u8_pkd3_host(srcPtr1, srcPtr2, srcSize);
+            printf("\n\nOutput of Accumulate:\n");
+            displayPacked(srcPtr1, srcSize, channel);
         } 
     }
     else if (matrix == 3)
@@ -252,7 +251,6 @@ int main(int argc, char** argv)
         printf("Channels = %d, Height = %d, Width = %d", channel, srcSize.height, srcSize.width);
         Rpp8u *srcPtr1 = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         Rpp8u *srcPtr2 = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
-        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         int *intSrcPtr1 = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
         int *intSrcPtr2 = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
         if (type == 1)
@@ -269,14 +267,14 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_add_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_accumulate_u8_pln1_host(srcPtr1, srcPtr2, srcSize);
             }
             else if (channel == 3)
             {
-                rppi_add_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_accumulate_u8_pln3_host(srcPtr1, srcPtr2, srcSize);
             }
-            printf("\n\nOutput of Addition:\n");
-            displayPlanar(dstPtr, srcSize, channel);
+            printf("\n\nOutput of Accumulate:\n");
+            displayPlanar(srcPtr1, srcSize, channel);
         }
         else if (type == 2)
         {
@@ -292,14 +290,14 @@ int main(int argc, char** argv)
             displayPacked(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_add_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_accumulate_u8_pln1_host(srcPtr1, srcPtr2, srcSize);
             }
             else if (channel == 3)
             {
-                rppi_add_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+                rppi_accumulate_u8_pkd3_host(srcPtr1, srcPtr2, srcSize);
             }
-            printf("\n\nOutput of Addition:\n");
-            displayPacked(dstPtr, srcSize, channel);
+            printf("\n\nOutput of Accumulate:\n");
+            displayPacked(srcPtr1, srcSize, channel);
         }
     }
 }

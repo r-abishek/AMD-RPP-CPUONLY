@@ -4,129 +4,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
-add_executable(
-    rppi_rgb2hsv
-    src/imgaug/rppi_rgb2hsv.cpp
-)
-target_include_directories(rppi_rgb2hsv
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_rgb2hsv
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_hsv2rgb
-    src/imgaug/rppi_hsv2rgb.cpp
-)
-target_include_directories(rppi_hsv2rgb
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_hsv2rgb
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_hue
-    src/imgaug/rppi_hue.cpp
-)
-target_include_directories(rppi_hue
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_hue
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_saturation
-    src/imgaug/rppi_saturation.cpp
-)
-target_include_directories(rppi_saturation
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_saturation
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_rgb2hsl
-    src/imgaug/rppi_rgb2hsl.cpp
-)
-target_include_directories(rppi_rgb2hsl
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_rgb2hsl
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_hsl2rgb
-    src/imgaug/rppi_hsl2rgb.cpp
-)
-target_include_directories(rppi_hsl2rgb
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_hsl2rgb
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_snowy
-    src/imgaug/rppi_snowy.cpp
-)
-target_include_directories(rppi_snowy
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_snowy
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_random_shadow
-    src/imgaug/rppi_random_shadow.cpp
-)
-target_include_directories(rppi_random_shadow
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_random_shadow
-    ${OpenCV_LIBS}
-)
 
 
 
@@ -141,7 +18,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     rppi_brightness_contrast
     src/imgaug/rppi_brightness_contrast.cpp
@@ -295,6 +172,37 @@ target_include_directories(rppi_planar2packed
 )
 target_link_libraries(
     rppi_planar2packed
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_rgb2hsl
+    src/imgaug/rppi_rgb2hsl.cpp
+)
+target_include_directories(rppi_rgb2hsl
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_rgb2hsl
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_hsl2rgb
+    src/imgaug/rppi_hsl2rgb.cpp
+)
+target_include_directories(rppi_hsl2rgb
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hsl2rgb
     ${OpenCV_LIBS}
 )
 
@@ -501,7 +409,7 @@ target_link_libraries(
 
 add_executable(
     rppi_bilateral_filter
-    src/arithmetic/rppi_bilateral_filter.cpp
+    src/filter_operations/rppi_bilateral_filter.cpp
 )
 target_include_directories(rppi_bilateral_filter
     PUBLIC
@@ -666,6 +574,36 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_snowy
+    src/imgaug/rppi_snowy.cpp
+)
+target_include_directories(rppi_snowy
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_snowy
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_random_shadow
+    src/imgaug/rppi_random_shadow.cpp
+)
+target_include_directories(rppi_random_shadow
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_random_shadow
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -681,7 +619,7 @@ target_link_libraries(
 
 add_executable(
     rppi_absolute_difference
-    src/arithmetic/rppi_absolute_difference.cpp
+    src/arithmetic_operations/rppi_absolute_difference.cpp
 )
 target_include_directories(rppi_absolute_difference
     PUBLIC
@@ -696,24 +634,8 @@ target_link_libraries(
 
 
 add_executable(
-    rppi_accumulate
-    src/arithmetic/rppi_accumulate.cpp
-)
-target_include_directories(rppi_accumulate
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_accumulate
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
     rppi_accumulate_weighted
-    src/arithmetic/rppi_accumulate_weighted.cpp
+    src/arithmetic_operations/rppi_accumulate_weighted.cpp
 )
 target_include_directories(rppi_accumulate_weighted
     PUBLIC
@@ -728,8 +650,24 @@ target_link_libraries(
 
 
 add_executable(
+    rppi_accumulate
+    src/arithmetic_operations/rppi_accumulate.cpp
+)
+target_include_directories(rppi_accumulate
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_accumulate
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
     rppi_add
-    src/arithmetic/rppi_add.cpp
+    src/arithmetic_operations/rppi_add.cpp
 )
 target_include_directories(rppi_add
     PUBLIC
@@ -742,10 +680,25 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_multiply
+    src/arithmetic_operations/rppi_multiply.cpp
+)
+target_include_directories(rppi_multiply
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_multiply
+    ${OpenCV_LIBS}
+)
+
 
 add_executable(
     rppi_subtract
-    src/arithmetic/rppi_subtract.cpp
+    src/arithmetic_operations/rppi_subtract.cpp
 )
 target_include_directories(rppi_subtract
     PUBLIC
@@ -761,7 +714,7 @@ target_link_libraries(
 
 add_executable(
     rppi_bitwise_AND
-    src/arithmetic/rppi_bitwise_AND.cpp
+    src/logical_operations/rppi_bitwise_AND.cpp
 )
 target_include_directories(rppi_bitwise_AND
     PUBLIC
@@ -776,24 +729,24 @@ target_link_libraries(
 
 
 add_executable(
-    rppi_inclusive_OR
-    src/arithmetic/rppi_inclusive_OR.cpp
+    rppi_bitwise_NOT
+    src/logical_operations/rppi_bitwise_NOT.cpp
 )
-target_include_directories(rppi_inclusive_OR
+target_include_directories(rppi_bitwise_NOT
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_inclusive_OR
+    rppi_bitwise_NOT
     ${OpenCV_LIBS}
 )
 
 
 add_executable(
     rppi_exclusive_OR
-    src/arithmetic/rppi_exclusive_OR.cpp
+    src/logical_operations/rppi_exclusive_OR.cpp
 )
 target_include_directories(rppi_exclusive_OR
     PUBLIC
@@ -808,32 +761,17 @@ target_link_libraries(
 
 
 add_executable(
-    rppi_bitwise_NOT
-    src/arithmetic/rppi_bitwise_NOT.cpp
+    rppi_inclusive_OR
+    src/logical_operations/rppi_inclusive_OR.cpp
 )
-target_include_directories(rppi_bitwise_NOT
+target_include_directories(rppi_inclusive_OR
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_bitwise_NOT
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_multiply
-    src/arithmetic/rppi_multiply.cpp
-)
-target_include_directories(rppi_multiply
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_multiply
+    rppi_inclusive_OR
     ${OpenCV_LIBS}
 )
 
@@ -1023,7 +961,7 @@ target_link_libraries(
 
 
 
-
+#[[
 add_executable(
     DisplayImage
     src/DisplayImage.cpp
