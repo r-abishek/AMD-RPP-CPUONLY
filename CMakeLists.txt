@@ -522,6 +522,126 @@ target_link_libraries(
 
 
 
+add_executable(
+    rppi_rgb_to_hsv
+    src/color_model_conversions/rppi_rgb_to_hsv.cpp
+)
+target_include_directories(rppi_rgb_to_hsv
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_rgb_to_hsv
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_hsv_to_rgb
+    src/color_model_conversions/rppi_hsv_to_rgb.cpp
+)
+target_include_directories(rppi_hsv_to_rgb
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hsv_to_rgb
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_hue
+    src/color_model_conversions/rppi_hue.cpp
+)
+target_include_directories(rppi_hue
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hue
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_saturation
+    src/color_model_conversions/rppi_saturation.cpp
+)
+target_include_directories(rppi_saturation
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_saturation
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_rgb_to_hsl
+    src/color_model_conversions/rppi_rgb_to_hsl.cpp
+)
+target_include_directories(rppi_rgb_to_hsl
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_rgb_to_hsl
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_hsl_to_rgb
+    src/color_model_conversions/rppi_hsl_to_rgb.cpp
+)
+target_include_directories(rppi_hsl_to_rgb
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hsl_to_rgb
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_exposure
+    src/color_model_conversions/rppi_exposure.cpp
+)
+target_include_directories(rppi_exposure
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_exposure
+    ${OpenCV_LIBS}
+)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -573,68 +693,7 @@ target_link_libraries(
 
 
 
-add_executable(
-    rppi_rgb_to_hsv
-    src/imgaug/rppi_rgb_to_hsv.cpp
-)
-target_include_directories(rppi_rgb_to_hsv
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_rgb_to_hsv
-    ${OpenCV_LIBS}
-)
 
-
-add_executable(
-    rppi_hsv_to_rgb
-    src/imgaug/rppi_hsv_to_rgb.cpp
-)
-target_include_directories(rppi_hsv_to_rgb
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_hsv_to_rgb
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_hue
-    src/imgaug/rppi_hue.cpp
-)
-target_include_directories(rppi_hue
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_hue
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_saturation
-    src/imgaug/rppi_saturation.cpp
-)
-target_include_directories(rppi_saturation
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_saturation
-    ${OpenCV_LIBS}
-)
 
 
 add_executable(
@@ -681,37 +740,6 @@ target_include_directories(rppi_planar_to_packed
 )
 target_link_libraries(
     rppi_planar_to_packed
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_rgb_to_hsl
-    src/imgaug/rppi_rgb_to_hsl.cpp
-)
-target_include_directories(rppi_rgb_to_hsl
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_rgb_to_hsl
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_hsl_to_rgb
-    src/imgaug/rppi_hsl_to_rgb.cpp
-)
-target_include_directories(rppi_hsl_to_rgb
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_hsl_to_rgb
     ${OpenCV_LIBS}
 )
 
@@ -818,22 +846,6 @@ target_include_directories(rppi_jitterAdd
 )
 target_link_libraries(
     rppi_jitterAdd
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_exposure
-    src/imgaug/rppi_exposure.cpp
-)
-target_include_directories(rppi_exposure
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_exposure
     ${OpenCV_LIBS}
 )
 

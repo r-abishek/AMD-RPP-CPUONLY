@@ -1,5 +1,5 @@
-#ifndef RPPI_COLOR_MODEL_CONVERSIONS.H
-#define RPPI_COLOR_MODEL_CONVERSIONS.H
+#ifndef RPPI_COLOR_MODEL_CONVERSIONS_H
+#define RPPI_COLOR_MODEL_CONVERSIONS_H
  
 #include "rppdefs.h"
 #ifdef __cplusplus
