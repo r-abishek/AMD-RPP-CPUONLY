@@ -27,10 +27,12 @@ RppStatus equalize_histogram_perChannel_host(T* srcPtr, RppiSize srcSize, T* dst
         for (int i = 0; i < bins; i++)
         {
             *histogramTemp = (Rpp32u) 0;
+            histogramTemp++;
         }
         for (int i = 0; i < bins; i++)
         {
             *lookUpTableTemp = (T) 0;
+            lookUpTable++;
         }
 
         histogramTemp = histogram;

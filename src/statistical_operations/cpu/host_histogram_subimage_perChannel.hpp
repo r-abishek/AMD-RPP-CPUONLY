@@ -27,6 +27,7 @@ RppStatus histogram_subimage_perChannel_host(T* srcPtr, RppiSize srcSize, Rpp32u
         for (int i = 0; i < bins; i++)
         {
             *histogramTemp = (Rpp32u) 0;
+            histogramTemp++;
         }
 
         histogramTemp = histogram;
