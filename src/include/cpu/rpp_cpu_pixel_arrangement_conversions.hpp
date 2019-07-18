@@ -32,3 +32,35 @@ rppi_packed_to_planar_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
                      3);
     return RPP_SUCCESS;
 }
+
+RppStatus 
+rppi_planar_to_packed_s32_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
+{
+    planar_to_packed_host<Rpp32s>(static_cast<Rpp32s*>(srcPtr), srcSize, static_cast<Rpp32s*>(dstPtr),
+                     1);
+    return RPP_SUCCESS;
+}
+
+RppStatus
+rppi_planar_to_packed_s32_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
+{
+    planar_to_packed_host<Rpp32s>(static_cast<Rpp32s*>(srcPtr), srcSize, static_cast<Rpp32s*>(dstPtr),
+                     3);
+    return RPP_SUCCESS;
+}
+
+RppStatus 
+rppi_packed_to_planar_s32_pkd1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
+{
+    packed_to_planar_host<Rpp32s>(static_cast<Rpp32s*>(srcPtr), srcSize, static_cast<Rpp32s*>(dstPtr),
+                     1);
+    return RPP_SUCCESS;
+}
+
+RppStatus
+rppi_packed_to_planar_s32_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
+{
+    packed_to_planar_host<Rpp32s>(static_cast<Rpp32s*>(srcPtr), srcSize, static_cast<Rpp32s*>(dstPtr),
+                     3);
+    return RPP_SUCCESS;
+}
