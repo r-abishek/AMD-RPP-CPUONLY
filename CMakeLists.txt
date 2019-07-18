@@ -6,38 +6,6 @@ project(amd_rpp VERSION 0.1)
 
 
 add_executable(
-    rppi_minMax
-    src/statistical_operations/rppi_minMax.cpp
-)
-target_include_directories(rppi_minMax
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_minMax
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_minMaxLoc
-    src/statistical_operations/rppi_minMaxLoc.cpp
-)
-target_include_directories(rppi_minMaxLoc
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_minMaxLoc
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
     rppi_integral
     src/statistical_operations/rppi_integral.cpp
 )
@@ -49,6 +17,66 @@ target_include_directories(rppi_integral
 )
 target_link_libraries(
     rppi_integral
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_snowy
+    src/image_augmentations/rppi_snowy.cpp
+)
+target_include_directories(rppi_snowy
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_snowy
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_random_shadow
+    src/image_augmentations/rppi_random_shadow.cpp
+)
+target_include_directories(rppi_random_shadow
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_random_shadow
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_random_crop_letterbox
+    src/geometry_transforms/rppi_random_crop_letterbox.cpp
+)
+target_include_directories(rppi_random_crop_letterbox
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_random_crop_letterbox
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_occlusionAdd
+    src/image_augmentations/rppi_occlusionAdd.cpp
+)
+target_include_directories(rppi_occlusionAdd
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_occlusionAdd
     ${OpenCV_LIBS}
 )
 

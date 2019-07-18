@@ -107,10 +107,14 @@ int main(int argc, char** argv)
         y1 = 648;
         x2 = 960;
         y2 = 72;
-        x1 = 200;
+        //x1 = 200;
         //y1 = 200;
         //x2 = 384;
         //y2 = 384;
+        x1 = 300;
+        y1 = 100;
+        x2 = 200;
+        y2 = 50;
         int xDiff = (int) x2 - (int) x1;
         int yDiff = (int) y2 - (int) y1;
         dstSize.width = (Rpp32u) RPPABS(xDiff) + (2 * borderWidth);
