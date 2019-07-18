@@ -21,6 +21,21 @@ target_link_libraries(
 )
 
 add_executable(
+    rppi_magnitude
+    src/arithmetic_operations/rppi_magnitude.cpp
+)
+target_include_directories(rppi_magnitude
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_magnitude
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_snowy
     src/image_augmentations/rppi_snowy.cpp
 )
@@ -80,6 +95,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_fish_eye_effect
+    src/image_augmentations/rppi_fish_eye_effect.cpp
+)
+target_include_directories(rppi_fish_eye_effect
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_fish_eye_effect
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -110,7 +140,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_accumulate_weighted
     src/arithmetic_operations/rppi_accumulate_weighted.cpp
@@ -125,7 +154,6 @@ target_link_libraries(
     rppi_accumulate_weighted
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_accumulate
@@ -142,7 +170,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_add
     src/arithmetic_operations/rppi_add.cpp
@@ -158,7 +185,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_subtract
     src/arithmetic_operations/rppi_subtract.cpp
@@ -171,6 +197,21 @@ target_include_directories(rppi_subtract
 )
 target_link_libraries(
     rppi_subtract
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_magnitude
+    src/arithmetic_operations/rppi_magnitude.cpp
+)
+target_include_directories(rppi_magnitude
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_magnitude
     ${OpenCV_LIBS}
 )
 
@@ -213,7 +254,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_bitwise_NOT
     src/logical_operations/rppi_bitwise_NOT.cpp
@@ -229,7 +269,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_exclusive_OR
     src/logical_operations/rppi_exclusive_OR.cpp
@@ -244,7 +283,6 @@ target_link_libraries(
     rppi_exclusive_OR
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_inclusive_OR
@@ -285,7 +323,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_bilateral_filter
     src/filter_operations/rppi_bilateral_filter.cpp
@@ -300,7 +337,6 @@ target_link_libraries(
     rppi_bilateral_filter
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_median_filter
@@ -341,7 +377,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_equalize_histogram
     src/statistical_operations/rppi_equalize_histogram.cpp
@@ -356,7 +391,6 @@ target_link_libraries(
     rppi_equalize_histogram
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_min
@@ -373,7 +407,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_max
     src/statistical_operations/rppi_max.cpp
@@ -388,7 +421,6 @@ target_link_libraries(
     rppi_max
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_minMax
@@ -405,7 +437,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_minMaxLoc
     src/statistical_operations/rppi_minMaxLoc.cpp
@@ -420,7 +451,6 @@ target_link_libraries(
     rppi_minMaxLoc
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_meanStdDev
@@ -437,7 +467,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_histogram_perChannel
     src/statistical_operations/rppi_histogram_perChannel.cpp
@@ -453,7 +482,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_equalize_histogram_perChannel
     src/statistical_operations/rppi_equalize_histogram_perChannel.cpp
@@ -468,7 +496,6 @@ target_link_libraries(
     rppi_equalize_histogram_perChannel
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_histogram_subimage_perChannel
@@ -509,7 +536,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_resize
     src/geometry_transforms/rppi_resize.cpp
@@ -525,7 +551,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_resize_crop
     src/geometry_transforms/rppi_resize_crop.cpp
@@ -540,7 +565,6 @@ target_link_libraries(
     rppi_resize_crop
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_rotate
@@ -572,7 +596,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_warp_affine
     src/geometry_transforms/rppi_warp_affine.cpp
@@ -587,7 +610,6 @@ target_link_libraries(
     rppi_warp_affine
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_scale
@@ -643,7 +665,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_hsv_to_rgb
     src/color_model_conversions/rppi_hsv_to_rgb.cpp
@@ -658,7 +679,6 @@ target_link_libraries(
     rppi_hsv_to_rgb
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_hue
@@ -675,7 +695,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_saturation
     src/color_model_conversions/rppi_saturation.cpp
@@ -690,7 +709,6 @@ target_link_libraries(
     rppi_saturation
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_rgb_to_hsl
@@ -707,7 +725,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_hsl_to_rgb
     src/color_model_conversions/rppi_hsl_to_rgb.cpp
@@ -723,7 +740,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_exposure
     src/color_model_conversions/rppi_exposure.cpp
@@ -738,7 +754,6 @@ target_link_libraries(
     rppi_exposure
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_channel_extract
@@ -794,7 +809,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_contrast
     src/image_augmentations/rppi_contrast.cpp
@@ -809,7 +823,6 @@ target_link_libraries(
     rppi_contrast
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_brightness
@@ -826,7 +839,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_gamma_correction
     src/image_augmentations/rppi_gamma_correction.cpp
@@ -841,7 +853,6 @@ target_link_libraries(
     rppi_gamma_correction
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_color_temperature
@@ -858,7 +869,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_pixelate
     src/image_augmentations/rppi_pixelate.cpp
@@ -873,7 +883,6 @@ target_link_libraries(
     rppi_pixelate
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_jitterAdd
@@ -980,7 +989,6 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
-
 add_executable(
     rppi_blend
     src/image_augmentations/rppi_blend.cpp
@@ -995,7 +1003,6 @@ target_link_libraries(
     rppi_blend
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_crop_replace_subimage
@@ -1035,7 +1042,6 @@ target_link_libraries(
     rppi_packed_to_planar
     ${OpenCV_LIBS}
 )
-
 
 add_executable(
     rppi_planar_to_packed
