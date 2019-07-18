@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    unsigned int kernelSize = 7;
+    unsigned int kernelSize = 9;
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");

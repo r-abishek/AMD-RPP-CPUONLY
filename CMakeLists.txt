@@ -21,17 +21,17 @@ target_link_libraries(
 )
 
 add_executable(
-    rppi_magnitude
-    src/arithmetic_operations/rppi_magnitude.cpp
+    rppi_median_filter
+    src/filter_operations/rppi_median_filter.cpp
 )
-target_include_directories(rppi_magnitude
+target_include_directories(rppi_median_filter
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_magnitude
+    rppi_median_filter
     ${OpenCV_LIBS}
 )
 
