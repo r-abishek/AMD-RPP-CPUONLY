@@ -207,6 +207,28 @@ rppi_exposureHSV_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
 RppStatus
 rppi_exposureHSV_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f exposureFactor);
+
+// ----------------------------------------
+// Host channel_extract functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_channel_extract_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                  Rpp32u extractChannelNumber);
+
+RppStatus
+rppi_channel_extract_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                  Rpp32u extractChannelNumber);
+
+// ----------------------------------------
+// Host channel_combine functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_channel_combine_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppPtr_t srcPtr3, RppiSize srcSize, RppPtr_t dstPtr);
+
+RppStatus
+rppi_channel_combine_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppPtr_t srcPtr3, RppiSize srcSize, RppPtr_t dstPtr);
  
 #ifdef __cplusplus
 }
