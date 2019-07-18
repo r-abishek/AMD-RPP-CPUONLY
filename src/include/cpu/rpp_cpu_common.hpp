@@ -594,6 +594,98 @@ RppStatus resize_crop_kernel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSi
     
 }
 
+template<typename T>
+RppStatus erode_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
+                                       unsigned int kernelSize, Rpp32u remainingElementsInRow, 
+                                       RppiChnFormat chnFormat, unsigned int channel)
+{
+    T pixel;
+
+    T* srcPtrWindowTemp;
+    srcPtrWindowTemp = srcPtrWindow;
+    pixel = *srcPtrWindowTemp;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                if (*srcPtrWindowTemp < pixel)
+                {
+                    pixel = *srcPtrWindowTemp;
+                }
+                srcPtrWindowTemp++;
+            }
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                if (*srcPtrWindowTemp < pixel)
+                {
+                    pixel = *srcPtrWindowTemp;
+                }
+                srcPtrWindowTemp += channel;
+            }
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    *dstPtrPixel = pixel;
+
+    return RPP_SUCCESS;
+}
+
+template<typename T>
+RppStatus dilate_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
+                                       unsigned int kernelSize, Rpp32u remainingElementsInRow, 
+                                       RppiChnFormat chnFormat, unsigned int channel)
+{
+    T pixel;
+
+    T* srcPtrWindowTemp;
+    srcPtrWindowTemp = srcPtrWindow;
+    pixel = *srcPtrWindowTemp;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                if (*srcPtrWindowTemp > pixel)
+                {
+                    pixel = *srcPtrWindowTemp;
+                }
+                srcPtrWindowTemp++;
+            }
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                if (*srcPtrWindowTemp > pixel)
+                {
+                    pixel = *srcPtrWindowTemp;
+                }
+                srcPtrWindowTemp += channel;
+            }
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    *dstPtrPixel = pixel;
+
+    return RPP_SUCCESS;
+}
+
 
 
 

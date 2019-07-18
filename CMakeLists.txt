@@ -6,32 +6,111 @@ project(amd_rpp VERSION 0.1)
 
 
 add_executable(
-    rppi_channel_extract
-    src/color_model_conversions/rppi_channel_extract.cpp
+    rppi_min
+    src/statistical_operations/rppi_min.cpp
 )
-target_include_directories(rppi_channel_extract
+target_include_directories(rppi_min
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_channel_extract
+    rppi_min
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_max
+    src/statistical_operations/rppi_max.cpp
+)
+target_include_directories(rppi_max
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_max
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_minMax
+    src/statistical_operations/rppi_minMax.cpp
+)
+target_include_directories(rppi_minMax
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_minMax
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_minMaxLoc
+    src/statistical_operations/rppi_minMaxLoc.cpp
+)
+target_include_directories(rppi_minMaxLoc
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_minMaxLoc
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_meanStdDev
+    src/statistical_operations/rppi_meanStdDev.cpp
+)
+target_include_directories(rppi_meanStdDev
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_meanStdDev
     ${OpenCV_LIBS}
 )
 
 add_executable(
-    rppi_channel_combine
-    src/color_model_conversions/rppi_channel_combine.cpp
+    rppi_erode
+    src/morphological_transforms/rppi_erode.cpp
 )
-target_include_directories(rppi_channel_combine
+target_include_directories(rppi_erode
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_channel_combine
+    rppi_erode
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_dilate
+    src/morphological_transforms/rppi_dilate.cpp
+)
+target_include_directories(rppi_dilate
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_dilate
     ${OpenCV_LIBS}
 )
 
@@ -692,6 +771,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_channel_combine
+    src/color_model_conversions/rppi_channel_combine.cpp
+)
+target_include_directories(rppi_channel_combine
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_channel_combine
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -971,6 +1065,45 @@ target_include_directories(rppi_planar_to_packed
 )
 target_link_libraries(
     rppi_planar_to_packed
+    ${OpenCV_LIBS}
+)
+
+
+
+
+
+
+
+
+
+
+add_executable(
+    rppi_erode
+    src/morphological_transforms/rppi_erode.cpp
+)
+target_include_directories(rppi_erode
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_erode
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_dilate
+    src/morphological_transforms/rppi_dilate.cpp
+)
+target_include_directories(rppi_dilate
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_dilate
     ${OpenCV_LIBS}
 )
 ]]
