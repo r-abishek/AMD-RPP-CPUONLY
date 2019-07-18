@@ -686,6 +686,52 @@ RppStatus dilate_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize,
     return RPP_SUCCESS;
 }
 
+template<typename T>
+RppStatus median_filter_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
+                                       unsigned int kernelSize, Rpp32u remainingElementsInRow, 
+                                       RppiChnFormat chnFormat, unsigned int channel)
+{
+    T *kernel = (T*)calloc(kernelSize * kernelSize, sizeof(T));
+    T *kernelTemp;
+    kernelTemp = kernel;
+
+    T* srcPtrWindowTemp;
+    srcPtrWindowTemp = srcPtrWindow;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                *kernelTemp = *srcPtrWindowTemp;
+                srcPtrWindowTemp++;
+                kernelTemp++;
+            }
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                *kernelTemp = *srcPtrWindowTemp;
+                srcPtrWindowTemp += channel;
+                kernelTemp++;
+            }
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+
+    std::sort(kernel, kernel + (kernelSize * kernelSize));
+
+    *dstPtrPixel = *(kernel + (((kernelSize * kernelSize) - 1) / 2));
+
+    return RPP_SUCCESS;
+}
+
 
 
 

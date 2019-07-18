@@ -6,38 +6,6 @@ project(amd_rpp VERSION 0.1)
 
 
 add_executable(
-    rppi_min
-    src/statistical_operations/rppi_min.cpp
-)
-target_include_directories(rppi_min
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_min
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_max
-    src/statistical_operations/rppi_max.cpp
-)
-target_include_directories(rppi_max
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_max
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
     rppi_minMax
     src/statistical_operations/rppi_minMax.cpp
 )
@@ -70,49 +38,21 @@ target_link_libraries(
 
 
 add_executable(
-    rppi_meanStdDev
-    src/statistical_operations/rppi_meanStdDev.cpp
+    rppi_integral
+    src/statistical_operations/rppi_integral.cpp
 )
-target_include_directories(rppi_meanStdDev
+target_include_directories(rppi_integral
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_meanStdDev
+    rppi_integral
     ${OpenCV_LIBS}
 )
 
-add_executable(
-    rppi_erode
-    src/morphological_transforms/rppi_erode.cpp
-)
-target_include_directories(rppi_erode
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_erode
-    ${OpenCV_LIBS}
-)
 
-add_executable(
-    rppi_dilate
-    src/morphological_transforms/rppi_dilate.cpp
-)
-target_include_directories(rppi_dilate
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_dilate
-    ${OpenCV_LIBS}
-)
 
 
 
@@ -330,6 +270,22 @@ target_include_directories(rppi_bilateral_filter
 )
 target_link_libraries(
     rppi_bilateral_filter
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_median_filter
+    src/filter_operations/rppi_median_filter.cpp
+)
+target_include_directories(rppi_median_filter
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_median_filter
     ${OpenCV_LIBS}
 )
 
