@@ -732,6 +732,70 @@ RppStatus median_filter_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize sr
     return RPP_SUCCESS;
 }
 
+template<typename T>
+RppStatus local_binary_pattern_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
+                                       unsigned int kernelSize, Rpp32u remainingElementsInRow, RppiLbpFormat lbpFormat, 
+                                       RppiChnFormat chnFormat, unsigned int channel)
+{
+    if (lbpFormat == RPPI_LBP)
+    {
+        
+    }
+    else if (lbpFormat == RPPI_MLBP)
+    {
+
+    }
+    else if (lbpFormat == RPPI_ULBP)
+    {
+
+    }
+    
+    
+    
+    
+    
+    
+    T pixel;
+
+    T* srcPtrWindowTemp;
+    srcPtrWindowTemp = srcPtrWindow;
+    pixel = *srcPtrWindowTemp;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                if (*srcPtrWindowTemp < pixel)
+                {
+                    pixel = *srcPtrWindowTemp;
+                }
+                srcPtrWindowTemp++;
+            }
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                if (*srcPtrWindowTemp < pixel)
+                {
+                    pixel = *srcPtrWindowTemp;
+                }
+                srcPtrWindowTemp += channel;
+            }
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    *dstPtrPixel = pixel;
+
+    return RPP_SUCCESS;
+}
+
 
 
 

@@ -82,6 +82,13 @@ typedef enum{
     HSV
 } RppiFormat;
 
+typedef enum
+{
+    RPPI_LBP,
+    RPPI_MLBP,
+    RPPI_ULBP
+} RppiLbpFormat;
+
 typedef struct {
        Rpp32f rho;
        Rpp32f theta;
