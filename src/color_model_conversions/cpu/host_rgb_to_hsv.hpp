@@ -6,12 +6,12 @@ RppStatus rgb_to_hsv_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
 {
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        for (int i = 0; i < (srcSize.width * srcSize.height); i++)
+        for (int i = 0; i < (srcSize.height * srcSize.width); i++)
         {
             Rpp32f rf, gf, bf, cmax, cmin, delta;
             rf = ((Rpp32f) srcPtr[i]) / 255;
-            gf = ((Rpp32f) srcPtr[i + (srcSize.width * srcSize.height)]) / 255;
-            bf = ((Rpp32f) srcPtr[i + (2 * srcSize.width * srcSize.height)]) / 255;
+            gf = ((Rpp32f) srcPtr[i + (srcSize.height * srcSize.width)]) / 255;
+            bf = ((Rpp32f) srcPtr[i + (2 * srcSize.height * srcSize.width)]) / 255;
             cmax = ((rf > gf) && (rf > bf)) ? rf : ((gf > bf) ? gf : bf);
             cmin = ((rf < gf) && (rf < bf)) ? rf : ((gf < bf) ? gf : bf);
             delta = cmax - cmin;
@@ -44,20 +44,20 @@ RppStatus rgb_to_hsv_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
 
             if (cmax == 0)
             {
-                dstPtr[i + (srcSize.width * srcSize.height)] = 0;
+                dstPtr[i + (srcSize.height * srcSize.width)] = 0;
             }
             else
             {
-                dstPtr[i + (srcSize.width * srcSize.height)] = delta / cmax;
+                dstPtr[i + (srcSize.height * srcSize.width)] = delta / cmax;
             }
 
-            dstPtr[i + (2 * srcSize.width * srcSize.height)] = cmax;
+            dstPtr[i + (2 * srcSize.height * srcSize.width)] = cmax;
 
         }
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
-        for (int i = 0; i < (3 * srcSize.width * srcSize.height); i += 3)
+        for (int i = 0; i < (3 * srcSize.height * srcSize.width); i += 3)
         {
             Rpp32f rf, gf, bf, cmax, cmin, delta;
             rf = ((Rpp32f) srcPtr[i]) / 255;

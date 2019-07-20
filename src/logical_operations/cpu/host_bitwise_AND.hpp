@@ -12,7 +12,7 @@ RppStatus bitwise_AND_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
 
     Rpp8u pixel;
 
-    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
         pixel = ((Rpp8u) (*srcPtr1Temp)) & ((Rpp8u) (*srcPtr2Temp));
         pixel = RPPPIXELCHECK(pixel);

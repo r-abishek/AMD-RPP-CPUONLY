@@ -12,7 +12,7 @@ RppStatus exposure_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
 
     if (imageFormat == RGB)
     {
-        for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+        for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
         {
             pixel = *srcPtrTemp * (pow(2, exposureFactor));
             pixel = RPPPIXELCHECK(pixel);
@@ -26,13 +26,13 @@ RppStatus exposure_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
         exposureFactor = RPPABS(exposureFactor);
         if (chnFormat == RPPI_CHN_PLANAR)
         {
-            for (int i = 0; i < ((channel - 1) * (srcSize.width * srcSize.height)); i++)
+            for (int i = 0; i < ((channel - 1) * (srcSize.height * srcSize.width)); i++)
             {
                 *dstPtrTemp = *srcPtrTemp;
                 srcPtrTemp++;
                 dstPtrTemp++;
             }
-            for (int i = 0; i < (srcSize.width * srcSize.height); i++)
+            for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
                 pixel = *srcPtrTemp * exposureFactor;
                 pixel = (pixel < (Rpp32f) 1) ? pixel : ((Rpp32f) 1);
@@ -45,7 +45,7 @@ RppStatus exposure_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
         else if (chnFormat == RPPI_CHN_PACKED)
         {
             int count = 0;
-            for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+            for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
             {
                 if (count == 2)
                 {

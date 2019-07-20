@@ -828,7 +828,7 @@ RppStatus compute_multiply_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dst
 
     Rpp32f pixel;
 
-    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
         pixel = ((Rpp32f) (*srcPtr1Temp)) * ((Rpp32f) (*srcPtr2Temp));
         pixel = RPPPIXELCHECK(pixel);

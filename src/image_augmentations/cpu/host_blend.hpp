@@ -13,7 +13,7 @@ RppStatus blend_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
 
     Rpp32f pixel;
 
-    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
         Rpp32f pixel = ((1 - alpha) * ((Rpp32f) (*srcPtr1Temp))) + (alpha * ((Rpp32f) (*srcPtr2Temp)));
         pixel = RPPPIXELCHECK(pixel);

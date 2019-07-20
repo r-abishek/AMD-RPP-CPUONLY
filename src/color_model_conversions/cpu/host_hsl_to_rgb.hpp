@@ -6,13 +6,13 @@ RppStatus hsl_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
 {
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        for (int i = 0; i < (srcSize.width * srcSize.height); i++)
+        for (int i = 0; i < (srcSize.height * srcSize.width); i++)
         {
             Rpp32f c, x, m, rf, gf, bf;
-            c = (2 * srcPtr[i + (2 * srcSize.width * srcSize.height)]) - 1;
-            c = (1 - RPPABS(c)) * srcPtr[i + (srcSize.width * srcSize.height)];
+            c = (2 * srcPtr[i + (2 * srcSize.height * srcSize.width)]) - 1;
+            c = (1 - RPPABS(c)) * srcPtr[i + (srcSize.height * srcSize.width)];
             x = c * (1 - abs((fmod((srcPtr[i] / 60), 2)) - 1));
-            m = srcPtr[i + (2 * srcSize.width * srcSize.height)] - c / 2;
+            m = srcPtr[i + (2 * srcSize.height * srcSize.width)] - c / 2;
             
             if ((0 <= srcPtr[i]) && (srcPtr[i] < 60))
             {
@@ -52,14 +52,14 @@ RppStatus hsl_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
             }
 
             dstPtr[i] = (Rpp8u) round((rf + m) * 255);
-            dstPtr[i + (srcSize.width * srcSize.height)] = (Rpp8u) round((gf + m) * 255);
-            dstPtr[i + (2 * srcSize.width * srcSize.height)] = (Rpp8u) round((bf + m) * 255);
+            dstPtr[i + (srcSize.height * srcSize.width)] = (Rpp8u) round((gf + m) * 255);
+            dstPtr[i + (2 * srcSize.height * srcSize.width)] = (Rpp8u) round((bf + m) * 255);
         }
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
         printf("\nInside\n");
-        for (int i = 0; i < (3 * srcSize.width * srcSize.height); i += 3)
+        for (int i = 0; i < (3 * srcSize.height * srcSize.width); i += 3)
         {
             Rpp32f c, x, m, rf, gf, bf;
             c = (2 * srcPtr[i + 2]) - 1;

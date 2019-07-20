@@ -12,7 +12,7 @@ RppStatus absolute_difference_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* 
 
     Rpp32f pixel;
 
-    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
         pixel = ((Rpp32f) (*srcPtr1Temp)) - ((Rpp32f) (*srcPtr2Temp));
         pixel = RPPABS(pixel);

@@ -10,7 +10,7 @@ RppStatus bitwise_NOT_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     Rpp8u pixel;
 
-    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
         pixel = ~((Rpp8u) (*srcPtrTemp));
         pixel = RPPPIXELCHECK(pixel);

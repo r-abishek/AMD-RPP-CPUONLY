@@ -219,7 +219,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     rppi_histogram
     src/statistical_operations/rppi_histogram.cpp
@@ -378,7 +378,7 @@ target_link_libraries(
     rppi_histogram_subimage_perChannel
     ${OpenCV_LIBS}
 )
-]]
+
 
 
 

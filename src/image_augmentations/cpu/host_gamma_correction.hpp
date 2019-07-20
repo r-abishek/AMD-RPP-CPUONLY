@@ -11,7 +11,7 @@ RppStatus gamma_correction_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     Rpp8u pixel;
 
-    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
         pixel = ((Rpp32f) (*srcPtrTemp)) / 255.0;
         pixel = pow(pixel, gamma);

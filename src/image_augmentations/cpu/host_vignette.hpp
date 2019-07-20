@@ -60,7 +60,7 @@ RppStatus vignette_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     Rpp32f max = 0;
     maskTemp = mask;
-    for (int i = 0; i < (srcSize.width * srcSize.height); i++)
+    for (int i = 0; i < (srcSize.height * srcSize.width); i++)
     {
         if (*maskTemp > max)
         {
@@ -70,7 +70,7 @@ RppStatus vignette_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     }
 
     maskTemp = mask;
-    for (int i = 0; i < (srcSize.width * srcSize.height); i++)
+    for (int i = 0; i < (srcSize.height * srcSize.width); i++)
     {
         *maskTemp = *maskTemp / max;
         maskTemp++;

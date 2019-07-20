@@ -3,7 +3,7 @@ void inputPlanar(int *intSrcPtr, RppiSize srcSize, Rpp32u channel)
     int p = 0;
     for(int c = 0; c < channel; c++)
     {
-        printf("\n\nEnter %d elements for channel %d:\n", (srcSize.width * srcSize.height), c+1);
+        printf("\n\nEnter %d elements for channel %d:\n", (srcSize.height * srcSize.width), c+1);
         for (int i = 0; i < (srcSize.height * srcSize.width); i++)
         {
             scanf("%d", intSrcPtr + p);
@@ -33,7 +33,7 @@ void inputPlanarF(Rpp32f *Rpp32fSrcPtr, RppiSize srcSize, Rpp32u channel)
     int p = 0;
     for(int c = 0; c < channel; c++)
     {
-        printf("\n\nEnter %d elements for channel %d:\n", (srcSize.width * srcSize.height), c+1);
+        printf("\n\nEnter %d elements for channel %d:\n", (srcSize.height * srcSize.width), c+1);
         for (int i = 0; i < (srcSize.height * srcSize.width); i++)
         {
             scanf("%f", Rpp32fSrcPtr + p);
