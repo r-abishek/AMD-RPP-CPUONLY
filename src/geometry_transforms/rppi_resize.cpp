@@ -98,12 +98,8 @@ int main(int argc, char** argv)
 
         srcSize.height = imageIn.rows;
         srcSize.width = imageIn.cols;
-        //dstSize.width = 2560;
-        //dstSize.height = 1440;
-        dstSize.width = 3840;
-        dstSize.height = 2160;
-        //dstSize.width = 6400;
-        //dstSize.height = 3600;
+        dstSize.width = 1920;
+        dstSize.height = 1080;
         
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;

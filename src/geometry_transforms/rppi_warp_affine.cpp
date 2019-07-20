@@ -75,14 +75,16 @@ int main(int argc, char** argv)
     RppiSize srcSize, dstSize;
     unsigned int channel;
 
-    Rpp32f affine[6] = {0};
+    //Rpp32f affine[6] = {0.707, -0.707, 0, -0.707, 0.707, 0};
+    Rpp32f affine[6] = {1.35, 0.3, 0, -0.75, 1.1, 0};
+/*    
     printf("\nEnter the 2x3 affine transformation matrix:");
     for (int i = 0; i < 6; i++)
     {
         printf("\nElement %d: ", i);
         scanf("%f", &affine[i]);
     }
-
+*/
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);

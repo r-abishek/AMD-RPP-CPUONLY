@@ -57,7 +57,9 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    RppiAxis flipAxis = RPPI_VERTICAL_AXIS;
+    //RppiAxis flipAxis = RPPI_VERTICAL_AXIS;
+    //RppiAxis flipAxis = RPPI_HORIZONTAL_AXIS;
+    RppiAxis flipAxis = RPPI_BOTH_AXIS;
      
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");

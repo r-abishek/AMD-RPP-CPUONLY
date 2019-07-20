@@ -518,7 +518,7 @@ RppStatus resize_kernel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize ds
                             + ((*(srcPtrBottomRow + srcLocationColumnFloor)) * (weightedHeight) * (1 - weightedWidth)) 
                             + ((*(srcPtrBottomRow + srcLocationColumnFloor + 1)) * (weightedHeight) * (weightedWidth));
                     
-                    *dstPtrTemp = (Rpp8u) round(pixel);
+                    *dstPtrTemp = (T) round(pixel);
                     dstPtrTemp ++;
                 }
             }
@@ -562,7 +562,7 @@ RppStatus resize_kernel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize ds
                             + ((*(srcPtrBottomRow + c + srcLocColFloorChanneled)) * (weightedHeight) * (1 - weightedWidth)) 
                             + ((*(srcPtrBottomRow + c + srcLocColFloorChanneled + channel)) * (weightedHeight) * (weightedWidth));
                     
-                    *dstPtrTemp = (Rpp8u) round(pixel);
+                    *dstPtrTemp = (T) round(pixel);
                     dstPtrTemp ++;
                 }
             }

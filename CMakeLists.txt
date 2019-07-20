@@ -378,7 +378,7 @@ target_link_libraries(
     rppi_histogram_subimage_perChannel
     ${OpenCV_LIBS}
 )
-
+]]
 
 
 
@@ -521,7 +521,7 @@ target_link_libraries(
 
 
 
-
+#[[
 add_executable(
     rppi_rgb_to_hsv
     src/color_model_conversions/rppi_rgb_to_hsv.cpp
