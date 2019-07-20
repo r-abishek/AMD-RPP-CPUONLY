@@ -8,10 +8,10 @@ RppStatus rgb_to_hsl_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
     {
         for (int i = 0; i < (srcSize.width * srcSize.height); i++)
         {
-            float rf, gf, bf, cmax, cmin, delta, divisor;
-            rf = ((float) srcPtr[i]) / 255;
-            gf = ((float) srcPtr[i + (srcSize.width * srcSize.height)]) / 255;
-            bf = ((float) srcPtr[i + (2 * srcSize.width * srcSize.height)]) / 255;
+            Rpp32f rf, gf, bf, cmax, cmin, delta, divisor;
+            rf = ((Rpp32f) srcPtr[i]) / 255;
+            gf = ((Rpp32f) srcPtr[i + (srcSize.width * srcSize.height)]) / 255;
+            bf = ((Rpp32f) srcPtr[i + (2 * srcSize.width * srcSize.height)]) / 255;
             cmax = ((rf > gf) && (rf > bf)) ? rf : ((gf > bf) ? gf : bf);
             cmin = ((rf < gf) && (rf < bf)) ? rf : ((gf < bf) ? gf : bf);
             divisor = cmax + cmin - 1;
@@ -60,10 +60,10 @@ RppStatus rgb_to_hsl_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
     {
         for (int i = 0; i < (3 * srcSize.width * srcSize.height); i += 3)
         {
-            float rf, gf, bf, cmax, cmin, delta, divisor;
-            rf = ((float) srcPtr[i]) / 255;
-            gf = ((float) srcPtr[i + 1]) / 255;
-            bf = ((float) srcPtr[i + 2]) / 255;
+            Rpp32f rf, gf, bf, cmax, cmin, delta, divisor;
+            rf = ((Rpp32f) srcPtr[i]) / 255;
+            gf = ((Rpp32f) srcPtr[i + 1]) / 255;
+            bf = ((Rpp32f) srcPtr[i + 2]) / 255;
             cmax = ((rf > gf) && (rf > bf)) ? rf : ((gf > bf) ? gf : bf);
             cmin = ((rf < gf) && (rf < bf)) ? rf : ((gf < bf) ? gf : bf);
             divisor = cmax + cmin - 1;

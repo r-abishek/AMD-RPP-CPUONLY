@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus bilateral_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                 Rpp32u kernelSize, Rpp32f sigmaI, Rpp32f sigmaS,
-                                RppiChnFormat chnFormat, unsigned int channel)
+                                RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (kernelSize % 2 == 0)
     {

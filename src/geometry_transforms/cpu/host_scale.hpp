@@ -17,7 +17,7 @@ RppStatus scale_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
 template <typename T>
 RppStatus scale_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            Rpp32f percentage,
-                           RppiChnFormat chnFormat, unsigned int channel)
+                           RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (percentage < 0)
     {

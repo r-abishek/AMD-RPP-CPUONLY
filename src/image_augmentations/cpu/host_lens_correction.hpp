@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus lens_correction_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
                                Rpp32f strength, Rpp32f zoom, 
-                               RppiChnFormat chnFormat, unsigned int channel)
+                               RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (strength < 0)
     {

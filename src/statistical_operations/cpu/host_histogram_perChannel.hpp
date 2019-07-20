@@ -3,7 +3,7 @@
 
 template <typename T>
 RppStatus histogram_perChannel_host(T* srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
-                         RppiChnFormat chnFormat, unsigned int channel)
+                         RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTemp;
     srcPtrTemp = srcPtr;

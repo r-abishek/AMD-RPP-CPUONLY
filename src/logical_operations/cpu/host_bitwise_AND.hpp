@@ -2,7 +2,7 @@
 
 template <typename T, typename U>
 RppStatus bitwise_AND_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
-                                   unsigned int channel)
+                                   Rpp32u channel)
 {
     T *srcPtr1Temp, *dstPtrTemp;
     U *srcPtr2Temp;

@@ -15,8 +15,7 @@ RppStatus exposure_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
         for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
         {
             pixel = *srcPtrTemp * (pow(2, exposureFactor));
-            pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
-            pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
+            pixel = RPPPIXELCHECK(pixel);
             *dstPtrTemp = (T) round(pixel);
             dstPtrTemp++;
             srcPtrTemp++;

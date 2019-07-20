@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus vignette_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                     Rpp32f stdDev,
-                    RppiChnFormat chnFormat, unsigned int channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTemp, *dstPtrTemp;
     srcPtrTemp = srcPtr;

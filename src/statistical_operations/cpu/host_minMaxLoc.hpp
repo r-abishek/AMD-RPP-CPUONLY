@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus minMaxLoc_host(T* srcPtr, RppiSize srcSize, T* maskPtr,
                       Rpp8u* min, Rpp8u* max, Rpp8u** minLoc, Rpp8u** maxLoc,
-                      RppiChnFormat chnFormat, unsigned int channel)
+                      RppiChnFormat chnFormat, Rpp32u channel)
 {
     *min = 255;
     *max = 0;

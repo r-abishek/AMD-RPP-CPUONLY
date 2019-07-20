@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus random_crop_letterbox_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                                      Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
-                                     RppiChnFormat chnFormat, unsigned int channel)
+                                     RppiChnFormat chnFormat, Rpp32u channel)
 {
     if ((RPPINRANGE(x1, 0, srcSize.width - 1) == 0) 
         || (RPPINRANGE(x2, 0, srcSize.width - 1) == 0) 

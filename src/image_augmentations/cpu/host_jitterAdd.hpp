@@ -4,8 +4,8 @@
 
 template <typename T>
 RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                    unsigned int maxJitterX, unsigned int maxJitterY, 
-                    RppiChnFormat chnFormat, unsigned int channel)
+                    Rpp32u maxJitterX, Rpp32u maxJitterY, 
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     if ((RPPINRANGE(maxJitterX, 0, srcSize.width - 1) == 0) 
         || (RPPINRANGE(maxJitterY, 0, srcSize.height - 1) == 0))

@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus contrast_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
                         Rpp32u new_min, Rpp32u new_max,
-                        RppiChnFormat chnFormat, unsigned int channel)
+                        RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (chnFormat == RPPI_CHN_PLANAR)
     {

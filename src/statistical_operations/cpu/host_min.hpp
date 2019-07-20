@@ -2,7 +2,7 @@
 
 template <typename T>
 RppStatus min_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize, T* dstPtr,
-                                   unsigned int channel)
+                                   Rpp32u channel)
 {
     for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
     {

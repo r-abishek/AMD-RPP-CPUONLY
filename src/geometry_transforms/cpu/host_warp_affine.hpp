@@ -4,7 +4,7 @@ template <typename T>
 RppStatus warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
                                        T* affine)
 {
-    float minX = 0, minY = 0, maxX = 0, maxY = 0;
+    Rpp32f minX = 0, minY = 0, maxX = 0, maxY = 0;
     for (int i = 0; i < srcSize.height; i++)
     {
         for (int j = 0; j < srcSize.width; j++)
@@ -39,7 +39,7 @@ RppStatus warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
 template <typename T, typename U>
 RppStatus warp_affine_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            U* affine,
-                           RppiChnFormat chnFormat, unsigned int channel)
+                           RppiChnFormat chnFormat, Rpp32u channel)
 {
     Rpp32f minX = 0, minY = 0;
     T *srcPtrTemp, *dstPtrTemp, *srcPtrTopRow, *srcPtrBottomRow;

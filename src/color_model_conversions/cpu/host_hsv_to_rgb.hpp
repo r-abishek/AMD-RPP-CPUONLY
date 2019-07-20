@@ -8,7 +8,7 @@ RppStatus hsv_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
     {
         for (int i = 0; i < (srcSize.width * srcSize.height); i++)
         {
-            float c, x, m, rf, gf, bf;
+            Rpp32f c, x, m, rf, gf, bf;
             c = srcPtr[i + (2 * srcSize.width * srcSize.height)] * srcPtr[i + (srcSize.width * srcSize.height)];
             x = c * (1 - abs((fmod((srcPtr[i] / 60), 2)) - 1));
             m = srcPtr[i + (2 * srcSize.width * srcSize.height)] - c;
@@ -60,7 +60,7 @@ RppStatus hsv_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
         printf("\nInside\n");
         for (int i = 0; i < (3 * srcSize.width * srcSize.height); i += 3)
         {
-            float c, x, m, rf, gf, bf;
+            Rpp32f c, x, m, rf, gf, bf;
             c = srcPtr[i + 2] * srcPtr[i + 1];
             x = c * (1 - abs((fmod((srcPtr[i] / 60), 2)) - 1));
             m = srcPtr[i + 2] - c;

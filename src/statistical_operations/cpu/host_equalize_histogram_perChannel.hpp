@@ -2,7 +2,7 @@
 
 template <typename T>
 RppStatus equalize_histogram_perChannel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
-                         RppiChnFormat chnFormat, unsigned int channel)
+                         RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrChannelBegin, *dstPtrChannelBegin;
     srcPtrChannelBegin = srcPtr;

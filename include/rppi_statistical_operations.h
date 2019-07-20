@@ -84,15 +84,15 @@ rppi_histogram_perChannel_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u
 
 RppStatus
 rppi_histogram_subimage_perChannel_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
-                                     unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2);
+                                     Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
 
 RppStatus
 rppi_histogram_subimage_perChannel_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
-                                     unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2);
+                                     Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
 
 RppStatus
 rppi_histogram_subimage_perChannel_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
-                                     unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2);
+                                     Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
 
 // ----------------------------------------
 // Host max functions declaration 

@@ -13,10 +13,10 @@ RppStatus hue_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
             Rpp32f *pHSV = (Rpp32f *)calloc(channel * srcSize.width * srcSize.height, sizeof(Rpp32f));
             for (int i = 0; i < (srcSize.width * srcSize.height); i++)
             {
-                float rf, gf, bf, cmax, cmin, delta;
-                rf = ((float) srcPtr[i]) / 255;
-                gf = ((float) srcPtr[i + (srcSize.width * srcSize.height)]) / 255;
-                bf = ((float) srcPtr[i + (2 * srcSize.width * srcSize.height)]) / 255;
+                Rpp32f rf, gf, bf, cmax, cmin, delta;
+                rf = ((Rpp32f) srcPtr[i]) / 255;
+                gf = ((Rpp32f) srcPtr[i + (srcSize.width * srcSize.height)]) / 255;
+                bf = ((Rpp32f) srcPtr[i + (2 * srcSize.width * srcSize.height)]) / 255;
                 cmax = ((rf > gf) && (rf > bf)) ? rf : ((gf > bf) ? gf : bf);
                 cmin = ((rf < gf) && (rf < bf)) ? rf : ((gf < bf) ? gf : bf);
                 delta = cmax - cmin;
@@ -73,7 +73,7 @@ RppStatus hue_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
             }
             for (int i = 0; i < (srcSize.width * srcSize.height); i++)
             {
-                float c, x, m, rf, gf, bf;
+                Rpp32f c, x, m, rf, gf, bf;
                 c = pHSV[i + (2 * srcSize.width * srcSize.height)] * pHSV[i + (srcSize.width * srcSize.height)];
                 x = c * (1 - abs((fmod((pHSV[i] / 60), 2)) - 1));
                 m = pHSV[i + (2 * srcSize.width * srcSize.height)] - c;
@@ -126,10 +126,10 @@ RppStatus hue_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
             Rpp32f *pHSV = (Rpp32f *)calloc(channel * srcSize.width * srcSize.height, sizeof(Rpp32f));
             for (int i = 0; i < (3 * srcSize.width * srcSize.height); i += 3)
             {
-                float rf, gf, bf, cmax, cmin, delta;
-                rf = ((float) srcPtr[i]) / 255;
-                gf = ((float) srcPtr[i + 1]) / 255;
-                bf = ((float) srcPtr[i + 2]) / 255;
+                Rpp32f rf, gf, bf, cmax, cmin, delta;
+                rf = ((Rpp32f) srcPtr[i]) / 255;
+                gf = ((Rpp32f) srcPtr[i + 1]) / 255;
+                bf = ((Rpp32f) srcPtr[i + 2]) / 255;
                 cmax = ((rf > gf) && (rf > bf)) ? rf : ((gf > bf) ? gf : bf);
                 cmin = ((rf < gf) && (rf < bf)) ? rf : ((gf < bf) ? gf : bf);
                 delta = cmax - cmin;
@@ -186,7 +186,7 @@ RppStatus hue_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
             }
             for (int i = 0; i < (3 * srcSize.width * srcSize.height); i += 3)
             {
-                float c, x, m, rf, gf, bf;
+                Rpp32f c, x, m, rf, gf, bf;
                 c = pHSV[i + 2] * pHSV[i + 1];
                 x = c * (1 - abs((fmod((pHSV[i] / 60), 2)) - 1));
                 m = pHSV[i + 2] - c;

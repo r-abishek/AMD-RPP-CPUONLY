@@ -6,7 +6,7 @@ template <typename T>
 RppStatus random_shadow_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
                              Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
                              Rpp32u numberOfShadows, Rpp32u maxSizeX, Rpp32u maxSizeY, 
-                             RppiChnFormat chnFormat, unsigned int channel)
+                             RppiChnFormat chnFormat, Rpp32u channel)
 {
     srand (time(NULL));
     RppiSize srcSizeSubImage, dstSizeSubImage, shadowSize;

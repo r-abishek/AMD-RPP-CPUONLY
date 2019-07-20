@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus meanStdDev_host(T* srcPtr, RppiSize srcSize,
                       Rpp32f* mean, Rpp32f* stdDev, 
-                      RppiChnFormat chnFormat, unsigned int channel)
+                      RppiChnFormat chnFormat, Rpp32u channel)
 {
     for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
     {

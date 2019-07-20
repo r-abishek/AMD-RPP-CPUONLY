@@ -2,7 +2,7 @@
 
 template <typename T>
 RppStatus bitwise_NOT_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                                   unsigned int channel)
+                                   Rpp32u channel)
 {
     T *srcPtrTemp, *dstPtrTemp;
     srcPtrTemp = srcPtr;

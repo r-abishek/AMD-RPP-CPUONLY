@@ -4,7 +4,7 @@ template <typename T>
 RppStatus occlusionAdd_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize1, RppiSize srcSize2, T* dstPtr, 
                             Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
                             Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2, 
-                            RppiChnFormat chnFormat, unsigned int channel)
+                            RppiChnFormat chnFormat, Rpp32u channel)
 {
     RppiSize srcSize1SubImage, srcSize2SubImage, dstSizeSubImage;
     T *srcPtr1SubImage, *srcPtr2SubImage, *dstPtrSubImage;

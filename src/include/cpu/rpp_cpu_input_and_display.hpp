@@ -1,4 +1,4 @@
-void inputPlanar(int *intSrcPtr, RppiSize srcSize, unsigned int channel)
+void inputPlanar(int *intSrcPtr, RppiSize srcSize, Rpp32u channel)
 {
     int p = 0;
     for(int c = 0; c < channel; c++)
@@ -12,7 +12,7 @@ void inputPlanar(int *intSrcPtr, RppiSize srcSize, unsigned int channel)
     }
 }
 
-void inputPacked(int *intSrcPtr, RppiSize srcSize, unsigned int channel)
+void inputPacked(int *intSrcPtr, RppiSize srcSize, Rpp32u channel)
 {
     int p = 0;
     printf("\n\nEnter %d elements for the image:\n", (channel * srcSize.height * srcSize.width));
@@ -28,7 +28,7 @@ void inputPacked(int *intSrcPtr, RppiSize srcSize, unsigned int channel)
     }
 }
 
-void inputPlanarF(float *floatSrcPtr, RppiSize srcSize, unsigned int channel)
+void inputPlanarF(Rpp32f *Rpp32fSrcPtr, RppiSize srcSize, Rpp32u channel)
 {
     int p = 0;
     for(int c = 0; c < channel; c++)
@@ -36,13 +36,13 @@ void inputPlanarF(float *floatSrcPtr, RppiSize srcSize, unsigned int channel)
         printf("\n\nEnter %d elements for channel %d:\n", (srcSize.width * srcSize.height), c+1);
         for (int i = 0; i < (srcSize.height * srcSize.width); i++)
         {
-            scanf("%f", floatSrcPtr + p);
+            scanf("%f", Rpp32fSrcPtr + p);
             p += 1;
         }
     }
 }
 
-void inputPackedF(float *floatSrcPtr, RppiSize srcSize, unsigned int channel)
+void inputPackedF(Rpp32f *Rpp32fSrcPtr, RppiSize srcSize, Rpp32u channel)
 {
     int p = 0;
     printf("\n\nEnter %d elements for the image:\n", (channel * srcSize.height * srcSize.width));
@@ -51,14 +51,14 @@ void inputPackedF(float *floatSrcPtr, RppiSize srcSize, unsigned int channel)
         for (int c = 0; c < channel; c++)
         {
             printf("Channel %d - ", c+1);
-            scanf("%f", floatSrcPtr + p);
+            scanf("%f", Rpp32fSrcPtr + p);
             p += 1;
         }
         printf("\n");
     }
 }
 
-void cast(int *intSrcPtr, Rpp8u *srcPtr, RppiSize srcSize, unsigned int channel)
+void cast(int *intSrcPtr, Rpp8u *srcPtr, RppiSize srcSize, Rpp32u channel)
 {
     for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
@@ -69,7 +69,7 @@ void cast(int *intSrcPtr, Rpp8u *srcPtr, RppiSize srcSize, unsigned int channel)
     }
 }
 
-void displayPlanar(Rpp8u *pArr, RppiSize size, unsigned int channel)
+void displayPlanar(Rpp8u *pArr, RppiSize size, Rpp32u channel)
 {
     int p = 0;
     for(int c = 0; c < channel; c++)
@@ -87,7 +87,7 @@ void displayPlanar(Rpp8u *pArr, RppiSize size, unsigned int channel)
     }
 }
 
-void displayPacked(Rpp8u *pArr, RppiSize size, unsigned int channel)
+void displayPacked(Rpp8u *pArr, RppiSize size, Rpp32u channel)
 {
     int p = 0;
     for (int i = 0; i < size.height; i++)
@@ -105,7 +105,7 @@ void displayPacked(Rpp8u *pArr, RppiSize size, unsigned int channel)
     }
 }
 
-void displayPlanarF(Rpp32f *pArr, RppiSize size, unsigned int channel)
+void displayPlanarF(Rpp32f *pArr, RppiSize size, Rpp32u channel)
 {
     int p = 0;
     for(int c = 0; c < channel; c++)
@@ -123,7 +123,7 @@ void displayPlanarF(Rpp32f *pArr, RppiSize size, unsigned int channel)
     }
 }
 
-void displayPackedF(Rpp32f *pArr, RppiSize size, unsigned int channel)
+void displayPackedF(Rpp32f *pArr, RppiSize size, Rpp32u channel)
 {
     int p = 0;
     for (int i = 0; i < size.height; i++)

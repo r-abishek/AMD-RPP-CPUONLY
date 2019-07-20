@@ -2,8 +2,8 @@
 
 template <typename T>
 RppStatus blur_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                    Rpp32f stdDev, unsigned int kernelSize,
-                    RppiChnFormat chnFormat, unsigned int channel)
+                    Rpp32f stdDev, Rpp32u kernelSize,
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (kernelSize % 2 == 0)
     {
