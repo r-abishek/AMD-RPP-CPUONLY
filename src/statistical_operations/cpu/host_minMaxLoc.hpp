@@ -1,35 +1,31 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T>
-RppStatus minMaxLoc_host(T* srcPtr, RppiSize srcSize, T* maskPtr,
-                      Rpp8u* min, Rpp8u* max, Rpp8u** minLoc, Rpp8u** maxLoc,
-                      RppiChnFormat chnFormat, Rpp32u channel)
+RppStatus minMaxLoc_host(T* srcPtr, RppiSize srcSize, 
+                         Rpp8u* min, Rpp8u* max, Rpp32s* minLoc, Rpp32s* maxLoc, 
+                         RppiChnFormat chnFormat, unsigned int channel)
 {
     *min = 255;
     *max = 0;
-    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+
+    T *srcPtrTemp, *minLocPtrTemp, *maxLocPtrTemp;
+    srcPtrTemp = srcPtr;
+    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
     {
-        if (maskPtr[i] != 0 && maskPtr[i] != 1)
+        if (*srcPtrTemp > *max)
         {
-            return RPP_ERROR;
+            *max = *srcPtrTemp;
+            maxLocPtrTemp = srcPtrTemp;
         }
-        else
+        if (*srcPtrTemp < *min)
         {
-            if (maskPtr[i] == 1)
-            {
-                if (srcPtr[i] > *max)
-                {
-                    *max = srcPtr[i];
-                    *maxLoc = &srcPtr[i];
-                }
-                if (srcPtr[i] < *min)
-                {
-                    *min = srcPtr[i];
-                    *minLoc = &srcPtr[i];
-                }
-            }
+            *min = *srcPtrTemp;
+            minLocPtrTemp = srcPtrTemp;
         }
+        srcPtrTemp++;
     }
+    *minLoc = minLocPtrTemp - srcPtr;
+    *maxLoc = maxLocPtrTemp - srcPtr;
 
     return RPP_SUCCESS;
 
