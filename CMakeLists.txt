@@ -632,7 +632,7 @@ target_link_libraries(
     rppi_exposure
     ${OpenCV_LIBS}
 )
-
+]]
 
 
 
@@ -883,7 +883,7 @@ target_link_libraries(
 
 
 
-
+#[[
 add_executable(
     rppi_packed_to_planar
     src/pixel_arrangement_conversions/rppi_packed_to_planar.cpp

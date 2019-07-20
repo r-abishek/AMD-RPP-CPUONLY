@@ -5,31 +5,42 @@ RppStatus contrast_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                         Rpp32u new_min, Rpp32u new_max,
                         RppiChnFormat chnFormat, Rpp32u channel)
 {
+    T *srcPtrTemp, *dstPtrTemp;
+    srcPtrTemp = srcPtr;
+    dstPtrTemp = dstPtr;
+
+    Rpp32f pixel, min, max;
+
     if (chnFormat == RPPI_CHN_PLANAR)
     {
         for(int c = 0; c < channel; c++)
         {
-            Rpp32f Min, Max;
-            Min = srcPtr[c * srcSize.height * srcSize.width];
-            Max = srcPtr[c * srcSize.height * srcSize.width];
+            srcPtrTemp = srcPtr + (c * srcSize.height * srcSize.width);
+            min = *srcPtrTemp;
+            max = *srcPtrTemp;
             for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
-                if (srcPtr[i + (c * srcSize.height * srcSize.width)] < Min)
+                if (*srcPtrTemp < min)
                 {
-                    Min = srcPtr[i + (c * srcSize.height * srcSize.width)];
+                    min = *srcPtrTemp;
                 }
-                if (srcPtr[i + (c * srcSize.height * srcSize.width)] > Max)
+                if (*srcPtrTemp > max)
                 {
-                    Max = srcPtr[i + (c * srcSize.height * srcSize.width)];
+                    max = *srcPtrTemp;
                 }
+                srcPtrTemp++;
             }
+
+            srcPtrTemp = srcPtr + (c * srcSize.height * srcSize.width);
             for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
-                Rpp32f pixel = (Rpp32f) srcPtr[i + (c * srcSize.height * srcSize.width)];
-                pixel = ((pixel - Min) * ((new_max - new_min) / (Max - Min))) + new_min;
+                pixel = (Rpp32f) (*srcPtrTemp);
+                pixel = ((pixel - min) * ((new_max - new_min) / (max - min))) + new_min;
                 pixel = (pixel < (Rpp32f)new_max) ? pixel : ((Rpp32f)new_max);
                 pixel = (pixel > (Rpp32f)new_min) ? pixel : ((Rpp32f)new_min);
-                dstPtr[i + (c * srcSize.height * srcSize.width)] = (Rpp8u) pixel;
+                *dstPtrTemp = (T) pixel;
+                srcPtrTemp++;
+                dstPtrTemp++;
             }
         }
     }
@@ -37,27 +48,33 @@ RppStatus contrast_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     {
         for(int c = 0; c < channel; c++)
         {
-            Rpp32f Min, Max;
-            Min = srcPtr[c];
-            Max = srcPtr[c];
+            srcPtrTemp = srcPtr + c;
+            dstPtrTemp = dstPtr + c;
+            min = *srcPtrTemp;
+            max = *srcPtrTemp;
             for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
-                if (srcPtr[(channel * i) + c] < Min)
+                if (*srcPtrTemp < min)
                 {
-                    Min = srcPtr[(channel * i) + c];
+                    min = *srcPtrTemp;
                 }
-                if (srcPtr[(channel * i) + c] > Max)
+                if (*srcPtrTemp > max)
                 {
-                    Max = srcPtr[(channel * i) + c];
+                    max = *srcPtrTemp;
                 }
+                srcPtrTemp = srcPtrTemp + channel;
             }
+
+            srcPtrTemp = srcPtr + c;
             for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
-                Rpp32f pixel = (Rpp32f) srcPtr[(channel * i) + c];
-                pixel = ((pixel - Min) * ((new_max - new_min) / (Max - Min))) + new_min;
+                pixel = (Rpp32f) (*srcPtrTemp);
+                pixel = ((pixel - min) * ((new_max - new_min) / (max - min))) + new_min;
                 pixel = (pixel < (Rpp32f)new_max) ? pixel : ((Rpp32f)new_max);
                 pixel = (pixel > (Rpp32f)new_min) ? pixel : ((Rpp32f)new_min);
-                dstPtr[(channel * i) + c] = (Rpp8u) pixel;
+                *dstPtrTemp = (T) pixel;
+                srcPtrTemp = srcPtrTemp + channel;
+                dstPtrTemp = dstPtrTemp + channel;
             }
         }
     }

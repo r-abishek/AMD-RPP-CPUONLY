@@ -375,7 +375,7 @@ RppStatus convolution_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcS
         }
     }
     pixel = RPPPIXELCHECK(pixel);
-    *dstPtrPixel = (Rpp8u) round(pixel);
+    *dstPtrPixel = (T) round(pixel);
 
     return RPP_SUCCESS;
 }

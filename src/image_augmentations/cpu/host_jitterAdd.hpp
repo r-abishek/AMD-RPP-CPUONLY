@@ -13,7 +13,7 @@ RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         return RPP_ERROR;
     }
 
-    Rpp8u *dstPtrForJitter = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+    T *dstPtrForJitter = (T *)calloc(channel * srcSize.height * srcSize.width, sizeof(T));
 
     T *srcPtrTemp, *dstPtrTemp;
     T *srcPtrBeginJitter, *dstPtrBeginJitter;
@@ -56,7 +56,7 @@ RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
             }
         }
 
-        resize_crop_kernel_host<Rpp8u>(static_cast<Rpp8u*>(dstPtrForJitter), srcSize, static_cast<Rpp8u*>(dstPtr), srcSize,
+        resize_crop_kernel_host<T>(static_cast<T*>(dstPtrForJitter), srcSize, static_cast<T*>(dstPtr), srcSize,
                             maxJitterX, maxJitterY, srcSize.width - maxJitterX - 1, srcSize.height - maxJitterY - 1,
                             RPPI_CHN_PLANAR, channel);
     }
@@ -87,7 +87,7 @@ RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
             srcPtrTemp += channeledJitterRangeX;
             dstPtrTemp += channeledJitterRangeX;
         }
-        resize_crop_kernel_host<Rpp8u>(static_cast<Rpp8u*>(dstPtrForJitter), srcSize, static_cast<Rpp8u*>(dstPtr), srcSize,
+        resize_crop_kernel_host<T>(static_cast<T*>(dstPtrForJitter), srcSize, static_cast<T*>(dstPtr), srcSize,
                             maxJitterX, maxJitterY, srcSize.width - maxJitterX - 1, srcSize.height - maxJitterY - 1,
                             RPPI_CHN_PACKED, channel);
     }
