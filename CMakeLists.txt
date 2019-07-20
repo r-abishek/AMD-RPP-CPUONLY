@@ -179,7 +179,7 @@ target_link_libraries(
 
 
 
-
+#[[
 add_executable(
     rppi_box_filter
     src/filter_operations/rppi_box_filter.cpp
@@ -914,3 +914,4 @@ target_link_libraries(
     rppi_planar_to_packed
     ${OpenCV_LIBS}
 )
+]]
