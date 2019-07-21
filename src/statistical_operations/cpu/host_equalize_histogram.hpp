@@ -2,7 +2,7 @@
 
 template <typename T>
 RppStatus equalize_histogram_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
-                                  unsigned int channel)
+                                  Rpp32u channel)
 {
     Rpp32u bins = (Rpp32u)(std::numeric_limits<unsigned char>::max()) + 1;
     Rpp32u *histogram = (Rpp32u *) calloc(bins, sizeof(Rpp32u));

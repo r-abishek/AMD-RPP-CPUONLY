@@ -4,8 +4,8 @@
 
 template <typename T>
 RppStatus crop_replace_subimage_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                    unsigned int occlusionHeight, unsigned int occlusionWidth, 
-                    RppiChnFormat chnFormat, unsigned int channel)
+                    Rpp32u occlusionHeight, Rpp32u occlusionWidth, 
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     if ((RPPINRANGE(occlusionHeight, 0, srcSize.height - 1) == 0) 
         || (RPPINRANGE(occlusionWidth, 0, srcSize.width - 1) == 0))

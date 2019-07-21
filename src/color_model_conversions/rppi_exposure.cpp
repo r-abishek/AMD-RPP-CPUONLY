@@ -22,6 +22,39 @@ using namespace std::chrono;
 
 
 RppStatus
+rppi_exposure_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp32f exposureFactor)
+{
+
+    exposure_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                           exposureFactor,
+                           RPPI_CHN_PLANAR, 1);
+    return RPP_SUCCESS;
+}
+
+RppStatus
+rppi_exposure_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp32f exposureFactor)
+{
+
+    exposure_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                           exposureFactor,
+                           RPPI_CHN_PLANAR, 3);
+    return RPP_SUCCESS;
+}
+
+RppStatus
+rppi_exposure_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp32f exposureFactor)
+{
+
+    exposure_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                           exposureFactor,
+                           RPPI_CHN_PACKED, 3);
+    return RPP_SUCCESS;
+}
+/*
+RppStatus
 rppi_exposureRGB_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f exposureFactor)
 {
@@ -64,7 +97,7 @@ rppi_exposureHSV_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
                            RPPI_CHN_PACKED, 3, HSV);
     return RPP_SUCCESS;
 }
-
+*/
 
 
 
@@ -72,15 +105,15 @@ rppi_exposureHSV_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
 int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
-    unsigned int channel = 3;
+    unsigned int channel;
     Rpp32f exposureFactor = 1.5;
 
     printf("\nEnter exposureFactor: ");
     scanf("%f", &exposureFactor);
 
-    int format;
-    printf("\nEnter input matrix format: 1 = RGB, 2 = HSV: ");
-    scanf("%d", &format);
+    int format = 1;
+    //printf("\nEnter input matrix format: 1 = RGB, 2 = HSV: ");
+    //scanf("%d", &format);
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -98,7 +131,21 @@ int main(int argc, char** argv)
             return -1;
         }
 
-        Mat imageIn = imread( argv[1], 1 );
+        do
+        {   printf("\nThe image input/inputs can be interpreted as 1 or 3 channel (greyscale or RGB). Please choose - only 1 or 3: ");
+            scanf("%d", &channel);
+        }while (channel != 1 && channel != 3);
+
+        Mat imageIn;
+
+        if (channel == 1)
+        {
+            imageIn = imread( argv[1], 0 );
+        }
+        else if (channel == 3)
+        {
+            imageIn = imread( argv[1], 1 );
+        }
 
         if ( !imageIn.data )
         {
@@ -125,30 +172,54 @@ int main(int argc, char** argv)
         if (format == 1)
         {   if (type == 1)
             {   
-                printf("\nExecuting pln3...\n");
-                Rpp8u *srcPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
-                Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-                rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
+                if (channel == 1)
+                {
+                    printf("\nExecuting pln1...\n");
+                    start = high_resolution_clock::now();
+                    rppi_exposure_u8_pln1_host(srcPtr, srcSize, dstPtr, exposureFactor);
+                    stop = high_resolution_clock::now();
 
-                start = high_resolution_clock::now();
-                rppi_exposureRGB_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, exposureFactor);
-                stop = high_resolution_clock::now();
+                    imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                }
+                else if (channel == 3)
+                {
+                    printf("\nExecuting pln3...\n");
+                    Rpp8u *srcPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+                    Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
+                    rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
-                rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+                    start = high_resolution_clock::now();
+                    rppi_exposure_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, exposureFactor);
+                    stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+                    rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+
+                    imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+                }                
             }
             else if (type == 2)
             {   
-                printf("\nExecuting pkd3...\n");
+                if (channel == 1)
+                {
+                    printf("\nExecuting pln1...\n");
+                    start = high_resolution_clock::now();
+                    rppi_exposure_u8_pln1_host(srcPtr, srcSize, dstPtr, exposureFactor);
+                    stop = high_resolution_clock::now();
 
-                start = high_resolution_clock::now();
-                rppi_exposureRGB_u8_pkd3_host(srcPtr, srcSize, dstPtr, exposureFactor);
-                stop = high_resolution_clock::now();
+                    imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                }
+                else if (channel == 3)
+                {
+                    printf("\nExecuting pkd3...\n");
+                    start = high_resolution_clock::now();
+                    rppi_exposure_u8_pkd3_host(srcPtr, srcSize, dstPtr, exposureFactor);
+                    stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+                    imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+                }
             }
         }
+        /*
         else if (format == 2)
         {   if (type == 1)
             {   
@@ -189,7 +260,7 @@ int main(int argc, char** argv)
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
             }
         }
-
+        */
 
         auto duration = duration_cast<milliseconds>(stop - start);
         cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
@@ -235,7 +306,7 @@ int main(int argc, char** argv)
                 Rpp8u dstPtr[36] = {0};
                 printf("\n\nInput:\n");
                 displayPlanar(srcPtr, srcSize, channel);
-                rppi_exposureRGB_u8_pln3_host(srcPtr, srcSize, dstPtr, exposureFactor);
+                rppi_exposure_u8_pln3_host(srcPtr, srcSize, dstPtr, exposureFactor);
                 printf("\n\nOutput of exposure Modification:\n");
                 displayPlanar(dstPtr, srcSize, channel);
             }
@@ -245,7 +316,7 @@ int main(int argc, char** argv)
                 Rpp8u dstPtr[36] = {0};
                 printf("\n\nInput:\n");
                 displayPacked(srcPtr, srcSize, channel);
-                rppi_exposureRGB_u8_pkd3_host(srcPtr, srcSize, dstPtr, exposureFactor);
+                rppi_exposure_u8_pkd3_host(srcPtr, srcSize, dstPtr, exposureFactor);
                 printf("\n\nOutput of exposure Modification:\n");
                 displayPacked(dstPtr, srcSize, channel);
             } 
@@ -275,7 +346,7 @@ int main(int argc, char** argv)
                 }
                 else if (channel == 3)
                 {
-                    rppi_exposureRGB_u8_pln3_host(srcPtr, srcSize, dstPtr, exposureFactor);
+                    rppi_exposure_u8_pln3_host(srcPtr, srcSize, dstPtr, exposureFactor);
                 }
                 printf("\n\nOutput of exposure Modification:\n");
                 displayPlanar(dstPtr, srcSize, channel);
@@ -293,13 +364,14 @@ int main(int argc, char** argv)
                 }
                 else if (channel == 3)
                 {
-                    rppi_exposureRGB_u8_pkd3_host(srcPtr, srcSize, dstPtr, exposureFactor);
+                    rppi_exposure_u8_pkd3_host(srcPtr, srcSize, dstPtr, exposureFactor);
                 }
                 printf("\n\nOutput of exposure Modification:\n");
                 displayPacked(dstPtr, srcSize, channel);
             }
         }
     }
+    /*
     else if (format == 2)
     {
         if (matrix == 1)
@@ -379,5 +451,5 @@ int main(int argc, char** argv)
             }
         }
     }
-    
+    */
 }

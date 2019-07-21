@@ -74,9 +74,23 @@ int main(int argc, char** argv)
             return -1;
         }
 
+        do
+        {   printf("\nThe image input/inputs can be interpreted as 1 or 3 channel (greyscale or RGB). Please choose - only 1 or 3: ");
+            scanf("%d", &channel);
+        }while (channel != 1 && channel != 3);
+
         Mat imageIn1, imageIn2;
-        imageIn1 = imread( argv[1], 1 );
-        imageIn2 = imread( argv[2], 1 );
+
+        if (channel == 1)
+        {
+            imageIn1 = imread( argv[1], 0 );
+            imageIn2 = imread( argv[2], 0 );
+        }
+        else if (channel ==3)
+        {
+            imageIn1 = imread( argv[1], 1 );
+            imageIn2 = imread( argv[2], 1 );
+        }
 
         if ( !imageIn1.data || !imageIn2.data)
         {

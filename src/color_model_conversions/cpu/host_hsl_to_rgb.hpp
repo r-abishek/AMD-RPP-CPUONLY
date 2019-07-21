@@ -4,109 +4,139 @@ template <typename T, typename U>
 RppStatus hsl_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                     RppiChnFormat chnFormat, unsigned channel)
 {
+    T *srcPtrTempH, *srcPtrTempS, *srcPtrTempL;
+    U *dstPtrTempR, *dstPtrTempG, *dstPtrTempB;
+
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        for (int i = 0; i < (srcSize.width * srcSize.height); i++)
+        srcPtrTempH = srcPtr;
+        srcPtrTempS = srcPtr + (srcSize.height * srcSize.width);
+        srcPtrTempL = srcPtr + (2 * srcSize.height * srcSize.width);
+        dstPtrTempR = dstPtr;
+        dstPtrTempG = dstPtr + (srcSize.height * srcSize.width);
+        dstPtrTempB = dstPtr + (2 * srcSize.height * srcSize.width);
+
+        for (int i = 0; i < (srcSize.height * srcSize.width); i++)
         {
-            float c, x, m, rf, gf, bf;
-            c = (2 * srcPtr[i + (2 * srcSize.width * srcSize.height)]) - 1;
-            c = (1 - RPPABS(c)) * srcPtr[i + (srcSize.width * srcSize.height)];
-            x = c * (1 - abs((fmod((srcPtr[i] / 60), 2)) - 1));
-            m = srcPtr[i + (2 * srcSize.width * srcSize.height)] - c / 2;
+            Rpp32f c, x, m, rf, gf, bf;
+            c = (2 * *srcPtrTempL) - 1;
+            c = (1 - RPPABS(c)) * *srcPtrTempS;
+            x = c * (1 - abs((fmod((*srcPtrTempH / 60), 2)) - 1));
+            m = *srcPtrTempL - c / 2;
             
-            if ((0 <= srcPtr[i]) && (srcPtr[i] < 60))
+            if ((0 <= *srcPtrTempH) && (*srcPtrTempH < 60))
             {
                 rf = c;
                 gf = x;
                 bf = 0;
             }
-            else if ((60 <= srcPtr[i]) && (srcPtr[i] < 120))
+            else if ((60 <= *srcPtrTempH) && (*srcPtrTempH < 120))
             {
                 rf = x;
                 gf = c;
                 bf = 0;
             }
-            else if ((120 <= srcPtr[i]) && (srcPtr[i] < 180))
+            else if ((120 <= *srcPtrTempH) && (*srcPtrTempH < 180))
             {
                 rf = 0;
                 gf = c;
                 bf = x;
             }
-            else if ((180 <= srcPtr[i]) && (srcPtr[i] < 240))
+            else if ((180 <= *srcPtrTempH) && (*srcPtrTempH < 240))
             {
                 rf = 0;
                 gf = x;
                 bf = c;
             }
-            else if ((240 <= srcPtr[i]) && (srcPtr[i] < 300))
+            else if ((240 <= *srcPtrTempH) && (*srcPtrTempH < 300))
             {
                 rf = x;
                 gf = 0;
                 bf = c;
             }
-            else if ((300 <= srcPtr[i]) && (srcPtr[i] < 360))
+            else if ((300 <= *srcPtrTempH) && (*srcPtrTempH < 360))
             {
                 rf = c;
                 gf = 0;
                 bf = x;
             }
 
-            dstPtr[i] = (Rpp8u) round((rf + m) * 255);
-            dstPtr[i + (srcSize.width * srcSize.height)] = (Rpp8u) round((gf + m) * 255);
-            dstPtr[i + (2 * srcSize.width * srcSize.height)] = (Rpp8u) round((bf + m) * 255);
+            *dstPtrTempR = (Rpp8u) round((rf + m) * 255);
+            *dstPtrTempG = (Rpp8u) round((gf + m) * 255);
+            *dstPtrTempB = (Rpp8u) round((bf + m) * 255);
+
+            srcPtrTempH++;
+            srcPtrTempS++;
+            srcPtrTempL++;
+            dstPtrTempR++;
+            dstPtrTempG++;
+            dstPtrTempB++;
         }
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
-        printf("\nInside\n");
-        for (int i = 0; i < (3 * srcSize.width * srcSize.height); i += 3)
+        srcPtrTempH = srcPtr;
+        srcPtrTempS = srcPtr + 1;
+        srcPtrTempL = srcPtr + 2;
+        dstPtrTempR = dstPtr;
+        dstPtrTempG = dstPtr + 1;
+        dstPtrTempB = dstPtr + 2;
+
+        for (int i = 0; i < (srcSize.height * srcSize.width); i++)
         {
-            float c, x, m, rf, gf, bf;
-            c = (2 * srcPtr[i + 2]) - 1;
-            c = (1 - RPPABS(c)) * srcPtr[i + 1];
-            x = c * (1 - abs((fmod((srcPtr[i] / 60), 2)) - 1));
-            m = srcPtr[i + 2] - c / 2;
+            Rpp32f c, x, m, rf, gf, bf;
+            c = (2 * *srcPtrTempL) - 1;
+            c = (1 - RPPABS(c)) * *srcPtrTempS;
+            x = c * (1 - abs((fmod((*srcPtrTempH / 60), 2)) - 1));
+            m = *srcPtrTempL - c / 2;
             
-            if ((0 <= srcPtr[i]) && (srcPtr[i] < 60))
+            if ((0 <= *srcPtrTempH) && (*srcPtrTempH < 60))
             {
                 rf = c;
                 gf = x;
                 bf = 0;
             }
-            else if ((60 <= srcPtr[i]) && (srcPtr[i] < 120))
+            else if ((60 <= *srcPtrTempH) && (*srcPtrTempH < 120))
             {
                 rf = x;
                 gf = c;
                 bf = 0;
             }
-            else if ((120 <= srcPtr[i]) && (srcPtr[i] < 180))
+            else if ((120 <= *srcPtrTempH) && (*srcPtrTempH < 180))
             {
                 rf = 0;
                 gf = c;
                 bf = x;
             }
-            else if ((180 <= srcPtr[i]) && (srcPtr[i] < 240))
+            else if ((180 <= *srcPtrTempH) && (*srcPtrTempH < 240))
             {
                 rf = 0;
                 gf = x;
                 bf = c;
             }
-            else if ((240 <= srcPtr[i]) && (srcPtr[i] < 300))
+            else if ((240 <= *srcPtrTempH) && (*srcPtrTempH < 300))
             {
                 rf = x;
                 gf = 0;
                 bf = c;
             }
-            else if ((300 <= srcPtr[i]) && (srcPtr[i] < 360))
+            else if ((300 <= *srcPtrTempH) && (*srcPtrTempH < 360))
             {
                 rf = c;
                 gf = 0;
                 bf = x;
             }
 
-            dstPtr[i] = (Rpp8u) round((rf + m) * 255);
-            dstPtr[i + 1] = (Rpp8u) round((gf + m) * 255);
-            dstPtr[i + 2] = (Rpp8u) round((bf + m) * 255);
+            *dstPtrTempR = (Rpp8u) round((rf + m) * 255);
+            *dstPtrTempG = (Rpp8u) round((gf + m) * 255);
+            *dstPtrTempB = (Rpp8u) round((bf + m) * 255);
+
+            srcPtrTempH += 3;
+            srcPtrTempS += 3;
+            srcPtrTempL += 3;
+            dstPtrTempR += 3;
+            dstPtrTempG += 3;
+            dstPtrTempB += 3;
         }
     }
 

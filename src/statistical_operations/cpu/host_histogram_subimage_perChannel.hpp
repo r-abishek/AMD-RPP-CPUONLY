@@ -3,8 +3,8 @@
 
 template <typename T>
 RppStatus histogram_subimage_perChannel_host(T* srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
-                                  unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, 
-                                  RppiChnFormat chnFormat, unsigned int channel)
+                                  Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
+                                  RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrSubImage;
     RppiSize srcSizeSubImage;
@@ -19,11 +19,18 @@ RppStatus histogram_subimage_perChannel_host(T* srcPtr, RppiSize srcSize, Rpp32u
     outputHistogramTemp = outputHistogram;
     for (int c = 0; c < channel; c++)
     {
-        memset (histogram,0,bins * sizeof(Rpp32u));
+        //memset (histogram,0,bins * sizeof(Rpp32u));
 
         Rpp32u *histogramTemp;
         histogramTemp = histogram;
 
+        for (int i = 0; i < bins; i++)
+        {
+            *histogramTemp = (Rpp32u) 0;
+            histogramTemp++;
+        }
+
+        histogramTemp = histogram;
         histogram_kernel_perChannel_host(srcPtrTemp, srcSizeSubImage, histogram, bins, increment, chnFormat, channel);
 
         for (int i = 0; i < bins; i++)

@@ -3,14 +3,22 @@
 template <typename T>
 RppStatus gamma_correction_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                    Rpp32f gamma,
-                                   unsigned int channel)
+                                   Rpp32u channel)
 {
-    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+    T *srcPtrTemp, *dstPtrTemp;
+    srcPtrTemp = srcPtr;
+    dstPtrTemp = dstPtr;
+
+    Rpp8u pixel;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
-        Rpp32f pixel = ((Rpp32f) srcPtr[i]) / 255;
+        pixel = ((Rpp32f) (*srcPtrTemp)) / 255.0;
         pixel = pow(pixel, gamma);
-        pixel *= 255;
-        dstPtr[i] =(Rpp8u) pixel;
+        pixel = pixel * 255.0;
+        *dstPtrTemp = (T) pixel;
+        srcPtrTemp++;
+        dstPtrTemp++;
     }
 
     return RPP_SUCCESS;

@@ -2,15 +2,15 @@
 
 template <typename T>
 RppStatus pixelate_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                    unsigned int kernelSize, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, 
-                    RppiChnFormat chnFormat, unsigned int channel)
+                    Rpp32u kernelSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (kernelSize % 2 == 0)
     {
         return RPP_ERROR;
     }
 
-    unsigned int bound = ((kernelSize - 1) / 2);
+    Rpp32u bound = ((kernelSize - 1) / 2);
 
     if ((RPPINRANGE(x1, bound, srcSize.width - 1 - bound) == 0) 
         || (RPPINRANGE(x2, bound, srcSize.width - 1 - bound) == 0) 

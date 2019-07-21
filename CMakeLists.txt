@@ -124,7 +124,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     rppi_absolute_difference
     src/arithmetic_operations/rppi_absolute_difference.cpp
@@ -1096,4 +1096,3 @@ target_link_libraries(
     rppi_dilate
     ${OpenCV_LIBS}
 )
-]]

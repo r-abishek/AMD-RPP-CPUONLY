@@ -6,13 +6,18 @@ template <typename T>
 RppStatus random_shadow_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
                              Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
                              Rpp32u numberOfShadows, Rpp32u maxSizeX, Rpp32u maxSizeY, 
-                             RppiChnFormat chnFormat, unsigned int channel)
+                             RppiChnFormat chnFormat, Rpp32u channel)
 {
     srand (time(NULL));
     RppiSize srcSizeSubImage, dstSizeSubImage, shadowSize;
     T *srcPtrSubImage, *dstPtrSubImage;
     
     compute_subimage_location_host(srcPtr, &srcPtrSubImage, srcSize, &srcSizeSubImage, x1, y1, x2, y2, chnFormat, channel);
+
+    if (maxSizeX > srcSizeSubImage.width || maxSizeY > srcSizeSubImage.height)
+    {
+        return RPP_ERROR;
+    }
 
     compute_subimage_location_host(dstPtr, &dstPtrSubImage, srcSize, &dstSizeSubImage, x1, y1, x2, y2, chnFormat, channel);
     
@@ -29,8 +34,8 @@ RppStatus random_shadow_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     for (int shadow = 0; shadow < numberOfShadows; shadow++)
     {
-        shadowSize.height = rand() % (srcSizeSubImage.height / 2);
-        shadowSize.width = rand() % (srcSizeSubImage.width / 2);
+        shadowSize.height = rand() % maxSizeY;
+        shadowSize.width = rand() % maxSizeX;
         Rpp32u shadowPosI = rand() % (srcSizeSubImage.height - shadowSize.height);
         Rpp32u shadowPosJ = rand() % (srcSizeSubImage.width - shadowSize.width);
 

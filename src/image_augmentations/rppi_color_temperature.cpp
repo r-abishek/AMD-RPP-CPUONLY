@@ -20,6 +20,16 @@ using namespace std::chrono;
 
 
 RppStatus
+rppi_color_temperature_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                          Rpp8s adjustmentValue)
+{
+    color_temperature_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                     adjustmentValue,
+                     RPPI_CHN_PLANAR, 1);
+    return RPP_SUCCESS;
+}
+
+RppStatus
 rppi_color_temperature_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                           Rpp8s adjustmentValue)
 {
@@ -52,7 +62,7 @@ int main(int argc, char** argv)
 
     while (adjustmentValueInt < -100 || adjustmentValueInt > 100)
     {
-        printf("\nEnter adjustment value (-10 to +10): ");
+        printf("\nEnter adjustment value (-100 to +100): ");
         scanf("%d", &adjustmentValueInt);
     }
 
@@ -73,12 +83,12 @@ int main(int argc, char** argv)
             printf("usage: DisplayImage.out <Image_Path>\n");
             return -1;
         }
-/*
+
         do
         {   printf("\nThe image input/inputs can be interpreted as 1 or 3 channel (greyscale or RGB). Please choose - only 1 or 3: ");
             scanf("%d", &channel);
         }while (channel != 1 && channel != 3);
-*/
+
         Mat imageIn;
 
         if (channel == 1)
@@ -118,7 +128,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                //rppi_color_temperature_u8_pln1_host(srcPtr, srcSize, dstPtr, adjustmentValue);
+                rppi_color_temperature_u8_pln1_host(srcPtr, srcSize, dstPtr, adjustmentValue);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -146,7 +156,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                //rppi_color_temperature_u8_pln1_host(srcPtr, srcSize, dstPtr, adjustmentValue);
+                rppi_color_temperature_u8_pln1_host(srcPtr, srcSize, dstPtr, adjustmentValue);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);

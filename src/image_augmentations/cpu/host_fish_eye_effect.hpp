@@ -2,7 +2,7 @@
 
 template <typename T>
 RppStatus fish_eye_effect_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                    RppiChnFormat chnFormat, unsigned int channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTemp, *dstPtrTemp;
     srcPtrTemp = srcPtr;
