@@ -137,15 +137,15 @@ rppi_color_temperature_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t 
 
 RppStatus
 rppi_pixelate_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             Rpp32u kernelSize, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2);
+                             Rpp32u kernelSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
 
 RppStatus
 rppi_pixelate_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             Rpp32u kernelSize, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2);
+                             Rpp32u kernelSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
 
 RppStatus
 rppi_pixelate_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             Rpp32u kernelSize, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2);
+                             Rpp32u kernelSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
 
 // ----------------------------------------
 // Host jitterAdd functions declaration 
@@ -164,15 +164,15 @@ rppi_pixelate_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
 
 RppStatus
 rppi_jitterAdd_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             unsigned int maxJitterX, unsigned int maxJitterY);
+                             Rpp32u maxJitterX, Rpp32u maxJitterY);
 
 RppStatus
 rppi_jitterAdd_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             unsigned int maxJitterX, unsigned int maxJitterY);
+                             Rpp32u maxJitterX, Rpp32u maxJitterY);
 
 RppStatus
 rppi_jitterAdd_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             unsigned int maxJitterX, unsigned int maxJitterY);
+                             Rpp32u maxJitterX, Rpp32u maxJitterY);
 
 // ----------------------------------------
 // Host vignette functions declaration 
@@ -354,15 +354,15 @@ rppi_blend_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, Rp
 
 RppStatus
 rppi_crop_replace_subimage_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             unsigned int occlusionHeight, unsigned int occlusionWidth);
+                             Rpp32u occlusionHeight, Rpp32u occlusionWidth);
 
 RppStatus
 rppi_crop_replace_subimage_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             unsigned int occlusionHeight, unsigned int occlusionWidth);
+                             Rpp32u occlusionHeight, Rpp32u occlusionWidth);
 
 RppStatus
 rppi_crop_replace_subimage_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             unsigned int occlusionHeight, unsigned int occlusionWidth);
+                             Rpp32u occlusionHeight, Rpp32u occlusionWidth);
  
 #ifdef __cplusplus
 }

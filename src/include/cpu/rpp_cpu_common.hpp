@@ -13,23 +13,22 @@
 #define RPPMIN3(a,b,c)          ((a < b) && (a < c) ?  a : ((b < c) ? b : c))
 #define RPPMAX2(a,b)            ((a > b) ? a : b)
 #define RPPMAX3(a,b,c)          ((a > b) && (a > c) ?  a : ((b > c) ? b : c))
-#define RPPGAUSSIAN(x, sigma)   (exp(-(pow(x, 2))/(2 * pow(sigma, 2))) / (2 * PI * pow(sigma, 2)))
-#define RPPDISTANCE(x, y, i, j) (sqrt(pow(x - i, 2) + pow(y - j, 2)))
 #define RPPINRANGE(a, x, y)     ((a >= x) && (a <= y) ? 1 : 0)
 #define RPPFLOOR(a)             ((int) a)
 #define RPPCEIL(a)              ((int) (a + 1.0))
 #define RPPISEVEN(a)            ((a % 2 == 0) ? 1 : 0)
+#define RPPPIXELCHECK(pixel)    (pixel < (Rpp32f) 0) ? ((Rpp32f) 0) : ((pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255))
 
 
 
 
 // Generate Functions
 
-RppStatus generate_gaussian_kernel_host(Rpp32f stdDev, Rpp32f* kernel, unsigned int kernelSize)
+RppStatus generate_gaussian_kernel_host(Rpp32f stdDev, Rpp32f* kernel, Rpp32u kernelSize)
 {
     Rpp32f s, sum = 0.0, multiplier;
     int bound = ((kernelSize - 1) / 2);
-    unsigned int c = 0;
+    Rpp32u c = 0;
     s = 1 / (2 * stdDev * stdDev);
     multiplier = (1 / M_PI) * (s);
     for (int i = -bound; i <= bound; i++)
@@ -62,7 +61,7 @@ RppStatus generate_gaussian_kernel_asymmetric_host(Rpp32f stdDev, Rpp32f* kernel
     }
     int boundX = ((kernelSizeX - 1) / 2);
     int boundY = ((kernelSizeY - 1) / 2);
-    unsigned int c = 0;
+    Rpp32u c = 0;
     s = 1 / (2 * stdDev * stdDev);
     multiplier = (1 / M_PI) * (s);
     for (int i = -boundY; i <= boundY; i++)
@@ -83,9 +82,9 @@ RppStatus generate_gaussian_kernel_asymmetric_host(Rpp32f stdDev, Rpp32f* kernel
 }
 
 template <typename T>
-RppStatus generate_bilateral_kernel_host(Rpp32f multiplierI, Rpp32f multiplierS, Rpp32f multiplier, Rpp32f* kernel, unsigned int kernelSize, int bound, 
+RppStatus generate_bilateral_kernel_host(Rpp32f multiplierI, Rpp32f multiplierS, Rpp32f multiplier, Rpp32f* kernel, Rpp32u kernelSize, int bound, 
                                          T* srcPtrWindow, RppiSize srcSizeMod, Rpp32u remainingElementsInRow, Rpp32u incrementToWindowCenter, 
-                                         RppiChnFormat chnFormat, unsigned int channel)
+                                         RppiChnFormat chnFormat, Rpp32u channel)
 {
     Rpp32f sum = 0.0;
     Rpp32f* kernelTemp;
@@ -142,7 +141,7 @@ RppStatus generate_bilateral_kernel_host(Rpp32f multiplierI, Rpp32f multiplierS,
 
 template <typename T>
 RppStatus generate_evenly_padded_image_host(T* srcPtr, RppiSize srcSize, T* srcPtrMod, RppiSize srcSizeMod, 
-                                     RppiChnFormat chnFormat, unsigned int channel)
+                                     RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (RPPISEVEN(srcSize.height) != RPPISEVEN(srcSizeMod.height) 
         || RPPISEVEN(srcSize.width) != RPPISEVEN(srcSizeMod.width)
@@ -256,7 +255,7 @@ RppStatus generate_evenly_padded_image_host(T* srcPtr, RppiSize srcSize, T* srcP
     return RPP_SUCCESS;
 }
 
-RppStatus generate_box_kernel_host(Rpp32f* kernel, unsigned int kernelSize)
+RppStatus generate_box_kernel_host(Rpp32f* kernel, Rpp32u kernelSize)
 {
     Rpp32f* kernelTemp;
     kernelTemp = kernel;
@@ -272,7 +271,7 @@ RppStatus generate_box_kernel_host(Rpp32f* kernel, unsigned int kernelSize)
 
 template <typename T>
 RppStatus generate_crop_host(T* srcPtr, RppiSize srcSize, T* srcPtrSubImage, RppiSize srcSizeSubImage, T* dstPtr, 
-                             RppiChnFormat chnFormat, unsigned int channel)
+                             RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrSubImageTemp, *dstPtrTemp;
     srcPtrSubImageTemp = srcPtrSubImage;
@@ -338,8 +337,8 @@ RppStatus generate_crop_host(T* srcPtr, RppiSize srcSize, T* srcPtrSubImage, Rpp
 
 template<typename T>
 RppStatus convolution_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
-                                       Rpp32f* kernel, unsigned int kernelSize, Rpp32u remainingElementsInRow, 
-                                       RppiChnFormat chnFormat, unsigned int channel)
+                                       Rpp32f* kernel, Rpp32u kernelSize, Rpp32u remainingElementsInRow, 
+                                       RppiChnFormat chnFormat, Rpp32u channel)
 {
     Rpp32f pixel = 0.0;
 
@@ -375,9 +374,8 @@ RppStatus convolution_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcS
             srcPtrWindowTemp += remainingElementsInRow;
         }
     }
-    pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
-    pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
-    *dstPtrPixel = (Rpp8u) round(pixel);
+    pixel = RPPPIXELCHECK(pixel);
+    *dstPtrPixel = (T) round(pixel);
 
     return RPP_SUCCESS;
 }
@@ -385,7 +383,7 @@ RppStatus convolution_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcS
 template<typename T>
 RppStatus histogram_kernel_perChannel_host(T* srcPtr, RppiSize srcSize, Rpp32u* histogram, 
                                 Rpp32u bins, Rpp32u increment, 
-                                RppiChnFormat chnFormat, unsigned int channel)
+                                RppiChnFormat chnFormat, Rpp32u channel)
 {
     Rpp32u packedIncrement = channel * increment;
     T *srcPtrTemp;
@@ -439,7 +437,7 @@ RppStatus histogram_kernel_perChannel_host(T* srcPtr, RppiSize srcSize, Rpp32u* 
 template<typename T>
 RppStatus histogram_kernel_host(T* srcPtr, RppiSize srcSize, Rpp32u* histogram, 
                                 Rpp32u bins, 
-                                unsigned int channel)
+                                Rpp32u channel)
 {
     Rpp32u elementsInBin = ((Rpp32u)(std::numeric_limits<T>::max()) + 1) / bins;
     int flag = 0;
@@ -473,7 +471,7 @@ RppStatus histogram_kernel_host(T* srcPtr, RppiSize srcSize, Rpp32u* histogram,
 
 template <typename T>
 RppStatus resize_kernel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
-                           RppiChnFormat chnFormat, unsigned int channel)
+                           RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (dstSize.height < 0 || dstSize.width < 0)
     {
@@ -520,7 +518,7 @@ RppStatus resize_kernel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize ds
                             + ((*(srcPtrBottomRow + srcLocationColumnFloor)) * (weightedHeight) * (1 - weightedWidth)) 
                             + ((*(srcPtrBottomRow + srcLocationColumnFloor + 1)) * (weightedHeight) * (weightedWidth));
                     
-                    *dstPtrTemp = (Rpp8u) round(pixel);
+                    *dstPtrTemp = (T) round(pixel);
                     dstPtrTemp ++;
                 }
             }
@@ -564,7 +562,7 @@ RppStatus resize_kernel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize ds
                             + ((*(srcPtrBottomRow + c + srcLocColFloorChanneled)) * (weightedHeight) * (1 - weightedWidth)) 
                             + ((*(srcPtrBottomRow + c + srcLocColFloorChanneled + channel)) * (weightedHeight) * (weightedWidth));
                     
-                    *dstPtrTemp = (Rpp8u) round(pixel);
+                    *dstPtrTemp = (T) round(pixel);
                     dstPtrTemp ++;
                 }
             }
@@ -577,7 +575,7 @@ RppStatus resize_kernel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize ds
 template <typename T>
 RppStatus resize_crop_kernel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2,
-                           RppiChnFormat chnFormat, unsigned int channel)
+                           RppiChnFormat chnFormat, Rpp32u channel)
 {
     RppiSize srcSizeSubImage;
     T *srcPtrSubImage;
@@ -617,8 +615,8 @@ RppStatus resize_crop_kernel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSi
 
 template<typename T>
 RppStatus convolve_image_host(T* srcPtrMod, RppiSize srcSizeMod, T* dstPtr, RppiSize srcSize, 
-                        Rpp32f* kernel, unsigned int kernelSize, 
-                        RppiChnFormat chnFormat, unsigned int channel)
+                        Rpp32f* kernel, Rpp32u kernelSize, 
+                        RppiChnFormat chnFormat, Rpp32u channel)
 {
     Rpp32u remainingElementsInRowPlanar = srcSizeMod.width - kernelSize;
     Rpp32u remainingElementsInRowPacked = (srcSizeMod.width - kernelSize) * channel;
@@ -670,8 +668,8 @@ RppStatus convolve_image_host(T* srcPtrMod, RppiSize srcSizeMod, T* dstPtr, Rppi
 
 template<typename T>
 RppStatus convolve_subimage_host(T* srcPtrMod, RppiSize srcSizeMod, T* dstPtr, RppiSize srcSizeSubImage, RppiSize srcSize, 
-                        Rpp32f* kernel, unsigned int kernelSize, 
-                        RppiChnFormat chnFormat, unsigned int channel)
+                        Rpp32f* kernel, Rpp32u kernelSize, 
+                        RppiChnFormat chnFormat, Rpp32u channel)
 {
     Rpp32u remainingElementsInRowPlanar = srcSize.width - kernelSize;
     Rpp32u remainingElementsInRowPacked = (srcSize.width - kernelSize) * channel;
@@ -747,8 +745,8 @@ RppStatus convolve_subimage_host(T* srcPtrMod, RppiSize srcSizeMod, T* dstPtr, R
 template<typename T>
 RppStatus compute_subimage_location_host(T* ptr, T** ptrSubImage, 
                                          RppiSize size, RppiSize *sizeSubImage, 
-                                         unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, 
-                                         RppiChnFormat chnFormat, unsigned int channel)
+                                         Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2, 
+                                         RppiChnFormat chnFormat, Rpp32u channel)
 {
     if ((RPPINRANGE(x1, 0, size.width - 1) == 0) 
         || (RPPINRANGE(x2, 0, size.width - 1) == 0) 
@@ -778,7 +776,7 @@ RppStatus compute_subimage_location_host(T* ptr, T** ptrSubImage,
 
 template<typename T>
 RppStatus compute_transpose_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize, 
-                                 RppiChnFormat chnFormat, unsigned int channel)
+                                 RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTemp, *dstPtrTemp;
     srcPtrTemp = srcPtr;
@@ -820,15 +818,24 @@ RppStatus compute_transpose_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSiz
 
 template <typename T, typename U>
 RppStatus compute_multiply_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
-                                   unsigned int channel)
+                                   Rpp32u channel)
 {
-    U pixel;
-    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+    T *srcPtr1Temp, *dstPtrTemp;
+    U *srcPtr2Temp;
+    srcPtr1Temp = srcPtr1;
+    srcPtr2Temp = srcPtr2;
+    dstPtrTemp = dstPtr;
+
+    Rpp32f pixel;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
-        pixel = ((U) srcPtr1[i]) * ((U) srcPtr2[i]);
-        pixel = (pixel < (U) 255) ? pixel : ((U) 255);
-        pixel = (pixel > (U) 0) ? pixel : ((U) 0);
-        dstPtr[i] =(T) pixel;
+        pixel = ((Rpp32f) (*srcPtr1Temp)) * ((Rpp32f) (*srcPtr2Temp));
+        pixel = RPPPIXELCHECK(pixel);
+        *dstPtrTemp =(T) pixel;
+        srcPtr1Temp++;
+        srcPtr2Temp++;
+        dstPtrTemp++;
     }
 
     return RPP_SUCCESS;

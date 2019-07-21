@@ -17,8 +17,10 @@ RppStatus scale_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
 template <typename T>
 RppStatus scale_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            Rpp32f percentage,
-                           RppiChnFormat chnFormat, unsigned int channel)
+                           RppiChnFormat chnFormat, Rpp32u channel)
 {
+    resize_kernel_host(srcPtr, srcSize, dstPtr, dstSize, chnFormat, channel);
+/*
     if (percentage < 0)
     {
         return RPP_ERROR;
@@ -65,7 +67,7 @@ RppStatus scale_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                             + ((*(srcPtrBottomRow + srcLocationColumnFloor)) * (weightedHeight) * (1 - weightedWidth)) 
                             + ((*(srcPtrBottomRow + srcLocationColumnFloor + 1)) * (weightedHeight) * (weightedWidth));
                     
-                    *dstPtrTemp = (Rpp8u) round(pixel);
+                    *dstPtrTemp = (T) round(pixel);
                     dstPtrTemp ++;
                 }
             }
@@ -109,12 +111,12 @@ RppStatus scale_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                             + ((*(srcPtrBottomRow + c + srcLocColFloorChanneled)) * (weightedHeight) * (1 - weightedWidth)) 
                             + ((*(srcPtrBottomRow + c + srcLocColFloorChanneled + channel)) * (weightedHeight) * (weightedWidth));
                     
-                    *dstPtrTemp = (Rpp8u) round(pixel);
+                    *dstPtrTemp = (T) round(pixel);
                     dstPtrTemp ++;
                 }
             }
         }
     }
-
+*/
     return RPP_SUCCESS;
 }

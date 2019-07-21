@@ -10,7 +10,7 @@ RppStatus rotate_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
     rotate[2] = -sin(angleRad);
     rotate[3] = cos(angleRad);
     
-    float minX = 0, minY = 0, maxX = 0, maxY = 0;
+    Rpp32f minX = 0, minY = 0, maxX = 0, maxY = 0;
     for (int i = 0; i < srcSize.height; i++)
     {
         for (int j = 0; j < srcSize.width; j++)
@@ -45,7 +45,7 @@ RppStatus rotate_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
 template <typename T>
 RppStatus rotate_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            Rpp32f angleDeg,
-                           RppiChnFormat chnFormat, unsigned int channel)
+                           RppiChnFormat chnFormat, Rpp32u channel)
 {
     Rpp32f angleRad = -RAD(angleDeg);
     Rpp32f rotate[4] = {0};
@@ -118,7 +118,7 @@ RppStatus rotate_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                             + ((*(srcPtrBottomRow + srcLocationColumnFloor)) * (weightedHeight) * (1 - weightedWidth)) 
                             + ((*(srcPtrBottomRow + srcLocationColumnFloor + 1)) * (weightedHeight) * (weightedWidth));
                     
-                        *dstPtrTemp = (Rpp8u) round(pixel);
+                        *dstPtrTemp = (T) round(pixel);
                         dstPtrTemp ++;
                     }
                 }
@@ -165,7 +165,7 @@ RppStatus rotate_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                             + ((*(srcPtrBottomRow + c + srcLocColFloorChanneled)) * (weightedHeight) * (1 - weightedWidth)) 
                             + ((*(srcPtrBottomRow + c + srcLocColFloorChanneled + channel)) * (weightedHeight) * (weightedWidth));
                     
-                        *dstPtrTemp = (Rpp8u) round(pixel);
+                        *dstPtrTemp = (T) round(pixel);
                         dstPtrTemp ++;
                     }
                 }

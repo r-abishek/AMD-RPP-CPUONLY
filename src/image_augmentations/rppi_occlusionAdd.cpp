@@ -125,13 +125,22 @@ int main(int argc, char** argv)
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
         Rpp32u src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2;
-        src1x1 = 200;
-        src1y1 = 1000;
-        src1x2 = 413;
-        src1y2 = 1200;
-        src2x1 = 320;
-        src2y1 = 100;
-        src2x2 = 960;
+        //src1x1 = 100;
+        //src1y1 = 100;
+        //src1x2 = 400;
+        //src1y2 = 400;
+        //src2x1 = 100;
+        //src2y1 = 100;
+        //src2x2 = 400;
+        //src2y2 = 400;
+
+        src1x1 = 100;
+        src1y1 = 400;
+        src1x2 = 400;
+        src1y2 = 600;
+        src2x1 = 0;
+        src2y1 = 350;
+        src2x2 = 700;
         src2y2 = 700;
         
         auto start = high_resolution_clock::now();

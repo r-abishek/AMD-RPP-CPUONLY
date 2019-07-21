@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    unsigned int kernelSize = 13;
+    unsigned int kernelSize = 11;
     unsigned int x1, y1, x2, y2;
 
     int input;

@@ -102,8 +102,8 @@ int main(int argc, char** argv)
 
         srcSize.height = imageIn.rows;
         srcSize.width = imageIn.cols;
-        dstSize.width = 2700;
-        dstSize.height = 1400;
+        dstSize.width = 1920;
+        dstSize.height = 1080;
         //dstSize.width = 256;
         //dstSize.height = 256;
         x1 = 320;

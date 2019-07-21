@@ -3,14 +3,21 @@
 template <typename T>
 RppStatus brightness_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                    Rpp32f alpha, Rpp32f beta,
-                                   unsigned int channel)
+                                   Rpp32u channel)
 {
-    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+    T *srcPtrTemp, *dstPtrTemp;
+    srcPtrTemp = srcPtr;
+    dstPtrTemp = dstPtr;
+
+    Rpp8u pixel;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
-        Rpp32f pixel = ((Rpp32f) srcPtr[i]) * alpha + beta;
-        pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
-        pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
-        dstPtr[i] =(Rpp8u) pixel;
+        pixel = ((Rpp32f) (*srcPtrTemp)) * alpha + beta;
+        pixel = RPPPIXELCHECK(pixel);
+        *dstPtrTemp = (T) round(pixel);
+        srcPtrTemp++;
+        dstPtrTemp++;
     }
 
     return RPP_SUCCESS;

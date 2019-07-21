@@ -63,8 +63,11 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    Rpp32f gamma = 0.4545;
+    Rpp32f gamma = 1.35;
      
+    printf("\nEnter gamma: ");
+    scanf("%f", &gamma);
+    
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
