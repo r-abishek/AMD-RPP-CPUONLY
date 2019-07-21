@@ -7,272 +7,96 @@ RppStatus hue_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
 {
     if (imageFormat == RGB)
     {
+        Rpp32f *srcPtrHSV = (Rpp32f *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp32f));
+        compute_rgb_to_hsv_host(srcPtr, srcSize, srcPtrHSV, chnFormat, channel);
+
+        Rpp32f *srcPtrHSVTemp;
+        srcPtrHSVTemp = srcPtrHSV;
+
         if (chnFormat == RPPI_CHN_PLANAR)
         {
-            Rpp32u channel = 3;
-            Rpp32f *pHSV = (Rpp32f *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp32f));
             for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
-                Rpp32f rf, gf, bf, cmax, cmin, delta;
-                rf = ((Rpp32f) srcPtr[i]) / 255;
-                gf = ((Rpp32f) srcPtr[i + (srcSize.height * srcSize.width)]) / 255;
-                bf = ((Rpp32f) srcPtr[i + (2 * srcSize.height * srcSize.width)]) / 255;
-                cmax = ((rf > gf) && (rf > bf)) ? rf : ((gf > bf) ? gf : bf);
-                cmin = ((rf < gf) && (rf < bf)) ? rf : ((gf < bf) ? gf : bf);
-                delta = cmax - cmin;
-
-                if (delta == 0)
+                *srcPtrHSVTemp = *srcPtrHSVTemp + hueShift;
+                while (*srcPtrHSVTemp > 360)
                 {
-                    pHSV[i] = 0;
+                    *srcPtrHSVTemp = *srcPtrHSVTemp - 360;
                 }
-                else if (cmax == rf)
+                while (*srcPtrHSVTemp < 0)
                 {
-                    pHSV[i] = round(60 * fmod(((gf - bf) / delta),6));
+                    *srcPtrHSVTemp = 360 + *srcPtrHSVTemp;
                 }
-                else if (cmax == gf)
-                {
-                    pHSV[i] = round(60 * (((bf - rf) / delta) + 2));
-                }
-                else if (cmax == bf)
-                {
-                    pHSV[i] = round(60 * (((rf - gf) / delta) + 4));
-                }
-                
-                while (pHSV[i] > 360)
-                {
-                    pHSV[i] = pHSV[i] - 360;
-                }
-                while (pHSV[i] < 0)
-                {
-                    pHSV[i] = 360 + pHSV[i];
-                }
-
-                if (cmax == 0)
-                {
-                    pHSV[i + (srcSize.height * srcSize.width)] = 0;
-                }
-                else
-                {
-                    pHSV[i + (srcSize.height * srcSize.width)] = delta / cmax;
-                }
-
-                pHSV[i + (2 * srcSize.height * srcSize.width)] = cmax;
-
-            }
-            for (int i = 0; i < (srcSize.height * srcSize.width); i++)
-            {
-                pHSV[i] += hueShift;
-                while (pHSV[i] > 360)
-                {
-                    pHSV[i] = pHSV[i] - 360;
-                }
-                while (pHSV[i] < 0)
-                {
-                    pHSV[i] = 360 + pHSV[i];
-                }
-            }
-            for (int i = 0; i < (srcSize.height * srcSize.width); i++)
-            {
-                Rpp32f c, x, m, rf, gf, bf;
-                c = pHSV[i + (2 * srcSize.height * srcSize.width)] * pHSV[i + (srcSize.height * srcSize.width)];
-                x = c * (1 - abs((fmod((pHSV[i] / 60), 2)) - 1));
-                m = pHSV[i + (2 * srcSize.height * srcSize.width)] - c;
-                
-                if ((0 <= pHSV[i]) && (pHSV[i] < 60))
-                {
-                    rf = c;
-                    gf = x;
-                    bf = 0;
-                }
-                else if ((60 <= pHSV[i]) && (pHSV[i] < 120))
-                {
-                    rf = x;
-                    gf = c;
-                    bf = 0;
-                }
-                else if ((120 <= pHSV[i]) && (pHSV[i] < 180))
-                {
-                    rf = 0;
-                    gf = c;
-                    bf = x;
-                }
-                else if ((180 <= pHSV[i]) && (pHSV[i] < 240))
-                {
-                    rf = 0;
-                    gf = x;
-                    bf = c;
-                }
-                else if ((240 <= pHSV[i]) && (pHSV[i] < 300))
-                {
-                    rf = x;
-                    gf = 0;
-                    bf = c;
-                }
-                else if ((300 <= pHSV[i]) && (pHSV[i] < 360))
-                {
-                    rf = c;
-                    gf = 0;
-                    bf = x;
-                }
-
-                dstPtr[i] = (Rpp8u) round((rf + m) * 255);
-                dstPtr[i + (srcSize.height * srcSize.width)] = (Rpp8u) round((gf + m) * 255);
-                dstPtr[i + (2 * srcSize.height * srcSize.width)] = (Rpp8u) round((bf + m) * 255);
+                srcPtrHSVTemp++;
             }
         }
         else if (chnFormat == RPPI_CHN_PACKED)
         {
-            Rpp32u channel = 3;
-            Rpp32f *pHSV = (Rpp32f *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp32f));
-            for (int i = 0; i < (3 * srcSize.height * srcSize.width); i += 3)
+            for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
-                Rpp32f rf, gf, bf, cmax, cmin, delta;
-                rf = ((Rpp32f) srcPtr[i]) / 255;
-                gf = ((Rpp32f) srcPtr[i + 1]) / 255;
-                bf = ((Rpp32f) srcPtr[i + 2]) / 255;
-                cmax = ((rf > gf) && (rf > bf)) ? rf : ((gf > bf) ? gf : bf);
-                cmin = ((rf < gf) && (rf < bf)) ? rf : ((gf < bf) ? gf : bf);
-                delta = cmax - cmin;
-
-                if (delta == 0)
+                *srcPtrHSVTemp = *srcPtrHSVTemp + hueShift;
+                while (*srcPtrHSVTemp > 360)
                 {
-                    pHSV[i] = 0;
+                    *srcPtrHSVTemp = *srcPtrHSVTemp - 360;
                 }
-                else if (cmax == rf)
+                while (*srcPtrHSVTemp < 0)
                 {
-                    pHSV[i] = round(60 * fmod(((gf - bf) / delta),6));
+                    *srcPtrHSVTemp = 360 + *srcPtrHSVTemp;
                 }
-                else if (cmax == gf)
-                {
-                    pHSV[i] = round(60 * (((bf - rf) / delta) + 2));
-                }
-                else if (cmax == bf)
-                {
-                    pHSV[i] = round(60 * (((rf - gf) / delta) + 4));
-                }
-                
-                while (pHSV[i] > 360)
-                {
-                    pHSV[i] = pHSV[i] - 360;
-                }
-                while (pHSV[i] < 0)
-                {
-                    pHSV[i] = 360 + pHSV[i];
-                }
-
-                if (cmax == 0)
-                {
-                    pHSV[i + 1] = 0;
-                }
-                else
-                {
-                    pHSV[i + 1] = delta / cmax;
-                }
-
-                pHSV[i + 2] = cmax;
-
-            }
-            for (int i = 0; i < (3 * srcSize.height * srcSize.width); i += 3)
-            {
-                pHSV[i] += hueShift;
-                while (pHSV[i] > 360)
-                {
-                    pHSV[i] = pHSV[i] - 360;
-                }
-                while (pHSV[i] < 0)
-                {
-                    pHSV[i] = 360 + pHSV[i];
-                }
-            }
-            for (int i = 0; i < (3 * srcSize.height * srcSize.width); i += 3)
-            {
-                Rpp32f c, x, m, rf, gf, bf;
-                c = pHSV[i + 2] * pHSV[i + 1];
-                x = c * (1 - abs((fmod((pHSV[i] / 60), 2)) - 1));
-                m = pHSV[i + 2] - c;
-                
-                if ((0 <= pHSV[i]) && (pHSV[i] < 60))
-                {
-                    rf = c;
-                    gf = x;
-                    bf = 0;
-                }
-                else if ((60 <= pHSV[i]) && (pHSV[i] < 120))
-                {
-                    rf = x;
-                    gf = c;
-                    bf = 0;
-                }
-                else if ((120 <= pHSV[i]) && (pHSV[i] < 180))
-                {
-                    rf = 0;
-                    gf = c;
-                    bf = x;
-                }
-                else if ((180 <= pHSV[i]) && (pHSV[i] < 240))
-                {
-                    rf = 0;
-                    gf = x;
-                    bf = c;
-                }
-                else if ((240 <= pHSV[i]) && (pHSV[i] < 300))
-                {
-                    rf = x;
-                    gf = 0;
-                    bf = c;
-                }
-                else if ((300 <= pHSV[i]) && (pHSV[i] < 360))
-                {
-                    rf = c;
-                    gf = 0;
-                    bf = x;
-                }
-
-                dstPtr[i] = (Rpp8u) round((rf + m) * 255);
-                dstPtr[i + 1] = (Rpp8u) round((gf + m) * 255);
-                dstPtr[i + 2] = (Rpp8u) round((bf + m) * 255);
+                srcPtrHSVTemp = srcPtrHSVTemp + channel;
             }
         }
+
+        compute_hsv_to_rgb_host(srcPtrHSV, srcSize, dstPtr, chnFormat, channel);
     }
     else if (imageFormat == HSV)
     {
+        T *srcPtrTemp, *dstPtrTemp;
+        srcPtrTemp = srcPtr;
+        dstPtrTemp = dstPtr;
+
         if (chnFormat == RPPI_CHN_PLANAR)
         {
-            Rpp32u channel = 3;
-            for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
-            {
-                dstPtr[i] = srcPtr[i];
-            }
             for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
-                dstPtr[i] += hueShift;
-                while (dstPtr[i] > 360)
+                *dstPtrTemp = *srcPtrTemp + hueShift;
+                while (*dstPtrTemp > 360)
                 {
-                    dstPtr[i] = dstPtr[i] - 360;
+                    *dstPtrTemp = *dstPtrTemp - 360;
                 }
-                while (dstPtr[i] < 0)
+                while (*dstPtrTemp < 0)
                 {
-                    dstPtr[i] = 360 + dstPtr[i];
+                    *dstPtrTemp = 360 + *dstPtrTemp;
                 }
+                srcPtrTemp++;
+                dstPtrTemp++;
+            }
+            for (int i = 0; i < (2 * srcSize.height * srcSize.width); i++)
+            {
+                *dstPtrTemp = *srcPtrTemp;
+                srcPtrTemp++;
+                dstPtrTemp++;
             }
         }
         else if (chnFormat == RPPI_CHN_PACKED)
         {
-            Rpp32u channel = 3;
-            for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+            for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
-                dstPtr[i] = srcPtr[i];
-            }
-            for (int i = 0; i < (3 * srcSize.height * srcSize.width); i += 3)
-            {
-                dstPtr[i] += hueShift;
-                while (dstPtr[i] > 360)
+                *dstPtrTemp = *srcPtrTemp + hueShift;
+                while (*dstPtrTemp > 360)
                 {
-                    dstPtr[i] = dstPtr[i] - 360;
+                    *dstPtrTemp = *dstPtrTemp - 360;
                 }
-                while (dstPtr[i] < 0)
+                while (*dstPtrTemp < 0)
                 {
-                    dstPtr[i] = 360 + dstPtr[i];
+                    *dstPtrTemp = 360 + *dstPtrTemp;
+                }
+                srcPtrTemp++;
+                dstPtrTemp++;
+                for (int c = 0; c < (channel - 1); c++)
+                {
+                    *dstPtrTemp = *srcPtrTemp;
+                    srcPtrTemp++;
+                    dstPtrTemp++;
                 }
             }
         }
