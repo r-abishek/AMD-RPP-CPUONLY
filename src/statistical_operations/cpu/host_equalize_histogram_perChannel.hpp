@@ -1,4 +1,5 @@
 #include <cpu/rpp_cpu_common.hpp>
+#include <string.h>
 
 template <typename T>
 RppStatus equalize_histogram_perChannel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
@@ -14,16 +15,30 @@ RppStatus equalize_histogram_perChannel_host(T* srcPtr, RppiSize srcSize, T* dst
 
     for (int c = 0; c < channel; c++)
     {
-        memset (histogram,0,bins * sizeof(Rpp32u));
-        memset (lookUpTable,0,bins * sizeof(T));
-
-        histogram_kernel_perChannel_host(srcPtrChannelBegin, srcSize, histogram, bins, 0, chnFormat, channel);
+        //memset (histogram,0,bins * sizeof(Rpp32u));
+        //memset (lookUpTable,0,bins * sizeof(T));
 
         Rpp32u sum = 0;
         Rpp32u *histogramTemp;
         T *lookUpTableTemp;
         histogramTemp = histogram;
         lookUpTableTemp = lookUpTable;
+
+        for (int i = 0; i < bins; i++)
+        {
+            *histogramTemp = (Rpp32u) 0;
+            histogramTemp++;
+        }
+        for (int i = 0; i < bins; i++)
+        {
+            *lookUpTableTemp = (T) 0;
+            lookUpTableTemp++;
+        }
+
+        histogramTemp = histogram;
+        lookUpTableTemp = lookUpTable;
+
+        histogram_kernel_perChannel_host(srcPtrChannelBegin, srcSize, histogram, bins, 0, chnFormat, channel);
         
         for (int i = 0; i < bins; i++)
         {

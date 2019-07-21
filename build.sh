@@ -5,4 +5,4 @@ mkdir build
 cd build
 #cmake ..
 cmake -DCMAKE_BUILD_TYPE=Debug ..
-make -j12
+make -j6
