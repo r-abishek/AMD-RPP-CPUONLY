@@ -2,7 +2,7 @@
 
 template <typename T>
 RppStatus magnitude_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize, T* dstPtr,
-                                   unsigned int channel)
+                                   Rpp32u channel)
 {
     T *srcPtr1Temp, *srcPtr2Temp, *dstPtrTemp;
     srcPtr1Temp = srcPtr1;

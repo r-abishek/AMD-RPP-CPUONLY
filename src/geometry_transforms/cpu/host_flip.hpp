@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus flip_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
                     RppiAxis flipAxis,
-                    RppiChnFormat chnFormat, unsigned channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTemp, *dstPtrTemp;
     srcPtrTemp = srcPtr;

@@ -3,7 +3,7 @@
 template <typename T, typename U>
 RppStatus snowy_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                     Rpp32f strength,
-                    RppiChnFormat chnFormat, unsigned channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (strength < 0 || strength > 1)
     {

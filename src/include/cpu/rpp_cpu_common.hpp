@@ -594,8 +594,8 @@ RppStatus resize_crop_kernel_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSi
 
 template<typename T>
 RppStatus erode_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
-                                       unsigned int kernelSize, Rpp32u remainingElementsInRow, 
-                                       RppiChnFormat chnFormat, unsigned int channel)
+                                       Rpp32u kernelSize, Rpp32u remainingElementsInRow, 
+                                       RppiChnFormat chnFormat, Rpp32u channel)
 {
     T pixel;
 
@@ -640,8 +640,8 @@ RppStatus erode_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize,
 
 template<typename T>
 RppStatus dilate_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
-                                       unsigned int kernelSize, Rpp32u remainingElementsInRow, 
-                                       RppiChnFormat chnFormat, unsigned int channel)
+                                       Rpp32u kernelSize, Rpp32u remainingElementsInRow, 
+                                       RppiChnFormat chnFormat, Rpp32u channel)
 {
     T pixel;
 
@@ -686,8 +686,8 @@ RppStatus dilate_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize,
 
 template<typename T>
 RppStatus median_filter_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
-                                       unsigned int kernelSize, Rpp32u remainingElementsInRow, 
-                                       RppiChnFormat chnFormat, unsigned int channel)
+                                       Rpp32u kernelSize, Rpp32u remainingElementsInRow, 
+                                       RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *kernel = (T*)calloc(kernelSize * kernelSize, sizeof(T));
     T *kernelTemp;
@@ -732,8 +732,8 @@ RppStatus median_filter_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize sr
 
 template<typename T>
 RppStatus local_binary_pattern_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
-                                       unsigned int kernelSize, Rpp32u remainingElementsInRow, RppiLbpFormat lbpFormat, 
-                                       RppiChnFormat chnFormat, unsigned int channel)
+                                       Rpp32u kernelSize, Rpp32u remainingElementsInRow, RppiLbpFormat lbpFormat, 
+                                       RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (lbpFormat == RPPI_LBP)
     {
@@ -1045,7 +1045,7 @@ RppStatus compute_multiply_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dst
 
 template <typename T, typename U>
 RppStatus compute_rgb_to_hsv_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
-                    RppiChnFormat chnFormat, unsigned channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTempR, *srcPtrTempG, *srcPtrTempB;
     U *dstPtrTempH, *dstPtrTempS, *dstPtrTempV;
@@ -1184,7 +1184,7 @@ RppStatus compute_rgb_to_hsv_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
 
 template <typename T, typename U>
 RppStatus compute_hsv_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
-                    RppiChnFormat chnFormat, unsigned channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTempH, *srcPtrTempS, *srcPtrTempV;
     U *dstPtrTempR, *dstPtrTempG, *dstPtrTempB;
@@ -1325,7 +1325,7 @@ RppStatus compute_hsv_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
 
 template <typename T, typename U>
 RppStatus compute_rgb_to_hsl_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
-                    RppiChnFormat chnFormat, unsigned channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTempR, *srcPtrTempG, *srcPtrTempB;
     U *dstPtrTempH, *dstPtrTempS, *dstPtrTempL;
@@ -1468,7 +1468,7 @@ RppStatus compute_rgb_to_hsl_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
 
 template <typename T, typename U>
 RppStatus compute_hsl_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
-                    RppiChnFormat chnFormat, unsigned channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTempH, *srcPtrTempS, *srcPtrTempL;
     U *dstPtrTempR, *dstPtrTempG, *dstPtrTempB;

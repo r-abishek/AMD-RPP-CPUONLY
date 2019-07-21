@@ -2,7 +2,7 @@
 
 template <typename T>
 RppStatus planar_to_packed_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
-                    unsigned channel)
+                    Rpp32u channel)
 {
     T *srcPtrTemp, *dstPtrTemp;
     srcPtrTemp = srcPtr;

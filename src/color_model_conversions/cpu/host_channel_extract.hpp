@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus channel_extract_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                     Rpp32u extractChannelNumber, 
-                    RppiChnFormat chnFormat, unsigned int channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (extractChannelNumber != 0 && extractChannelNumber != 1 && extractChannelNumber != 2)
     {

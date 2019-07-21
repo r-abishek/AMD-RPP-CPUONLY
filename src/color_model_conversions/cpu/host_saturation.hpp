@@ -3,7 +3,7 @@
 template <typename T, typename U>
 RppStatus saturation_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                     Rpp32f saturationFactor,
-                    RppiChnFormat chnFormat, unsigned channel, RppiFormat imageFormat)
+                    RppiChnFormat chnFormat, Rpp32u channel, RppiFormat imageFormat)
 {
     if (imageFormat == RGB)
     {

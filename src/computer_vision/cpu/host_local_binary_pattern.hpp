@@ -2,8 +2,8 @@
 
 template <typename T>
 RppStatus local_binary_pattern_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                    unsigned int kernelSize, RppiLbpFormat lbpFormat, 
-                    RppiChnFormat chnFormat, unsigned int channel)
+                    Rpp32u kernelSize, RppiLbpFormat lbpFormat, 
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (lbpFormat == RPPI_LBP)
     {

@@ -3,8 +3,8 @@
 
 template <typename T>
 RppStatus median_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                    unsigned int kernelSize,
-                    RppiChnFormat chnFormat, unsigned int channel)
+                    Rpp32u kernelSize,
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (kernelSize % 2 == 0)
     {

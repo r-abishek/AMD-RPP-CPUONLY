@@ -2,7 +2,7 @@
 
 template <typename T>
 RppStatus channel_combine_host(T* srcPtr1, T* srcPtr2, T* srcPtr3, RppiSize srcSize, T* dstPtr,
-                               RppiChnFormat chnFormat, unsigned int channel)
+                               RppiChnFormat chnFormat, Rpp32u channel)
 {
 
     T *srcPtr1Temp, *srcPtr2Temp, *srcPtr3Temp, *dstPtrTemp;

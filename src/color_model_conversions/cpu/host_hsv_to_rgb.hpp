@@ -2,7 +2,7 @@
 
 template <typename T, typename U>
 RppStatus hsv_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
-                    RppiChnFormat chnFormat, unsigned channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     compute_hsv_to_rgb_host(srcPtr, srcSize, dstPtr, chnFormat, channel);
 

@@ -2,7 +2,7 @@
 
 template <typename T, typename U>
 RppStatus integral_host(T* srcPtr, RppiSize srcSize, U* dstPtr, 
-                        RppiChnFormat chnFormat, unsigned int channel)
+                        RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTemp;
     U *dstPtrTemp;

@@ -2,8 +2,8 @@
 
 template <typename T>
 RppStatus dilate_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                    unsigned int kernelSize,
-                    RppiChnFormat chnFormat, unsigned int channel)
+                    Rpp32u kernelSize,
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (kernelSize % 2 == 0)
     {

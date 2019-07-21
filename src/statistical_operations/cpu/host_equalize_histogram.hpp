@@ -4,7 +4,7 @@ template <typename T>
 RppStatus equalize_histogram_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
                                   Rpp32u channel)
 {
-    Rpp32u bins = (Rpp32u)(std::numeric_limits<unsigned char>::max()) + 1;
+    Rpp32u bins = (Rpp32u)(std::numeric_limits<Rpp8u>::max()) + 1;
     Rpp32u *histogram = (Rpp32u *) calloc(bins, sizeof(Rpp32u));
     T *lookUpTable = (T *) calloc (bins, sizeof(T));
     Rpp32u *histogramTemp;
