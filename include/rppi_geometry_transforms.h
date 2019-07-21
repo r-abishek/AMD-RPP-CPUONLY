@@ -1,5 +1,5 @@
-#ifndef RPPI_GEOMETRY_TRANSFORMS_H
-#define RPPI_GEOMETRY_TRANSFORMS_H
+#ifndef RPPI_GEOMETRY_TRANSFORMS
+#define RPPI_GEOMETRY_TRANSFORMS
  
 #include "rppdefs.h"
 #ifdef __cplusplus

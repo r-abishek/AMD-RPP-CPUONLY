@@ -1,5 +1,5 @@
-#ifndef RPPI_COMPUTER_VISION_H
-#define RPPI_COMPUTER_VISION_H
+#ifndef RPPI_COMPUTER_VISION
+#define RPPI_COMPUTER_VISION
  
 #include "rppdefs.h"
 #ifdef __cplusplus

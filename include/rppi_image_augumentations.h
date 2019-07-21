@@ -1,5 +1,5 @@
-#ifndef RPPI_IMAGE_AUGMENTATIONS_H
-#define RPPI_IMAGE_AUGMENTATIONS_H
+#ifndef RPPI_IMAGE_AUGMENTATIONS
+#define RPPI_IMAGE_AUGMENTATIONS
  
 #include "rppdefs.h"
 #ifdef __cplusplus

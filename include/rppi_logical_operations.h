@@ -1,5 +1,5 @@
-#ifndef RPPI_LOGICAL_OPERATIONS_H
-#define RPPI_LOGICAL_OPERATIONS_H
+#ifndef RPPI_LOGICAL_OPERATIONS
+#define RPPI_LOGICAL_OPERATIONS
  
 #include "rppdefs.h"
 #ifdef __cplusplus

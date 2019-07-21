@@ -1,5 +1,5 @@
-#ifndef RPPI_STATISTICAL_OPERATIONS_H
-#define RPPI_STATISTICAL_OPERATIONS_H
+#ifndef RPPI_STATISTICAL_OPERATIONS
+#define RPPI_STATISTICAL_OPERATIONS
  
 #include "rppdefs.h"
 #ifdef __cplusplus
