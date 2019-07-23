@@ -3,7 +3,7 @@
 template <typename T, typename U>
 RppStatus accumulate_weighted_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize,
                                    Rpp32f alpha,
-                                   Rpp32u channel)
+                                   RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtr1Temp;
     U *srcPtr2Temp;

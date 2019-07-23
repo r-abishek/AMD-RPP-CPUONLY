@@ -2,7 +2,7 @@
 
 template <typename T, typename U>
 RppStatus accumulate_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize,
-                                   Rpp32u channel)
+                          RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtr1Temp;
     U *srcPtr2Temp;
