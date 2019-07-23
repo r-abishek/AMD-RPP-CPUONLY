@@ -3,7 +3,7 @@
 #include <time.h>
 
 template <typename T>
-RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
+RppStatus jitter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                     Rpp32u maxJitterX, Rpp32u maxJitterY, 
                     RppiChnFormat chnFormat, Rpp32u channel)
 {

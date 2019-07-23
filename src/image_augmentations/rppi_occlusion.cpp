@@ -1,4 +1,4 @@
-// rppi_occlusionAdd
+// rppi_occlusion
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
@@ -9,7 +9,7 @@
 #include <chrono>
 #include "cpu/rpp_cpu_input_and_display.hpp"
 #include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
-#include "cpu/host_occlusionAdd.hpp"
+#include "cpu/host_occlusion.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -20,11 +20,11 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_occlusionAdd_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
+rppi_occlusion_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
                                Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
                                Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2)
 {
-    occlusionAdd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize1, srcSize2, static_cast<Rpp8u*>(dstPtr), 
+    occlusion_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize1, srcSize2, static_cast<Rpp8u*>(dstPtr), 
                              src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2, 
                              RPPI_CHN_PLANAR, 1);
 
@@ -33,11 +33,11 @@ rppi_occlusionAdd_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 }
 
 RppStatus
-rppi_occlusionAdd_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
+rppi_occlusion_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
                                Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
                                Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2)
 {
-    occlusionAdd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize1, srcSize2, static_cast<Rpp8u*>(dstPtr), 
+    occlusion_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize1, srcSize2, static_cast<Rpp8u*>(dstPtr), 
                              src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2, 
                              RPPI_CHN_PLANAR, 3);
 
@@ -46,11 +46,11 @@ rppi_occlusionAdd_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 }
 
 RppStatus
-rppi_occlusionAdd_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
+rppi_occlusion_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
                                Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
                                Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2)
 {
-    occlusionAdd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize1, srcSize2, static_cast<Rpp8u*>(dstPtr), 
+    occlusion_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize1, srcSize2, static_cast<Rpp8u*>(dstPtr), 
                              src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2, 
                              RPPI_CHN_PACKED, 3);
 
@@ -154,7 +154,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_occlusionAdd_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_occlusion_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -170,7 +170,7 @@ int main(int argc, char** argv)
                 rppi_packed_to_planar_u8_pkd3_host(srcPtr2, srcSize2, srcPtr2Temp);
 
                 start = high_resolution_clock::now();
-                rppi_occlusionAdd_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize1, srcSize2, dstPtrTemp, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_occlusion_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize1, srcSize2, dstPtrTemp, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
                 stop = high_resolution_clock::now();
 
                 rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -184,7 +184,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_occlusionAdd_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_occlusion_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -193,7 +193,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_occlusionAdd_u8_pkd3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_occlusion_u8_pkd3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -216,7 +216,7 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    printf("\nEntering pixel values doesn't makes sense for occlusionAdd!");
+    printf("\nEntering pixel values doesn't makes sense for occlusion!");
 /*    
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
@@ -234,7 +234,7 @@ int main(int argc, char** argv)
         displayPlanar(srcPtr1, srcSize, channel);
         printf("\n\nInput 2:\n");
         displayPlanar(srcPtr2, srcSize, channel);
-        rppi_occlusionAdd_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+        rppi_occlusion_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
         printf("\n\nOutput of Multiplication:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
@@ -252,7 +252,7 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPlanar(srcPtr2, srcSize, channel);
-            rppi_occlusionAdd_u8_pln3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+            rppi_occlusion_u8_pln3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
             printf("\n\nOutput of Multiplication:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
@@ -265,7 +265,7 @@ int main(int argc, char** argv)
             displayPacked(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPacked(srcPtr2, srcSize, channel);
-            rppi_occlusionAdd_u8_pkd3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+            rppi_occlusion_u8_pkd3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
             printf("\n\nOutput of Multiplication:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
@@ -298,11 +298,11 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_occlusionAdd_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_occlusion_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
             }
             else if (channel == 3)
             {
-                rppi_occlusionAdd_u8_pln3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_occlusion_u8_pln3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
             }
             printf("\n\nOutput of Multiplication:\n");
             displayPlanar(dstPtr, srcSize, channel);
@@ -321,11 +321,11 @@ int main(int argc, char** argv)
             displayPacked(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_occlusionAdd_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_occlusion_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
             }
             else if (channel == 3)
             {
-                rppi_occlusionAdd_u8_pkd3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_occlusion_u8_pkd3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
             }
             printf("\n\nOutput of Multiplication:\n");
             displayPacked(dstPtr, srcSize, channel);

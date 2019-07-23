@@ -780,17 +780,17 @@ target_link_libraries(
 )
 
 add_executable(
-    rppi_jitterAdd
-    src/image_augmentations/rppi_jitterAdd.cpp
+    rppi_jitter
+    src/image_augmentations/rppi_jitter.cpp
 )
-target_include_directories(rppi_jitterAdd
+target_include_directories(rppi_jitter
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_jitterAdd
+    rppi_jitter
     ${OpenCV_LIBS}
 )
 
@@ -840,17 +840,17 @@ target_link_libraries(
 )
 
 add_executable(
-    rppi_occlusionAdd
-    src/image_augmentations/rppi_occlusionAdd.cpp
+    rppi_occlusion
+    src/image_augmentations/rppi_occlusion.cpp
 )
-target_include_directories(rppi_occlusionAdd
+target_include_directories(rppi_occlusion
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_occlusionAdd
+    rppi_occlusion
     ${OpenCV_LIBS}
 )
 
