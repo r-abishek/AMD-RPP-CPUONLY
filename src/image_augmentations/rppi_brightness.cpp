@@ -25,7 +25,7 @@ rppi_brightness_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
 {
     brightness_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     alpha, beta,
-                                    1);
+                                    RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
 
@@ -37,7 +37,7 @@ rppi_brightness_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
 {
     brightness_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     alpha, beta,
-                                    3);
+                                    RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
 
@@ -49,7 +49,7 @@ rppi_brightness_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
 {
     brightness_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     alpha, beta,
-                                    3);
+                                    RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
 

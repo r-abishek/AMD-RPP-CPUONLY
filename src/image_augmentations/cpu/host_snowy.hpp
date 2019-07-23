@@ -129,9 +129,6 @@ RppStatus snowy_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                 dstPtrTemp++;
             }
         }
-        
-        
-        
     }
     else if (channel == 3)
     {

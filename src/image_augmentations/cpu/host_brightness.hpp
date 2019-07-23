@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus brightness_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                    Rpp32f alpha, Rpp32f beta,
-                                   Rpp32u channel)
+                                   RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTemp, *dstPtrTemp;
     srcPtrTemp = srcPtr;
