@@ -855,17 +855,17 @@ target_link_libraries(
 )
 
 add_executable(
-    rppi_snowy
-    src/image_augmentations/rppi_snowy.cpp
+    rppi_snow
+    src/image_augmentations/rppi_snow.cpp
 )
-target_include_directories(rppi_snowy
+target_include_directories(rppi_snow
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_snowy
+    rppi_snow
     ${OpenCV_LIBS}
 )
 

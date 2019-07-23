@@ -281,24 +281,24 @@ rppi_occlusion_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize
                                Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2);
 
 // ----------------------------------------
-// Host snowy functions declaration 
+// Host snow functions declaration 
 // ----------------------------------------
-/* Introduces snowy effect in the entire image
+/* Introduces snow effect in the entire image
 *param[in] srcPtr input image
 *param[in] srcSize dimensions of the input images
 *param[out] dstPtr output image
-*param[in] strength strength of snowy effect desired
+*param[in] strength strength of snow effect desired
 *returns a  RppStatus enumeration. 
 *retval RPP_SUCCESS : No error succesful completion
 *retval RPP_ERROR : Error 
 */
 
 RppStatus
-rppi_snowyRGB_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+rppi_snowRGB_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f strength);
 
 RppStatus
-rppi_snowyRGB_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+rppi_snowRGB_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f strength);
 
 // ----------------------------------------

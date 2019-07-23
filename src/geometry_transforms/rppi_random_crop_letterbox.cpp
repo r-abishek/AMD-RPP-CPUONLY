@@ -115,10 +115,14 @@ int main(int argc, char** argv)
         y1 = 100;
         x2 = 200;
         y2 = 50;
+        x1 = 500;
+        y1 = 360;
+        x2 = 800;
+        y2 = 540;
         int xDiff = (int) x2 - (int) x1;
         int yDiff = (int) y2 - (int) y1;
-        dstSize.width = (Rpp32u) RPPABS(xDiff) + (2 * borderWidth);
-        dstSize.height = (Rpp32u) RPPABS(yDiff) + (2 * borderWidth);
+        dstSize.width = (Rpp32u) RPPABS(xDiff) + (200);
+        dstSize.height = (Rpp32u) RPPABS(yDiff) + (200);
 
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;

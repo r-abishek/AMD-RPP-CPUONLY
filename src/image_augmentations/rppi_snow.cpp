@@ -1,4 +1,4 @@
-// rppi_snowy
+// rppi_snow
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
@@ -9,7 +9,7 @@
 #include <chrono>
 #include "cpu/rpp_cpu_input_and_display.hpp"
 #include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
-#include "cpu/host_snowy.hpp"
+#include "cpu/host_snow.hpp"
 #include "../color_model_conversions/cpu/host_rgb_to_hsv.hpp"
 #include "../color_model_conversions/cpu/host_hsv_to_rgb.hpp"
 #include "../color_model_conversions/cpu/host_rgb_to_hsl.hpp"
@@ -24,33 +24,33 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_snowy_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+rppi_snow_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f strength)
 {
 
-    snowy_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+    snow_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                            strength,
                            RPPI_CHN_PLANAR, 1);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_snowy_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+rppi_snow_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f strength)
 {
 
-    snowy_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+    snow_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                            strength,
                            RPPI_CHN_PLANAR, 3);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_snowy_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+rppi_snow_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f strength)
 {
 
-    snowy_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+    snow_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                            strength,
                            RPPI_CHN_PACKED, 3);
     return RPP_SUCCESS;
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_snowy_u8_pln1_host(srcPtr, srcSize, dstPtr, strength);
+                rppi_snow_u8_pln1_host(srcPtr, srcSize, dstPtr, strength);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -146,7 +146,7 @@ int main(int argc, char** argv)
                 rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_snowy_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, strength);
+                rppi_snow_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, strength);
                 stop = high_resolution_clock::now();
 
                 rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -160,7 +160,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_snowy_u8_pln1_host(srcPtr, srcSize, dstPtr, strength);
+                rppi_snow_u8_pln1_host(srcPtr, srcSize, dstPtr, strength);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -169,7 +169,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_snowy_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
+                rppi_snow_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -212,8 +212,8 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_snowy_u8_pln3_host(srcPtr, srcSize, dstPtr, strength);
-            printf("\n\nOutput of snowy Modification:\n");
+            rppi_snow_u8_pln3_host(srcPtr, srcSize, dstPtr, strength);
+            printf("\n\nOutput of snow Modification:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -222,8 +222,8 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_snowy_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
-            printf("\n\nOutput of snowy Modification:\n");
+            rppi_snow_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
+            printf("\n\nOutput of snow Modification:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -252,9 +252,9 @@ int main(int argc, char** argv)
             }
             else if (channel == 3)
             {
-                rppi_snowy_u8_pln3_host(srcPtr, srcSize, dstPtr, strength);
+                rppi_snow_u8_pln3_host(srcPtr, srcSize, dstPtr, strength);
             }
-            printf("\n\nOutput of snowy Modification:\n");
+            printf("\n\nOutput of snow Modification:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -270,9 +270,9 @@ int main(int argc, char** argv)
             }
             else if (channel == 3)
             {
-                rppi_snowy_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
+                rppi_snow_u8_pkd3_host(srcPtr, srcSize, dstPtr, strength);
             }
-            printf("\n\nOutput of snowy Modification:\n");
+            printf("\n\nOutput of snow Modification:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }
