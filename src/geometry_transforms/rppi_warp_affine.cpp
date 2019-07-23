@@ -21,10 +21,10 @@ using namespace std::chrono;
 
 RppStatus
 rppi_warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
-                                  RppPtr_t affine)
+                                  Rpp32f* affine)
 {
     warp_affine_output_size_host<Rpp32f>(srcSize, dstSizePtr,
-                                         static_cast<Rpp32f*>(affine));
+                                         affine);
 
     return RPP_SUCCESS;
 
@@ -32,10 +32,10 @@ rppi_warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
 
 RppStatus
 rppi_warp_affine_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
-                              RppPtr_t affine)
+                              Rpp32f* affine)
 {
     warp_affine_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            static_cast<Rpp32f*>(affine),
+                            affine,
                             RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
@@ -44,10 +44,10 @@ rppi_warp_affine_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
 
 RppStatus
 rppi_warp_affine_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
-                              RppPtr_t affine)
+                              Rpp32f* affine)
 {
     warp_affine_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            static_cast<Rpp32f*>(affine),
+                            affine,
                             RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
@@ -56,10 +56,10 @@ rppi_warp_affine_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
 
 RppStatus
 rppi_warp_affine_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
-                              RppPtr_t affine)
+                              Rpp32f* affine)
 {
     warp_affine_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            static_cast<Rpp32f*>(affine),
+                            affine,
                             RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
