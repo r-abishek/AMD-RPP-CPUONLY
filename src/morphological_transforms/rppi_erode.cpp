@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    unsigned int kernelSize = 11;
+    unsigned int kernelSize = 7;
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -170,8 +170,8 @@ int main(int argc, char** argv)
         imageOutOpenCV.copyTo(images(cv::Rect(imageIn.cols,0, imageIn.cols, imageIn.rows)));
         imageOut.copyTo(images(cv::Rect(2 * imageIn.cols,0, imageIn.cols, imageIn.rows)));
 
-        namedWindow("Input and Output Images", WINDOW_NORMAL );
-        imshow("Input and Output Images", images);
+        namedWindow("Input, OpenCV-Output and Output Images", WINDOW_NORMAL );
+        imshow("Input, OpenCV-Output and Output Images", images);
 
         waitKey(0);
 

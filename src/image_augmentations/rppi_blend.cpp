@@ -62,6 +62,9 @@ int main(int argc, char** argv)
     unsigned int channel;
     Rpp32f alpha = 0.5;
 
+    printf("\nEnter alpha value: ");
+    scanf("%f", &alpha);
+
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
@@ -185,6 +188,8 @@ int main(int argc, char** argv)
 
         namedWindow("2 Input Images and Output Image", WINDOW_NORMAL );
         imshow("2 Input Images and Output Image", images);
+
+        imwrite("images/noisyImageOutput.jpg", imageOut);
 
         waitKey(0);
 
