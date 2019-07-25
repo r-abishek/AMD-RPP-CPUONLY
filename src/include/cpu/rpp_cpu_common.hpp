@@ -316,6 +316,45 @@ RppStatus generate_crop_host(T* srcPtr, RppiSize srcSize, T* srcPtrSubImage, Rpp
     return RPP_SUCCESS;
 }
 
+RppStatus generate_sobel_kernel_host(Rpp32f* kernel, Rpp32u type)
+{
+    Rpp32f* kernelTemp;
+    kernelTemp = kernel;
+
+    if (type == 1)
+    {
+        Rpp32f kernelX[9] = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
+        Rpp32f* kernelXTemp;
+        kernelXTemp = kernelX;
+
+        for (int i = 0; i < 9; i++)
+        {
+            *kernelTemp = *kernelXTemp / 9;
+            kernelTemp++;
+            kernelXTemp++;
+        }
+    }
+    else if (type == 2)
+    {
+        Rpp32f kernelY[9] = {-1, -2, -1, 0, 0, 0, 1, 2, 1};
+        Rpp32f* kernelYTemp;
+        kernelYTemp = kernelY;
+
+        for (int i = 0; i < 9; i++)
+        {
+            *kernelTemp = *kernelYTemp / 9;
+            kernelTemp++;
+            kernelYTemp++;
+        }
+    }
+    else
+    {
+        return RPP_ERROR;
+    }
+
+    return RPP_SUCCESS;
+}
+
 
 
 
@@ -1607,6 +1646,32 @@ RppStatus compute_hsl_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
     }
 
     return RPP_SUCCESS;
+}
+
+template <typename T>
+RppStatus compute_magnitude_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize, T* dstPtr,
+                         RppiChnFormat chnFormat, Rpp32u channel)
+{
+    T *srcPtr1Temp, *srcPtr2Temp, *dstPtrTemp;
+    srcPtr1Temp = srcPtr1;
+    srcPtr2Temp = srcPtr2;
+    dstPtrTemp = dstPtr;
+
+    Rpp32f pixel;
+    
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+    {
+        pixel = sqrt(((Rpp32f)(*srcPtr1Temp) * (Rpp32f)(*srcPtr1Temp)) + ((Rpp32f)(*srcPtr2Temp) * (Rpp32f)(*srcPtr2Temp)));
+        pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
+        pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
+        *dstPtrTemp =(Rpp8u) round(pixel);
+        srcPtr1Temp++;
+        srcPtr2Temp++;
+        dstPtrTemp++;
+    }
+
+    return RPP_SUCCESS;
+
 }
 
 #endif //RPP_CPU_COMMON_H
