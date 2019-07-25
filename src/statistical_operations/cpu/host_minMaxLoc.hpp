@@ -10,7 +10,7 @@ RppStatus minMaxLoc_host(T* srcPtr, RppiSize srcSize,
 
     T *srcPtrTemp, *minLocPtrTemp, *maxLocPtrTemp;
     srcPtrTemp = srcPtr;
-    for (int i = 0; i < (channel * srcSize.width * srcSize.height); i++)
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
         if (*srcPtrTemp > *max)
         {
