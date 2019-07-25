@@ -4,6 +4,80 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
+add_executable(
+    rppi_warp_affine
+    src/geometry_transforms/rppi_warp_affine.cpp
+)
+target_include_directories(rppi_warp_affine
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_warp_affine
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_sobel_filter
+    src/filter_operations/rppi_sobel_filter.cpp
+)
+target_include_directories(rppi_sobel_filter
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_sobel_filter
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_magnitude
+    src/arithmetic_operations/rppi_magnitude.cpp
+)
+target_include_directories(rppi_magnitude
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_magnitude
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_warp_perspective
+    src/geometry_transforms/rppi_warp_perspective.cpp
+)
+target_include_directories(rppi_warp_perspective
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_warp_perspective
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_local_binary_pattern
+    src/computer_vision/rppi_local_binary_pattern.cpp
+)
+target_include_directories(rppi_local_binary_pattern
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_local_binary_pattern
+    ${OpenCV_LIBS}
+)
 
 
 
@@ -18,8 +92,7 @@ project(amd_rpp VERSION 0.1)
 
 
 
-
-
+#[[
 add_executable(
     rppi_absolute_difference
     src/arithmetic_operations/rppi_absolute_difference.cpp
@@ -991,3 +1064,4 @@ target_link_libraries(
     rppi_dilate
     ${OpenCV_LIBS}
 )
+]]

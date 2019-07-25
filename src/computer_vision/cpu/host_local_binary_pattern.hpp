@@ -2,32 +2,15 @@
 
 template <typename T>
 RppStatus local_binary_pattern_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                    Rpp32u kernelSize, RppiLbpFormat lbpFormat, 
                     RppiChnFormat chnFormat, Rpp32u channel)
 {
-    if (lbpFormat == RPPI_LBP)
-    {
-        if (kernelSize != 3 && kernelSize != 5)
-        {
-            return RPP_ERROR;
-        }
-        
-    }
-    else if (lbpFormat == RPPI_MLBP)
-    {
-
-    }
-    else if (lbpFormat == RPPI_ULBP)
-    {
-
-    }
-
-    int bound = ((kernelSize - 1) / 2);
+    Rpp32u kernelSize = 3;
+    Rpp32u bound = ((kernelSize - 1) / 2);
 
     RppiSize srcSizeMod;
     srcSizeMod.width = srcSize.width + (2 * bound);
     srcSizeMod.height = srcSize.height + (2 * bound);
-    Rpp8u *srcPtrMod = (Rpp8u *)calloc(srcSizeMod.width * srcSizeMod.height * channel, sizeof(Rpp8u));
+    Rpp8u *srcPtrMod = (Rpp8u *)calloc(srcSizeMod.height * srcSizeMod.width * channel, sizeof(Rpp8u));
 
     generate_evenly_padded_image_host(srcPtr, srcSize, srcPtrMod, srcSizeMod, chnFormat, channel);
 
@@ -47,7 +30,7 @@ RppStatus local_binary_pattern_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                 for (int j = 0; j < srcSize.width; j++)
                 {
                     local_binary_pattern_kernel_host(srcPtrWindow, dstPtrTemp, srcSize, 
-                                    kernelSize, remainingElementsInRowPlanar, lbpFormat, 
+                                    remainingElementsInRowPlanar, 
                                     chnFormat, channel);
                     srcPtrWindow++;
                     dstPtrTemp++;
@@ -66,7 +49,7 @@ RppStatus local_binary_pattern_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                 for (int c = 0; c < channel; c++)
                 {   
                     local_binary_pattern_kernel_host(srcPtrWindow, dstPtrTemp, srcSize, 
-                                    kernelSize, remainingElementsInRowPacked, lbpFormat, 
+                                    remainingElementsInRowPacked, 
                                     chnFormat, channel);
                     srcPtrWindow++;
                     dstPtrTemp++;

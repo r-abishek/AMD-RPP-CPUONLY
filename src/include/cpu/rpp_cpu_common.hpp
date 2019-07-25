@@ -771,61 +771,85 @@ RppStatus median_filter_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize sr
 
 template<typename T>
 RppStatus local_binary_pattern_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
-                                       Rpp32u kernelSize, Rpp32u remainingElementsInRow, RppiLbpFormat lbpFormat, 
+                                       Rpp32u remainingElementsInRow, 
                                        RppiChnFormat chnFormat, Rpp32u channel)
 {
-    if (lbpFormat == RPPI_LBP)
-    {
-        
-    }
-    else if (lbpFormat == RPPI_MLBP)
-    {
+    Rpp32u kernelSize = 3;
+    T *neighborhood = (T *)calloc(kernelSize * kernelSize, sizeof(T));
+    T pixel = 0;
 
-    }
-    else if (lbpFormat == RPPI_ULBP)
-    {
-
-    }
-    
-    
-    
-    
-    
-    
-    T pixel;
-
-    T* srcPtrWindowTemp;
+    T *srcPtrWindowTemp, *neighborhoodTemp;
     srcPtrWindowTemp = srcPtrWindow;
-    pixel = *srcPtrWindowTemp;
+    neighborhoodTemp = neighborhood;
     
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        for (int m = 0; m < kernelSize; m++)
-        {
-            for (int n = 0; n < kernelSize; n++)
-            {
-                if (*srcPtrWindowTemp < pixel)
-                {
-                    pixel = *srcPtrWindowTemp;
-                }
-                srcPtrWindowTemp++;
-            }
-            srcPtrWindowTemp += remainingElementsInRow;
-        }
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp++;
+        neighborhoodTemp++;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp++;
+        neighborhoodTemp++;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp++;
+        neighborhoodTemp += 5;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp++;
+        neighborhoodTemp++;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp++;
+        neighborhoodTemp -= 5;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp++;
+        neighborhoodTemp += 3;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp++;
+        neighborhoodTemp--;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp++;
+        neighborhoodTemp--;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+
+        srcPtrWindowTemp = srcPtrWindow + srcSize.width + 1;
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
-        for (int m = 0; m < kernelSize; m++)
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp += channel;
+        neighborhoodTemp++;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp += channel;
+        neighborhoodTemp++;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp += channel;
+        neighborhoodTemp += 5;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp += channel;
+        neighborhoodTemp++;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp += channel;
+        neighborhoodTemp -= 5;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp += channel;
+        neighborhoodTemp += 3;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp += channel;
+        neighborhoodTemp--;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+        srcPtrWindowTemp += channel;
+        neighborhoodTemp--;
+        *neighborhoodTemp = *srcPtrWindowTemp;
+
+        srcPtrWindowTemp = srcPtrWindow + (channel * (srcSize.width + 1));
+    }
+
+    neighborhoodTemp = neighborhood;
+    
+    for (int i = 0; i < 8; i++)
+    {
+        if (*neighborhoodTemp - *srcPtrWindowTemp >= 0)
         {
-            for (int n = 0; n < kernelSize; n++)
-            {
-                if (*srcPtrWindowTemp < pixel)
-                {
-                    pixel = *srcPtrWindowTemp;
-                }
-                srcPtrWindowTemp += channel;
-            }
-            srcPtrWindowTemp += remainingElementsInRow;
+            pixel += pow(2, i);
         }
     }
     *dstPtrPixel = pixel;
