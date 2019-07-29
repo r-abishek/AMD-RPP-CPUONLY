@@ -1,4 +1,4 @@
-// rppi_warp_affine
+// rppi_warp_perspective
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
@@ -9,7 +9,7 @@
 #include <chrono>
 #include "cpu/rpp_cpu_input_and_display.hpp"
 #include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
-#include "cpu/host_warp_affine.hpp"
+#include "cpu/host_warp_perspective.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -20,22 +20,22 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
-                                  Rpp32f* affine)
+rppi_warp_perspective_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
+                                  Rpp32f* perspective)
 {
-    warp_affine_output_size_host<Rpp32f>(srcSize, dstSizePtr,
-                                         affine);
+    warp_perspective_output_size_host<Rpp32f>(srcSize, dstSizePtr,
+                                         perspective);
 
     return RPP_SUCCESS;
 
 }
 
 RppStatus
-rppi_warp_affine_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
-                              Rpp32f* affine)
+rppi_warp_perspective_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+                              Rpp32f* perspective)
 {
-    warp_affine_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            affine,
+    warp_perspective_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
+                            perspective,
                             RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
@@ -43,11 +43,11 @@ rppi_warp_affine_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
 }
 
 RppStatus
-rppi_warp_affine_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
-                              Rpp32f* affine)
+rppi_warp_perspective_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+                              Rpp32f* perspective)
 {
-    warp_affine_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            affine,
+    warp_perspective_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
+                            perspective,
                             RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
@@ -55,11 +55,11 @@ rppi_warp_affine_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
 }
 
 RppStatus
-rppi_warp_affine_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
-                              Rpp32f* affine)
+rppi_warp_perspective_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+                              Rpp32f* perspective)
 {
-    warp_affine_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            affine,
+    warp_perspective_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
+                            perspective,
                             RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
@@ -75,16 +75,16 @@ int main(int argc, char** argv)
     RppiSize srcSize, dstSize;
     unsigned int channel;
 
-    //Rpp32f affine[6] = {0.707, -0.707, 0, -0.707, 0.707, 0};
-    Rpp32f affine[6] = {1.35, 0.3, 0, -0.75, 1.1, 0};
-    //Mat affineMat = Mat(2, 3, CV_32FC1, affine);
-    //_InputArray affineReshaped = _InputArray(affineMat);
+    //Rpp32f perspective[6] = {0.707, -0.707, 0, -0.707, 0.707, 0};
+    Rpp32f perspective[9] = {1.35, 0.3, 0, -0.75, 1.1, 0, 0, 0, 1};
+    //Mat perspectiveMat = Mat(2, 3, CV_32FC1, perspective);
+    //_InputArray perspectiveReshaped = _InputArray(perspectiveMat);
 /*    
-    printf("\nEnter the 2x3 affine transformation matrix:");
+    printf("\nEnter the 2x3 perspective transformation matrix:");
     for (int i = 0; i < 6; i++)
     {
         printf("\nElement %d: ", i);
-        scanf("%f", &affine[i]);
+        scanf("%f", &perspective[i]);
     }
 */
     int input;
@@ -131,7 +131,7 @@ int main(int argc, char** argv)
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
         
-        rppi_warp_affine_output_size_host(srcSize, &dstSize, affine);
+        rppi_warp_perspective_output_size_host(srcSize, &dstSize, perspective);
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
         //Mat imageOutOpenCV;
         //imageOutOpenCV.rows = dstSize.height;
         //imageOutOpenCV.cols = dstSize.width;
-        //warpAffine(imageIn,imageOutOpenCV,affineReshaped,imageOutOpenCV.size());
+        //warpperspective(imageIn,imageOutOpenCV,perspectiveReshaped,imageOutOpenCV.size());
 
         if (type == 1)
         {   
@@ -151,7 +151,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_warp_affine_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, affine);
+                rppi_warp_perspective_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, perspective);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -165,7 +165,7 @@ int main(int argc, char** argv)
                 rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_warp_affine_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, affine);
+                rppi_warp_perspective_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, perspective);
                 stop = high_resolution_clock::now();
 
                 rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -179,7 +179,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_warp_affine_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, affine);
+                rppi_warp_perspective_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, perspective);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -188,7 +188,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_warp_affine_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, affine);
+                rppi_warp_perspective_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, perspective);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -224,14 +224,14 @@ int main(int argc, char** argv)
         srcSize.width = 4;
         Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
         
-        rppi_warp_affine_output_size_host(srcSize, &dstSize, affine);
+        rppi_warp_perspective_output_size_host(srcSize, &dstSize, perspective);
         printf("Height - %d, Width - %d", dstSize.height, dstSize.width);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_warp_affine_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, affine);
-        printf("\n\nOutput of warp-affine:\n");
+        rppi_warp_perspective_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, perspective);
+        printf("\n\nOutput of warp-perspective:\n");
         displayPlanar(dstPtr, dstSize, channel);
     }
     else if (matrix == 2)
@@ -243,26 +243,26 @@ int main(int argc, char** argv)
         {
             Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
             
-            rppi_warp_affine_output_size_host(srcSize, &dstSize, affine);
+            rppi_warp_perspective_output_size_host(srcSize, &dstSize, perspective);
             Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_warp_affine_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, affine);
-            printf("\n\nOutput of warp-affine:\n");
+            rppi_warp_perspective_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, perspective);
+            printf("\n\nOutput of warp-perspective:\n");
             displayPlanar(dstPtr, dstSize, channel);
         }
         else if (type == 2)
         {
             Rpp8u srcPtr[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
             
-            rppi_warp_affine_output_size_host(srcSize, &dstSize, affine);
+            rppi_warp_perspective_output_size_host(srcSize, &dstSize, perspective);
             Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_warp_affine_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, affine);
-            printf("\n\nOutput of warp-affine:\n");
+            rppi_warp_perspective_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, perspective);
+            printf("\n\nOutput of warp-perspective:\n");
             displayPacked(dstPtr, dstSize, channel);
         } 
     }
@@ -278,7 +278,7 @@ int main(int argc, char** argv)
         Rpp8u *srcPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         int *intSrcPtr = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
         
-        rppi_warp_affine_output_size_host(srcSize, &dstSize, affine);
+        rppi_warp_perspective_output_size_host(srcSize, &dstSize, perspective);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
         if (type == 1)
@@ -290,13 +290,13 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_warp_affine_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, affine);
+                rppi_warp_perspective_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, perspective);
             }
             else if (channel == 3)
             {
-                rppi_warp_affine_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, affine);
+                rppi_warp_perspective_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, perspective);
             }
-            printf("\n\nOutput of warp-affine:\n");
+            printf("\n\nOutput of warp-perspective:\n");
             displayPlanar(dstPtr, dstSize, channel);
         }
         else if (type == 2)
@@ -308,13 +308,13 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_warp_affine_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, affine);
+                rppi_warp_perspective_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, perspective);
             }
             else if (channel == 3)
             {
-                rppi_warp_affine_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, affine);
+                rppi_warp_perspective_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, perspective);
             }
-            printf("\n\nOutput of warp-affine:\n");
+            printf("\n\nOutput of warp-perspective:\n");
             displayPacked(dstPtr, dstSize, channel);
         }
     }
