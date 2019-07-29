@@ -80,21 +80,6 @@ target_link_libraries(
 )
 
 add_executable(
-    rppi_jitter
-    src/image_augmentations/rppi_jitter.cpp
-)
-target_include_directories(rppi_jitter
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_jitter
-    ${OpenCV_LIBS}
-)
-
-add_executable(
     rppi_histogram
     src/statistical_operations/rppi_histogram.cpp
 )
@@ -123,6 +108,97 @@ target_link_libraries(
     rppi_equalize_histogram
     ${OpenCV_LIBS}
 )
+
+add_executable(
+    rppi_occlusion
+    src/image_augmentations/rppi_occlusion.cpp
+)
+target_include_directories(rppi_occlusion
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_occlusion
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_snow
+    src/image_augmentations/rppi_snow.cpp
+)
+target_include_directories(rppi_snow
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_snow
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_random_shadow
+    src/image_augmentations/rppi_random_shadow.cpp
+)
+target_include_directories(rppi_random_shadow
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_random_shadow
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_pixelate
+    src/image_augmentations/rppi_pixelate.cpp
+)
+target_include_directories(rppi_pixelate
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_pixelate
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_jitter
+    src/image_augmentations/rppi_jitter.cpp
+)
+target_include_directories(rppi_jitter
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_jitter
+    ${OpenCV_LIBS}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

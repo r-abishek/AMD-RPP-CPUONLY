@@ -16,12 +16,7 @@ RppStatus crop_replace_subimage_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     T *srcPtrTemp, *dstPtrTemp;
     srcPtrTemp = srcPtr;
     dstPtrTemp = dstPtr;
-    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
-    {
-        *dstPtrTemp = *srcPtrTemp;
-        srcPtrTemp++;
-        dstPtrTemp++;
-    }
+    memcpy(dstPtr, srcPtr, channel * srcSize.height * srcSize.width * sizeof(T));
 
     Rpp32u xDst = (rand() % (srcSize.width - occlusionWidth));
     Rpp32u yDst = (rand() % (srcSize.height - occlusionHeight));

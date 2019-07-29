@@ -20,15 +20,7 @@ RppStatus pixelate_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         return RPP_ERROR;
     }
 
-    T *srcPtrTemp, *dstPtrTemp;
-    srcPtrTemp = srcPtr;
-    dstPtrTemp = dstPtr;
-    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
-    {
-        *dstPtrTemp = *srcPtrTemp;
-        srcPtrTemp++;
-        dstPtrTemp++;
-    }
+    memcpy(dstPtr, srcPtr, channel * srcSize.height * srcSize.width * sizeof(T));
 
     Rpp32f *kernel = (Rpp32f *)calloc(kernelSize * kernelSize, sizeof(Rpp32f));
 

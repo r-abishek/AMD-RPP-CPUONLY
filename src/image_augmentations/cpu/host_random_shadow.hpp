@@ -25,12 +25,7 @@ RppStatus random_shadow_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     srcPtrTemp = srcPtr;
     dstPtrTemp = dstPtr;
 
-    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
-    {
-        *dstPtrTemp = *srcPtrTemp;
-        srcPtrTemp++;
-        dstPtrTemp++;
-    }
+    memcpy(dstPtr, srcPtr, channel * srcSize.height * srcSize.width * sizeof(T));
 
     for (int shadow = 0; shadow < numberOfShadows; shadow++)
     {

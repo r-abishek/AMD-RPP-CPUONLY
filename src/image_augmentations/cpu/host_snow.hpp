@@ -55,12 +55,7 @@ RppStatus snow_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
     }
     else if (channel == 3)
     {
-        for (int i = 0; i < (3 * srcSize.height * srcSize.width); i++)
-        {
-            *srcPtrRGBTemp = *srcPtrTemp;
-            srcPtrRGBTemp++;
-            srcPtrTemp++;
-        }
+        memcpy(srcPtrRGB, srcPtr, 3 * srcSize.height * srcSize.width * sizeof(T));
     }
 
     Rpp32f *srcPtrHSL = (Rpp32f *)calloc(3 * srcSize.height * srcSize.width, sizeof(Rpp32f));

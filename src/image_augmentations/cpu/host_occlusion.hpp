@@ -23,6 +23,8 @@ RppStatus occlusion_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize1, RppiSize src
 
     compute_subimage_location_host(dstPtr, &dstPtrSubImage, srcSize1, &dstSizeSubImage, src1x1, src1y1, src1x2, src1y2, chnFormat, channel);
 
+    memcpy(dstPtr, srcPtr1, channel * srcSize1.height * srcSize1.width * sizeof(T));
+/*
     T *srcPtr1Temp, *dstPtrTemp;
     srcPtr1Temp = srcPtr1;
     dstPtrTemp = dstPtr;
@@ -33,7 +35,7 @@ RppStatus occlusion_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize1, RppiSize src
         srcPtr1Temp++;
         dstPtrTemp++;
     }
-
+*/
     T *dstPtrResizeTemp, *dstPtrSubImageTemp;
     dstPtrResizeTemp = dstPtrResize;
     dstPtrSubImageTemp = dstPtrSubImage;
