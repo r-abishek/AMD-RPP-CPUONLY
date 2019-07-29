@@ -79,6 +79,50 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_jitter
+    src/image_augmentations/rppi_jitter.cpp
+)
+target_include_directories(rppi_jitter
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_jitter
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_histogram
+    src/statistical_operations/rppi_histogram.cpp
+)
+target_include_directories(rppi_histogram
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_histogram
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_equalize_histogram
+    src/statistical_operations/rppi_equalize_histogram.cpp
+)
+target_include_directories(rppi_equalize_histogram
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_equalize_histogram
+    ${OpenCV_LIBS}
+)
 
 
 
