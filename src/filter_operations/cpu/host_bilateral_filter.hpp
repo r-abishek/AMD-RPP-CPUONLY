@@ -33,6 +33,9 @@ RppStatus bilateral_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     srcPtrWindow = srcPtrMod;
     dstPtrTemp = dstPtr;
 
+    T maxVal = (T)(std::numeric_limits<T>::max());
+    T minVal = (T)(std::numeric_limits<T>::min());
+
     if (chnFormat == RPPI_CHN_PLANAR)
     {
         for (int c = 0; c < channel; c++)
@@ -45,7 +48,7 @@ RppStatus bilateral_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                                       srcPtrWindow, srcSizeMod, remainingElementsInRowPlanar, incrementToWindowCenterPlanar, 
                                                       chnFormat, channel);
                     convolution_kernel_host(srcPtrWindow, dstPtrTemp, srcSize, 
-                                            kernel, kernelSize, remainingElementsInRowPlanar, 
+                                            kernel, kernelSize, remainingElementsInRowPlanar, maxVal, minVal, 
                                             chnFormat, channel);
                     srcPtrWindow++;
                     dstPtrTemp++;
@@ -67,7 +70,7 @@ RppStatus bilateral_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                                       srcPtrWindow, srcSizeMod, remainingElementsInRowPacked, incrementToWindowCenterPacked, 
                                                       chnFormat, channel);
                     convolution_kernel_host(srcPtrWindow, dstPtrTemp, srcSize, 
-                                            kernel, kernelSize, remainingElementsInRowPacked, 
+                                            kernel, kernelSize, remainingElementsInRowPacked, maxVal, minVal, 
                                             chnFormat, channel);
                     srcPtrWindow++;
                     dstPtrTemp++;

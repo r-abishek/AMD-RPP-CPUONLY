@@ -5,17 +5,47 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 add_executable(
-    rppi_warp_affine
-    src/geometry_transforms/rppi_warp_affine.cpp
+    rppi_thresholding
+    src/statistical_operations/rppi_thresholding.cpp
 )
-target_include_directories(rppi_warp_affine
+target_include_directories(rppi_thresholding
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_warp_affine
+    rppi_thresholding
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_contrast
+    src/image_augmentations/rppi_contrast.cpp
+)
+target_include_directories(rppi_contrast
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_contrast
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_blur
+    src/image_augmentations/rppi_blur.cpp
+)
+target_include_directories(rppi_blur
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_blur
     ${OpenCV_LIBS}
 )
 

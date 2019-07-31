@@ -1,15 +1,15 @@
-// rppi_sobel_filter
+// rppi_thresholding
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_filter_operations.h"
+#include "rppi_statistical_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
 #include "cpu/rpp_cpu_input_and_display.hpp"
 #include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
-#include "cpu/host_sobel_filter.hpp"
+#include "cpu/host_thresholding.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -18,31 +18,38 @@ using namespace std::chrono;
 
 
 
+
 RppStatus
-rppi_sobel_filter_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u sobelType)
+rppi_thresholding_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp8u min, Rpp8u max)
 {
-    sobel_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
-                             sobelType, 
+    thresholding_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
+                             min, max, 
                              RPPI_CHN_PLANAR, 1);
+
     return RPP_SUCCESS;
+
 }
 
 RppStatus
-rppi_sobel_filter_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u sobelType)
+rppi_thresholding_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp8u min, Rpp8u max)
 {
-    sobel_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
-                             sobelType, 
+    thresholding_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
+                             min, max, 
                              RPPI_CHN_PLANAR, 3);
+
     return RPP_SUCCESS;
+
 }
 
 RppStatus
-rppi_sobel_filter_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u sobelType)
+rppi_thresholding_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp8u min, Rpp8u max)
 {
-    sobel_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
-                             sobelType, 
+    thresholding_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
+                             min, max, 
                              RPPI_CHN_PACKED, 3);
+
     return RPP_SUCCESS;
+
 }
 
 
@@ -53,18 +60,14 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    Rpp32u sobelType;
+    Rpp8u min, max;
+    min = (Rpp8u) 50;
+    max = (Rpp8u) 150;
 
-    do
-    {
-        printf("\nEnter sobelType (0/1/2): ");
-        scanf("%d", &sobelType);
-    }while (sobelType != 0 && sobelType != 1 && sobelType != 2);
-    
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
-
+    
     int type;
     printf("\nEnter type of arrangement: 1 = planar, 2 = packed: ");
     scanf("%d", &type);
@@ -106,9 +109,9 @@ int main(int argc, char** argv)
 
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
-        
+
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
-        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
@@ -121,7 +124,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_sobel_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, sobelType);
+                rppi_thresholding_u8_pln1_host(srcPtr, srcSize, dstPtr, min, max);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -135,7 +138,7 @@ int main(int argc, char** argv)
                 rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_sobel_filter_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, sobelType);
+                rppi_thresholding_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, min, max);
                 stop = high_resolution_clock::now();
 
                 rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -149,7 +152,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_sobel_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, sobelType);
+                rppi_thresholding_u8_pln1_host(srcPtr, srcSize, dstPtr, min, max);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -158,7 +161,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_sobel_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, sobelType);
+                rppi_thresholding_u8_pkd3_host(srcPtr, srcSize, dstPtr, min, max);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -179,22 +182,23 @@ int main(int argc, char** argv)
 
         return 0;
     }
-     
+
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
-
+    
     if (matrix == 1)
     {
         channel = 1;
         srcSize.height = 3;
         srcSize.width = 4;
         Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
+        Rpp8u maskPtr[12] = {0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0};
         Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_sobel_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, sobelType);
-        printf("\n\nOutput of sobel_filter:\n");
+        rppi_thresholding_u8_pln1_host(srcPtr, srcSize, dstPtr, min, max);
+        printf("\n\nOutput of thresholding operation:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -205,21 +209,23 @@ int main(int argc, char** argv)
         if (type == 1)
         {
             Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
+            Rpp8u maskPtr[36] = {0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0};
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_sobel_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, sobelType);
-            printf("\n\nOutput of sobel_filter:\n");
+            rppi_thresholding_u8_pln3_host(srcPtr, srcSize, dstPtr, min, max);
+            printf("\n\nOutput of thresholding operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
         {
             Rpp8u srcPtr[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
+            Rpp8u maskPtr[36] = {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_sobel_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, sobelType);
-            printf("\n\nOutput of sobel_filter:\n");
+            rppi_thresholding_u8_pkd3_host(srcPtr, srcSize, dstPtr, min, max);
+            printf("\n\nOutput of thresholding operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -244,13 +250,13 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_sobel_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, sobelType);
+                rppi_thresholding_u8_pln1_host(srcPtr, srcSize, dstPtr, min, max);
             }
             else if (channel == 3)
             {
-                rppi_sobel_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, sobelType);
+                rppi_thresholding_u8_pln3_host(srcPtr, srcSize, dstPtr, min, max);
             }
-            printf("\n\nOutput of sobel_filter:\n");
+            printf("\n\nOutput of thresholding operation:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -262,13 +268,13 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_sobel_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, sobelType);
+                rppi_thresholding_u8_pln1_host(srcPtr, srcSize, dstPtr, min, max);
             }
             else if (channel == 3)
             {
-                rppi_sobel_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, sobelType);
+                rppi_thresholding_u8_pkd3_host(srcPtr, srcSize, dstPtr, min, max);
             }
-            printf("\n\nOutput of sobel_filter:\n");
+            printf("\n\nOutput of thresholding operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }
