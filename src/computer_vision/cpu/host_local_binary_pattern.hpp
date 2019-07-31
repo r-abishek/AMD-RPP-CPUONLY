@@ -14,15 +14,17 @@ RppStatus local_binary_pattern_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     generate_evenly_padded_image_host(srcPtr, srcSize, srcPtrMod, srcSizeMod, chnFormat, channel);
 
-    Rpp32u remainingElementsInRowPlanar = srcSizeMod.width - kernelSize;
-    Rpp32u remainingElementsInRowPacked = (srcSizeMod.width - kernelSize) * channel;
-    
     T *srcPtrWindow, *dstPtrTemp;
     srcPtrWindow = srcPtrMod;
     dstPtrTemp = dstPtr;
     
     if (chnFormat == RPPI_CHN_PLANAR)
     {
+        Rpp32u rowIncrementForWindow = kernelSize - 1;
+        Rpp32u channelIncrementForWindow = (kernelSize - 1) * srcSizeMod.width;
+        Rpp32u remainingElementsInRow = srcSizeMod.width - kernelSize;
+        Rpp32u centerPixelIncrement = srcSize.width + 1;
+
         for (int c = 0; c < channel; c++)
         {
             for (int i = 0; i < srcSize.height; i++)
@@ -30,18 +32,22 @@ RppStatus local_binary_pattern_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                 for (int j = 0; j < srcSize.width; j++)
                 {
                     local_binary_pattern_kernel_host(srcPtrWindow, dstPtrTemp, srcSize, 
-                                    remainingElementsInRowPlanar, 
+                                    remainingElementsInRow, srcPtrWindow + centerPixelIncrement, 
                                     chnFormat, channel);
                     srcPtrWindow++;
                     dstPtrTemp++;
                 }
-                srcPtrWindow += (kernelSize - 1);
+                srcPtrWindow += (rowIncrementForWindow);
             }
-            srcPtrWindow += ((kernelSize - 1) * srcSizeMod.width);
+            srcPtrWindow += (channelIncrementForWindow);
         }
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
+        Rpp32u rowIncrementForWindow = (kernelSize - 1) * channel;
+        Rpp32u remainingElementsInRow = (srcSizeMod.width - kernelSize) * channel;
+        Rpp32u centerPixelIncrement = channel * (srcSize.width + 1);
+
         for (int i = 0; i < srcSize.height; i++)
         {
             for (int j = 0; j < srcSize.width; j++)
@@ -49,13 +55,13 @@ RppStatus local_binary_pattern_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                 for (int c = 0; c < channel; c++)
                 {   
                     local_binary_pattern_kernel_host(srcPtrWindow, dstPtrTemp, srcSize, 
-                                    remainingElementsInRowPacked, 
+                                    remainingElementsInRow, srcPtrWindow + centerPixelIncrement, 
                                     chnFormat, channel);
                     srcPtrWindow++;
                     dstPtrTemp++;
                 }
             }
-            srcPtrWindow += ((kernelSize - 1) * channel);
+            srcPtrWindow += (rowIncrementForWindow);
         }
     }
 

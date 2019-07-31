@@ -760,87 +760,116 @@ RppStatus median_filter_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize sr
 
 template<typename T>
 RppStatus local_binary_pattern_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
-                                       Rpp32u remainingElementsInRow, 
+                                       Rpp32u remainingElementsInRow, T* centerPixelPtr, 
                                        RppiChnFormat chnFormat, Rpp32u channel)
 {
-    Rpp32u kernelSize = 3;
-    T *neighborhood = (T *)calloc(kernelSize * kernelSize, sizeof(T));
-    T pixel = 0;
-
-    T *srcPtrWindowTemp, *neighborhoodTemp;
+    T pixel = (T) 0;
+    T *srcPtrWindowTemp;
     srcPtrWindowTemp = srcPtrWindow;
-    neighborhoodTemp = neighborhood;
     
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        *neighborhoodTemp = *srcPtrWindowTemp;
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 0);
+        }
         srcPtrWindowTemp++;
-        neighborhoodTemp++;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp++;
-        neighborhoodTemp++;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp++;
-        neighborhoodTemp += 5;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp++;
-        neighborhoodTemp++;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp++;
-        neighborhoodTemp -= 5;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp++;
-        neighborhoodTemp += 3;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp++;
-        neighborhoodTemp--;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp++;
-        neighborhoodTemp--;
-        *neighborhoodTemp = *srcPtrWindowTemp;
 
-        srcPtrWindowTemp = srcPtrWindow + srcSize.width + 1;
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 1);
+        }
+        srcPtrWindowTemp++;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 2);
+        }
+        srcPtrWindowTemp++;
+        srcPtrWindowTemp += remainingElementsInRow;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 7);
+        }
+        srcPtrWindowTemp += 2;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 3);
+        }
+        srcPtrWindowTemp++;
+        srcPtrWindowTemp += remainingElementsInRow;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 6);
+        }
+        srcPtrWindowTemp++;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 5);
+        }
+        srcPtrWindowTemp++;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 4);
+        }
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp += channel;
-        neighborhoodTemp++;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp += channel;
-        neighborhoodTemp++;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp += channel;
-        neighborhoodTemp += 5;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp += channel;
-        neighborhoodTemp++;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp += channel;
-        neighborhoodTemp -= 5;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp += channel;
-        neighborhoodTemp += 3;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp += channel;
-        neighborhoodTemp--;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-        srcPtrWindowTemp += channel;
-        neighborhoodTemp--;
-        *neighborhoodTemp = *srcPtrWindowTemp;
-
-        srcPtrWindowTemp = srcPtrWindow + (channel * (srcSize.width + 1));
-    }
-
-    neighborhoodTemp = neighborhood;
-    
-    for (int i = 0; i < 8; i++)
-    {
-        if (*neighborhoodTemp - *srcPtrWindowTemp >= 0)
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
         {
-            pixel += pow(2, i);
+            pixel += pow(2, 0);
+        }
+        srcPtrWindowTemp += channel;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 1);
+        }
+        srcPtrWindowTemp += channel;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 2);
+        }
+        srcPtrWindowTemp += channel;
+        srcPtrWindowTemp += remainingElementsInRow;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 7);
+        }
+        srcPtrWindowTemp += (2 * channel);
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 3);
+        }
+        srcPtrWindowTemp += channel;
+        srcPtrWindowTemp += remainingElementsInRow;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 6);
+        }
+        srcPtrWindowTemp += channel;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 5);
+        }
+        srcPtrWindowTemp += channel;
+
+        if (*srcPtrWindowTemp - *centerPixelPtr >= 0)
+        {
+            pixel += pow(2, 4);
         }
     }
+
     *dstPtrPixel = pixel;
 
     return RPP_SUCCESS;
