@@ -5,6 +5,21 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 add_executable(
+    rppi_phase
+    src/arithmetic_operations/rppi_phase.cpp
+)
+target_include_directories(rppi_phase
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_phase
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_look_up_table
     src/color_model_conversions/rppi_look_up_table.cpp
 )
