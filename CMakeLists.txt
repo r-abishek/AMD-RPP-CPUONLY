@@ -5,6 +5,21 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 add_executable(
+    rppi_look_up_table
+    src/color_model_conversions/rppi_look_up_table.cpp
+)
+target_include_directories(rppi_look_up_table
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_look_up_table
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_thresholding
     src/statistical_operations/rppi_thresholding.cpp
 )
