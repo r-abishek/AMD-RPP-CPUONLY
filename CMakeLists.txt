@@ -20,6 +20,21 @@ target_link_libraries(
 )
 
 add_executable(
+    rppi_corner_pad_image
+    src/geometry_transforms/rppi_corner_pad_image.cpp
+)
+target_include_directories(rppi_corner_pad_image
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_corner_pad_image
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_integral
     src/statistical_operations/rppi_integral.cpp
 )
