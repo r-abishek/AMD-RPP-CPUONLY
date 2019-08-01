@@ -5,107 +5,32 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 add_executable(
-    rppi_phase
-    src/arithmetic_operations/rppi_phase.cpp
+    rppi_pad_image
+    src/geometry_transforms/rppi_pad_image.cpp
 )
-target_include_directories(rppi_phase
+target_include_directories(rppi_pad_image
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_phase
+    rppi_pad_image
     ${OpenCV_LIBS}
 )
 
 add_executable(
-    rppi_look_up_table
-    src/color_model_conversions/rppi_look_up_table.cpp
+    rppi_integral
+    src/statistical_operations/rppi_integral.cpp
 )
-target_include_directories(rppi_look_up_table
+target_include_directories(rppi_integral
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_look_up_table
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_thresholding
-    src/statistical_operations/rppi_thresholding.cpp
-)
-target_include_directories(rppi_thresholding
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_thresholding
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_contrast
-    src/image_augmentations/rppi_contrast.cpp
-)
-target_include_directories(rppi_contrast
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_contrast
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_blur
-    src/image_augmentations/rppi_blur.cpp
-)
-target_include_directories(rppi_blur
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_blur
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_sobel_filter
-    src/filter_operations/rppi_sobel_filter.cpp
-)
-target_include_directories(rppi_sobel_filter
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_sobel_filter
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_magnitude
-    src/arithmetic_operations/rppi_magnitude.cpp
-)
-target_include_directories(rppi_magnitude
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_magnitude
+    rppi_integral
     ${OpenCV_LIBS}
 )
 
@@ -136,111 +61,6 @@ target_include_directories(rppi_local_binary_pattern
 )
 target_link_libraries(
     rppi_local_binary_pattern
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_histogram
-    src/statistical_operations/rppi_histogram.cpp
-)
-target_include_directories(rppi_histogram
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_histogram
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_equalize_histogram
-    src/statistical_operations/rppi_equalize_histogram.cpp
-)
-target_include_directories(rppi_equalize_histogram
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_equalize_histogram
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_occlusion
-    src/image_augmentations/rppi_occlusion.cpp
-)
-target_include_directories(rppi_occlusion
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_occlusion
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_snow
-    src/image_augmentations/rppi_snow.cpp
-)
-target_include_directories(rppi_snow
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_snow
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_random_shadow
-    src/image_augmentations/rppi_random_shadow.cpp
-)
-target_include_directories(rppi_random_shadow
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_random_shadow
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_pixelate
-    src/image_augmentations/rppi_pixelate.cpp
-)
-target_include_directories(rppi_pixelate
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_pixelate
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_jitter
-    src/image_augmentations/rppi_jitter.cpp
-)
-target_include_directories(rppi_jitter
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_jitter
     ${OpenCV_LIBS}
 )
 
@@ -378,6 +198,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_phase
+    src/arithmetic_operations/rppi_phase.cpp
+)
+target_include_directories(rppi_phase
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_phase
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -498,6 +333,21 @@ target_include_directories(rppi_median_filter
 )
 target_link_libraries(
     rppi_median_filter
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_sobel_filter
+    src/filter_operations/rppi_sobel_filter.cpp
+)
+target_include_directories(rppi_sobel_filter
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_sobel_filter
     ${OpenCV_LIBS}
 )
 
@@ -657,6 +507,21 @@ target_include_directories(rppi_histogram_subimage_perChannel
 )
 target_link_libraries(
     rppi_histogram_subimage_perChannel
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_thresholding
+    src/statistical_operations/rppi_thresholding.cpp
+)
+target_include_directories(rppi_thresholding
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_thresholding
     ${OpenCV_LIBS}
 )
 
@@ -930,6 +795,21 @@ target_include_directories(rppi_channel_combine
 )
 target_link_libraries(
     rppi_channel_combine
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_look_up_table
+    src/color_model_conversions/rppi_look_up_table.cpp
+)
+target_include_directories(rppi_look_up_table
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_look_up_table
     ${OpenCV_LIBS}
 )
 
@@ -1242,6 +1122,30 @@ target_include_directories(rppi_dilate
 )
 target_link_libraries(
     rppi_dilate
+    ${OpenCV_LIBS}
+)
+
+
+
+
+
+
+
+
+
+
+add_executable(
+    rppi_local_binary_pattern
+    src/computer_vision/rppi_local_binary_pattern.cpp
+)
+target_include_directories(rppi_local_binary_pattern
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_local_binary_pattern
     ${OpenCV_LIBS}
 )
 ]]
