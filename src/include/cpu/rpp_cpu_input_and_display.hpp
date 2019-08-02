@@ -142,3 +142,37 @@ void displayPackedF(Rpp32f *pArr, RppiSize size, Rpp32u channel)
         p += (channel * size.width);
     }
 }
+
+template <typename T>
+void displayTensor(T *pArr, Rpp32u size)
+{
+    int p = 0, count = 0;
+    for (int i = 0; i < size; i++, count++)
+    {
+        printf("%d\t", (int) *(pArr + p));
+        p++;
+        if (count == 19)
+        {
+            printf("\n");
+            count = 0;
+        }
+    }
+    printf("\n");
+}
+
+template <typename T>
+void displayTensorF(T *pArr, Rpp32u size)
+{
+    int p = 0, count = 0;
+    for (int i = 0; i < size; i++, count++)
+    {
+        printf("%0.6f\t", (int) *(pArr + p));
+        p++;
+        if (count == 19)
+        {
+            printf("\n");
+            count = 0;
+        }
+    }
+    printf("\n");
+}

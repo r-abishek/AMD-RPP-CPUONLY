@@ -94,6 +94,51 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_tensor_add
+    src/arithmetic_operations/rppi_tensor_add.cpp
+)
+target_include_directories(rppi_tensor_add
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_add
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_tensor_subtract
+    src/arithmetic_operations/rppi_tensor_subtract.cpp
+)
+target_include_directories(rppi_tensor_subtract
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_subtract
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_tensor_multiply
+    src/arithmetic_operations/rppi_tensor_multiply.cpp
+)
+target_include_directories(rppi_tensor_multiply
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_multiply
+    ${OpenCV_LIBS}
+)
+
 
 
 
