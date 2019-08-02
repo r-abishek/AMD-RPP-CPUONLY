@@ -79,6 +79,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_max
+    src/statistical_operations/rppi_max.cpp
+)
+target_include_directories(rppi_max
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_max
+    ${OpenCV_LIBS}
+)
+
 
 
 

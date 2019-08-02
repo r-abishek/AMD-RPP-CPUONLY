@@ -22,7 +22,7 @@ using namespace std::chrono;
 RppStatus
 rppi_integral_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    integral_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr), 
+    integral_host<Rpp8u, Rpp32u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp32u*>(dstPtr), 
                          RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
@@ -32,7 +32,7 @@ rppi_integral_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 RppStatus
 rppi_integral_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    integral_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr), 
+    integral_host<Rpp8u, Rpp32u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp32u*>(dstPtr), 
                          RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
@@ -42,7 +42,7 @@ rppi_integral_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 RppStatus
 rppi_integral_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    integral_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr), 
+    integral_host<Rpp8u, Rpp32u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp32u*>(dstPtr), 
                          RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
@@ -180,7 +180,7 @@ int main(int argc, char** argv)
 
         return 0;
     }
-/*
+
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
@@ -191,8 +191,7 @@ int main(int argc, char** argv)
         srcSize.height = 3;
         srcSize.width = 4;
         Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
-        Rpp8u maskPtr[12] = {0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0};
-        Rpp8u dstPtr[12] = {0};
+        Rpp32u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
         rppi_integral_u8_pln1_host(srcPtr, srcSize, dstPtr);
@@ -207,8 +206,7 @@ int main(int argc, char** argv)
         if (type == 1)
         {
             Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
-            Rpp8u maskPtr[36] = {0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0};
-            Rpp8u dstPtr[36] = {0};
+            Rpp32u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
             rppi_integral_u8_pln3_host(srcPtr, srcSize, dstPtr);
@@ -218,8 +216,7 @@ int main(int argc, char** argv)
         else if (type == 2)
         {
             Rpp8u srcPtr[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
-            Rpp8u maskPtr[36] = {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            Rpp8u dstPtr[36] = {0};
+            Rpp32u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
             rppi_integral_u8_pkd3_host(srcPtr, srcSize, dstPtr);
@@ -237,7 +234,7 @@ int main(int argc, char** argv)
         scanf("%d", &srcSize.width);
         printf("Channels = %d, Height = %d, Width = %d", channel, srcSize.height, srcSize.width);
         Rpp8u *srcPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
-        Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+        Rpp32u *dstPtr = (Rpp32u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp32u));
         int *intSrcPtr = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
         if (type == 1)
         {
@@ -275,5 +272,5 @@ int main(int argc, char** argv)
             printf("\n\nOutput of integral operation:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
-    }*/
+    }
 }
