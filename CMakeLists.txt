@@ -52,6 +52,21 @@ target_link_libraries(
 )
 
 add_executable(
+    rppi_data_object_copy
+    src/computer_vision/rppi_data_object_copy.cpp
+)
+target_include_directories(rppi_data_object_copy
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_data_object_copy
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_max
     src/statistical_operations/rppi_max.cpp
 )
@@ -1282,6 +1297,21 @@ target_include_directories(rppi_local_binary_pattern
 )
 target_link_libraries(
     rppi_local_binary_pattern
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_data_object_copy
+    src/computer_vision/rppi_data_object_copy.cpp
+)
+target_include_directories(rppi_data_object_copy
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_data_object_copy
     ${OpenCV_LIBS}
 )
 ]]
