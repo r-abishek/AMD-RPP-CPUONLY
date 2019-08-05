@@ -962,6 +962,7 @@ RppStatus convolve_image_host(T* srcPtrMod, RppiSize srcSizeMod, U* dstPtr, Rppi
     if (chnFormat == RPPI_CHN_PLANAR)
     {
         Rpp32u remainingElementsInRow = srcSizeMod.width - kernelSize.width;
+        Rpp32u windowRowIncrement = kernelSize.width - 1;
 
         for (int c = 0; c < channel; c++)
         {
@@ -975,7 +976,7 @@ RppStatus convolve_image_host(T* srcPtrMod, RppiSize srcSizeMod, U* dstPtr, Rppi
                     srcPtrWindow++;
                     dstPtrTemp++;
                 }
-                srcPtrWindow += (kernelSize.width - 1);
+                srcPtrWindow += windowRowIncrement;
             }
             srcPtrWindow += ((kernelSize.height - 1) * srcSizeMod.width);
         }
@@ -983,6 +984,7 @@ RppStatus convolve_image_host(T* srcPtrMod, RppiSize srcSizeMod, U* dstPtr, Rppi
     else if (chnFormat == RPPI_CHN_PACKED)
     {
         Rpp32u remainingElementsInRow = (srcSizeMod.width - kernelSize.width) * channel;
+        Rpp32u windowRowIncrement = (kernelSize.width - 1) * channel;
         
         for (int i = 0; i < srcSize.height; i++)
         {
@@ -997,7 +999,7 @@ RppStatus convolve_image_host(T* srcPtrMod, RppiSize srcSizeMod, U* dstPtr, Rppi
                     dstPtrTemp++;
                 }
             }
-            srcPtrWindow += ((kernelSize.width - 1) * channel);
+            srcPtrWindow += windowRowIncrement;
         }
     }
     
@@ -1830,6 +1832,66 @@ RppStatus compute_threshold_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
 
     return RPP_SUCCESS;
 
+}
+
+template <typename T>
+RppStatus compute_downsampled_image_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize, 
+                                         RppiChnFormat chnFormat, Rpp32u channel)
+{
+    T *srcPtrTemp, *dstPtrTemp;
+    srcPtrTemp = srcPtr;
+    dstPtrTemp = dstPtr;
+
+    Rpp8u checkEven;
+    checkEven = (Rpp8u) RPPISEVEN(srcSize.width);
+
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int c = 0; c < channel; c++)
+        {
+            srcPtrTemp = srcPtr + (c * srcSize.height * srcSize.width);
+
+            for (int i = 0; i < dstSize.height; i++)
+            {
+                for (int j = 0; j < dstSize.width; j++)
+                {
+                    *dstPtrTemp = *srcPtrTemp;
+                    srcPtrTemp += 2;
+                    dstPtrTemp++;
+                }
+                if (checkEven == 0)
+                {
+                    srcPtrTemp--;
+                }
+                srcPtrTemp += srcSize.width;
+            }
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        Rpp32u elementsInRow = srcSize.width * channel;    
+        
+        for (int i = 0; i < dstSize.height; i++)
+        {
+            for (int j = 0; j < dstSize.width; j++)
+            {
+                for (int c = 0; c < channel; c++)
+                {
+                    *dstPtrTemp = *srcPtrTemp;
+                    srcPtrTemp++;
+                    dstPtrTemp++;
+                }
+                srcPtrTemp += channel;
+            }
+            if (checkEven == 0)
+            {
+                srcPtrTemp -= channel;
+            }
+            srcPtrTemp += elementsInRow;
+        }
+    }
+
+    return RPP_SUCCESS;
 }
 
 #endif //RPP_CPU_COMMON_H

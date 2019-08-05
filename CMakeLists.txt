@@ -7,6 +7,21 @@ project(amd_rpp VERSION 0.1)
 
 
 add_executable(
+    rppi_blur
+    src/image_augmentations/rppi_blur.cpp
+)
+target_include_directories(rppi_blur
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_blur
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_custom_convolution
     src/filter_operations/rppi_custom_convolution.cpp
 )
@@ -48,6 +63,21 @@ target_include_directories(rppi_local_binary_pattern
 )
 target_link_libraries(
     rppi_local_binary_pattern
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_gaussian_image_pyramid
+    src/computer_vision/rppi_gaussian_image_pyramid.cpp
+)
+target_include_directories(rppi_gaussian_image_pyramid
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_gaussian_image_pyramid
     ${OpenCV_LIBS}
 )
 
