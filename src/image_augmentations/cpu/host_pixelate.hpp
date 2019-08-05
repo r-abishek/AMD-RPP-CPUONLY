@@ -44,7 +44,10 @@ RppStatus pixelate_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         srcPtrMod = srcPtrSubImage - (bound * srcSize.width * channel) - (bound * channel);
     }
 
-    convolve_subimage_host(srcPtrMod, srcSizeMod, dstPtrSubImage, srcSizeSubImage, srcSize, kernel, kernelSize, chnFormat, channel);
+    RppiSize rppiKernelSize;
+    rppiKernelSize.height = kernelSize;
+    rppiKernelSize.width = kernelSize;
+    convolve_subimage_host(srcPtrMod, srcSizeMod, dstPtrSubImage, srcSizeSubImage, srcSize, kernel, rppiKernelSize, chnFormat, channel);
 
     return RPP_SUCCESS;
 }

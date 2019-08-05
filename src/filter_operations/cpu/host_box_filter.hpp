@@ -21,7 +21,10 @@ RppStatus box_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     generate_evenly_padded_image_host(srcPtr, srcSize, srcPtrMod, srcSizeMod, chnFormat, channel);
     
-    convolve_image_host(srcPtrMod, srcSizeMod, dstPtr, srcSize, kernel, kernelSize, chnFormat, channel);
+    RppiSize rppiKernelSize;
+    rppiKernelSize.height = kernelSize;
+    rppiKernelSize.width = kernelSize;
+    convolve_image_host(srcPtrMod, srcSizeMod, dstPtr, srcSize, kernel, rppiKernelSize, chnFormat, channel);
     
     return RPP_SUCCESS;
 }

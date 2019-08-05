@@ -4,48 +4,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
-add_executable(
-    rppi_pad_image
-    src/geometry_transforms/rppi_pad_image.cpp
-)
-target_include_directories(rppi_pad_image
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_pad_image
-    ${OpenCV_LIBS}
-)
+
 
 add_executable(
-    rppi_corner_pad_image
-    src/geometry_transforms/rppi_corner_pad_image.cpp
+    rppi_custom_convolution
+    src/filter_operations/rppi_custom_convolution.cpp
 )
-target_include_directories(rppi_corner_pad_image
+target_include_directories(rppi_custom_convolution
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_corner_pad_image
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_integral
-    src/statistical_operations/rppi_integral.cpp
-)
-target_include_directories(rppi_integral
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_integral
+    rppi_custom_convolution
     ${OpenCV_LIBS}
 )
 
@@ -95,50 +67,49 @@ target_link_libraries(
 )
 
 add_executable(
-    rppi_tensor_add
-    src/arithmetic_operations/rppi_tensor_add.cpp
+    rppi_pixelate
+    src/image_augmentations/rppi_pixelate.cpp
 )
-target_include_directories(rppi_tensor_add
+target_include_directories(rppi_pixelate
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_tensor_add
+    rppi_pixelate
     ${OpenCV_LIBS}
 )
 
 add_executable(
-    rppi_tensor_subtract
-    src/arithmetic_operations/rppi_tensor_subtract.cpp
+    rppi_pad_image
+    src/geometry_transforms/rppi_pad_image.cpp
 )
-target_include_directories(rppi_tensor_subtract
+target_include_directories(rppi_pad_image
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_tensor_subtract
+    rppi_pad_image
     ${OpenCV_LIBS}
 )
 
 add_executable(
-    rppi_tensor_multiply
-    src/arithmetic_operations/rppi_tensor_multiply.cpp
+    rppi_corner_pad_image
+    src/geometry_transforms/rppi_corner_pad_image.cpp
 )
-target_include_directories(rppi_tensor_multiply
+target_include_directories(rppi_corner_pad_image
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_tensor_multiply
+    rppi_corner_pad_image
     ${OpenCV_LIBS}
 )
-
 
 
 
@@ -288,6 +259,51 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_tensor_add
+    src/arithmetic_operations/rppi_tensor_add.cpp
+)
+target_include_directories(rppi_tensor_add
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_add
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_tensor_subtract
+    src/arithmetic_operations/rppi_tensor_subtract.cpp
+)
+target_include_directories(rppi_tensor_subtract
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_subtract
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_tensor_multiply
+    src/arithmetic_operations/rppi_tensor_multiply.cpp
+)
+target_include_directories(rppi_tensor_multiply
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_multiply
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -365,7 +381,7 @@ target_link_libraries(
 
 
 
-
+]]
 add_executable(
     rppi_box_filter
     src/filter_operations/rppi_box_filter.cpp
@@ -425,7 +441,7 @@ target_link_libraries(
     rppi_sobel_filter
     ${OpenCV_LIBS}
 )
-
+#[[
 
 
 
@@ -600,6 +616,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_integral
+    src/statistical_operations/rppi_integral.cpp
+)
+target_include_directories(rppi_integral
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_integral
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -726,6 +757,36 @@ target_include_directories(rppi_transpose
 )
 target_link_libraries(
     rppi_transpose
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_pad_image
+    src/geometry_transforms/rppi_pad_image.cpp
+)
+target_include_directories(rppi_pad_image
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_pad_image
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_corner_pad_image
+    src/geometry_transforms/rppi_corner_pad_image.cpp
+)
+target_include_directories(rppi_corner_pad_image
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_corner_pad_image
     ${OpenCV_LIBS}
 )
 

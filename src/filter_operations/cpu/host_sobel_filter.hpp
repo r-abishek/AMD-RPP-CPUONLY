@@ -14,29 +14,33 @@ RppStatus sobel_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     Rpp32s *dstPtrIntermediate = (Rpp32s *)calloc(srcSize.height * srcSize.width * channel, sizeof(Rpp32s));
 
+    RppiSize rppiKernelSize;
+    rppiKernelSize.height = 3;
+    rppiKernelSize.width = 3;
+
     if (sobelType == 0)
     {
         Rpp32f *kernelX = (Rpp32f *)calloc(3 * 3, sizeof(Rpp32f));
         generate_sobel_kernel_host(kernelX, 1);
-        convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediate, srcSize, kernelX, 3, chnFormat, channel);
+        convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediate, srcSize, kernelX, rppiKernelSize, chnFormat, channel);
     }
     else if (sobelType == 1)
     {
         Rpp32f *kernelY = (Rpp32f *)calloc(3 * 3, sizeof(Rpp32f));
         generate_sobel_kernel_host(kernelY, 2);
-        convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediate, srcSize, kernelY, 3, chnFormat, channel);
+        convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediate, srcSize, kernelY, rppiKernelSize, chnFormat, channel);
     }
     else if (sobelType == 2)
     {
         Rpp32f *kernelX = (Rpp32f *)calloc(3 * 3, sizeof(Rpp32f));
         generate_sobel_kernel_host(kernelX, 1);
         Rpp32s *dstPtrIntermediateX = (Rpp32s *)calloc(srcSize.height * srcSize.width * channel, sizeof(Rpp32s));
-        convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediateX, srcSize, kernelX, 3, chnFormat, channel);
+        convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediateX, srcSize, kernelX, rppiKernelSize, chnFormat, channel);
 
         Rpp32f *kernelY = (Rpp32f *)calloc(3 * 3, sizeof(Rpp32f));
         generate_sobel_kernel_host(kernelY, 2);
         Rpp32s *dstPtrIntermediateY = (Rpp32s *)calloc(srcSize.height * srcSize.width * channel, sizeof(Rpp32s));
-        convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediateY, srcSize, kernelY, 3, chnFormat, channel);
+        convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediateY, srcSize, kernelY, rppiKernelSize, chnFormat, channel);
 
         compute_magnitude_host(dstPtrIntermediateX, dstPtrIntermediateY, srcSize, dstPtrIntermediate, chnFormat, channel);
     }

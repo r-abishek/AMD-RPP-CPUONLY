@@ -1,4 +1,4 @@
-// rppi_box_filter
+// rppi_custom_convolution
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
@@ -9,7 +9,7 @@
 #include <chrono>
 #include "cpu/rpp_cpu_input_and_display.hpp"
 #include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
-#include "cpu/host_box_filter.hpp"
+#include "cpu/host_custom_convolution.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -19,29 +19,29 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_box_filter_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u kernelSize)
+rppi_custom_convolution_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize, Rpp32f scale)
 {
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     kernelSize,
-                     RPPI_CHN_PLANAR, 1);
+    custom_convolution_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                   static_cast<Rpp32f*>(kernel), kernelSize, scale, 
+                                   RPPI_CHN_PLANAR, 1);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_box_filter_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u kernelSize)
+rppi_custom_convolution_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize, Rpp32f scale)
 {
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     kernelSize,
-                     RPPI_CHN_PLANAR, 3);
+    custom_convolution_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                   static_cast<Rpp32f*>(kernel), kernelSize, scale, 
+                                   RPPI_CHN_PLANAR, 3);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_box_filter_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u kernelSize)
+rppi_custom_convolution_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize, Rpp32f scale)
 {
-    box_filter_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     kernelSize,
-                     RPPI_CHN_PACKED, 3);
+    custom_convolution_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                   static_cast<Rpp32f*>(kernel), kernelSize, scale, 
+                                   RPPI_CHN_PACKED, 3);
     return RPP_SUCCESS;
 }
 
@@ -51,9 +51,21 @@ rppi_box_filter_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
 
 int main(int argc, char** argv)
 {
-    RppiSize srcSize, dstSize;
+    RppiSize srcSize, dstSize, kernelSize;
     unsigned int channel;
-    unsigned int kernelSize = 3;
+
+    kernelSize.height = 9;
+    kernelSize.width = 5;
+    Rpp32f scale = 45;
+    Rpp32f kernel[45];
+
+    for (int i = 0; i < kernelSize.height * kernelSize.width; i++)
+    {
+        kernel[i] = 1;
+    }
+
+    printf("\nKernel Display: ");
+    displayPlanar(kernel, kernelSize, 1);
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -115,7 +127,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_box_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -129,7 +141,7 @@ int main(int argc, char** argv)
                 rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_box_filter_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, kernelSize);
+                rppi_custom_convolution_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, kernel, kernelSize, scale);
                 stop = high_resolution_clock::now();
 
                 rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -143,7 +155,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_box_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -152,7 +164,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_box_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize);
+                rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -187,22 +199,8 @@ int main(int argc, char** argv)
         Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_box_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
-        /*
-        if (kernelSize == 3)
-        {
-            rppi_box_filter3x3_u8_pln1_host(srcPtr, srcSize, dstPtr);
-        }
-        else if (kernelSize == 5)
-        {
-            rppi_box_filter5x5_u8_pln1_host(srcPtr, srcSize, dstPtr);
-        }
-        else if (kernelSize == 7)
-        {
-            rppi_box_filter7x7_u8_pln1_host(srcPtr, srcSize, dstPtr);
-        }
-        */
-        printf("\n\nOutput of box_filter:\n");
+        rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+        printf("\n\nOutput of custom_convolution:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -216,22 +214,8 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_box_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize);
-            /*
-            if (kernelSize == 3)
-            {
-                rppi_box_filter3x3_u8_pln3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 5)
-            {
-                rppi_box_filter5x5_u8_pln3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 7)
-            {
-                rppi_box_filter7x7_u8_pln3_host(srcPtr, srcSize, dstPtr);
-            }
-            */
-            printf("\n\nOutput of box_filter:\n");
+            rppi_custom_convolution_u8_pln3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+            printf("\n\nOutput of custom_convolution:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -240,22 +224,8 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_box_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize);
-            /*
-            if (kernelSize == 3)
-            {
-                rppi_box_filter3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 5)
-            {
-                rppi_box_filter5x5_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 7)
-            {
-                rppi_box_filter7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-            }
-            */
-            printf("\n\nOutput of box_filter:\n");
+            rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+            printf("\n\nOutput of custom_convolution:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -280,41 +250,13 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_box_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_box_filter3x3_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_box_filter5x5_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_box_filter7x7_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                */
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
             }
             else if (channel == 3)
             {
-                rppi_box_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_box_filter3x3_u8_pln3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_box_filter5x5_u8_pln3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_box_filter7x7_u8_pln3_host(srcPtr, srcSize, dstPtr);
-                }
-                */
+                rppi_custom_convolution_u8_pln3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
             }
-            printf("\n\nOutput of box_filter:\n");
+            printf("\n\nOutput of custom_convolution:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -326,41 +268,13 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_box_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_box_filter3x3_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_box_filter5x5_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_box_filter7x7_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                */
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
             }
             else if (channel == 3)
             {
-                rppi_box_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_box_filter3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_box_filter5x5_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_box_filter7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-                }
-                */
+                rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
             }
-            printf("\n\nOutput of box_filter:\n");
+            printf("\n\nOutput of custom_convolution:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }
