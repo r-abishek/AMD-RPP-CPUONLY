@@ -92,6 +92,19 @@ rppi_custom_convolution_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t
 RppStatus
 rppi_custom_convolution_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize, Rpp32f scale);
 
+// ----------------------------------------
+// Host non_max_suppression functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_non_max_suppression_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u kernelSize);
+
+RppStatus
+rppi_non_max_suppression_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u kernelSize);
+
+RppStatus
+rppi_non_max_suppression_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u kernelSize);
+
 #ifdef __cplusplus
 }
 #endif

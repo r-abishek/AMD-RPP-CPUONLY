@@ -37,6 +37,21 @@ target_link_libraries(
 )
 
 add_executable(
+    rppi_non_max_suppression
+    src/filter_operations/rppi_non_max_suppression.cpp
+)
+target_include_directories(rppi_non_max_suppression
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_non_max_suppression
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_warp_perspective
     src/geometry_transforms/rppi_warp_perspective.cpp
 )
