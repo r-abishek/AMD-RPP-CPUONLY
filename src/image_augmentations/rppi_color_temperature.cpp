@@ -20,33 +20,34 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_color_temperature_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp8s adjustmentValue)
+rppi_color_temperature_u8_pln1_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dstPtr,Rpp32s adjustmentValue)
 {
-    color_temperature_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     adjustmentValue,
-                     RPPI_CHN_PLANAR, 1);
-    return RPP_SUCCESS;
+	color_temperature_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
+                                  adjustmentValue, 
+                                  RPPI_CHN_PLANAR, 1);
+    
+	return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_color_temperature_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp8s adjustmentValue)
+rppi_color_temperature_u8_pln3_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dstPtr,Rpp32s adjustmentValue)
 {
-    color_temperature_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     adjustmentValue,
-                     RPPI_CHN_PLANAR, 3);
-    return RPP_SUCCESS;
+	color_temperature_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
+                                  adjustmentValue, 
+                                  RPPI_CHN_PLANAR, 3);
+    
+	return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_color_temperature_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp8s adjustmentValue)
+rppi_color_temperature_u8_pkd3_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dstPtr,Rpp32s adjustmentValue)
 {
-    color_temperature_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     adjustmentValue,
-                     RPPI_CHN_PACKED, 3);
-    return RPP_SUCCESS;
+
+	color_temperature_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
+                                  adjustmentValue, 
+                                  RPPI_CHN_PACKED, 3);
+    
+	return RPP_SUCCESS;
 }
 
 

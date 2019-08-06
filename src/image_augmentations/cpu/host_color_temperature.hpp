@@ -2,7 +2,7 @@
 
 template <typename T>
 RppStatus color_temperature_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
-                    Rpp8s adjustmentValue,
+                    Rpp32s adjustmentValue,
                     RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (channel != 1 && channel !=  3)
