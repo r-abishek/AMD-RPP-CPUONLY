@@ -7,11 +7,11 @@ RppStatus accumulate_squared_host(T* srcPtr, RppiSize srcSize,
     T *srcPtrTemp;
     srcPtrTemp = srcPtr;
 
-    Rpp32f pixel;
+    Rpp32s pixel;
     
     for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
-        pixel = (Rpp32f) *srcPtrTemp;
+        pixel = (Rpp32s) *srcPtrTemp;
         pixel = pixel * pixel;
         pixel = RPPPIXELCHECK(pixel);
         *srcPtrTemp =(T) pixel;

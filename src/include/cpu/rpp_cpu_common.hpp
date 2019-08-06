@@ -1223,11 +1223,11 @@ RppStatus compute_subtract_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dst
     srcPtr2Temp = srcPtr2;
     dstPtrTemp = dstPtr;
 
-    Rpp32f pixel;
+    Rpp32s pixel;
 
     for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
-        pixel = ((Rpp32f) (*srcPtr1Temp)) - ((Rpp32f) (*srcPtr2Temp));
+        pixel = ((Rpp32s) (*srcPtr1Temp)) - ((Rpp32s) (*srcPtr2Temp));
         pixel = RPPPIXELCHECK(pixel);
         *dstPtrTemp =(T) pixel;
         srcPtr1Temp++;
@@ -1249,11 +1249,11 @@ RppStatus compute_multiply_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dst
     srcPtr2Temp = srcPtr2;
     dstPtrTemp = dstPtr;
 
-    Rpp32f pixel;
+    Rpp32s pixel;
 
     for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
-        pixel = ((Rpp32f) (*srcPtr1Temp)) * ((Rpp32f) (*srcPtr2Temp));
+        pixel = ((Rpp32s) (*srcPtr1Temp)) * ((Rpp32s) (*srcPtr2Temp));
         pixel = RPPPIXELCHECK(pixel);
         *dstPtrTemp =(T) pixel;
         srcPtr1Temp++;
@@ -1840,13 +1840,18 @@ RppStatus compute_magnitude_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize, T* ds
     dstPtrTemp = dstPtr;
 
     Rpp32f pixel;
+    Rpp32s srcPtr1Value, srcPtr2Value;
     
     for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
-        pixel = sqrt(((Rpp32f)(*srcPtr1Temp) * (Rpp32f)(*srcPtr1Temp)) + ((Rpp32f)(*srcPtr2Temp) * (Rpp32f)(*srcPtr2Temp)));
-        pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
-        pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
-        *dstPtrTemp =(Rpp8u) round(pixel);
+        srcPtr1Value = (Rpp32s) *srcPtr1Temp;
+        srcPtr2Value = (Rpp32s) *srcPtr2Temp;
+        pixel = sqrt((srcPtr1Value * srcPtr1Value) + (srcPtr2Value * srcPtr2Value));
+        //pixel = sqrt(((Rpp32f)(*srcPtr1Temp) * (Rpp32f)(*srcPtr1Temp)) + ((Rpp32f)(*srcPtr2Temp) * (Rpp32f)(*srcPtr2Temp)));
+        //pixel = (pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255);
+        //pixel = (pixel > (Rpp32f) 0) ? pixel : ((Rpp32f) 0);
+        pixel = RPPPIXELCHECK(pixel);
+        *dstPtrTemp =(T) round(pixel);
         srcPtr1Temp++;
         srcPtr2Temp++;
         dstPtrTemp++;

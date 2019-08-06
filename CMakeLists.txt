@@ -194,7 +194,7 @@ target_link_libraries(
 
 
 
-
+#[[
 add_executable(
     rppi_bitwise_AND
     src/logical_operations/rppi_bitwise_AND.cpp
@@ -1256,3 +1256,4 @@ target_link_libraries(
     rppi_data_object_copy
     ${OpenCV_LIBS}
 )
+]]
