@@ -19,28 +19,28 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_custom_convolution_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize, Rpp32f scale)
+rppi_custom_convolution_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize)
 {
     custom_convolution_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                                   static_cast<Rpp32f*>(kernel), kernelSize, scale, 
+                                   static_cast<Rpp32f*>(kernel), kernelSize, 
                                    RPPI_CHN_PLANAR, 1);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_custom_convolution_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize, Rpp32f scale)
+rppi_custom_convolution_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize)
 {
     custom_convolution_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                                   static_cast<Rpp32f*>(kernel), kernelSize, scale, 
+                                   static_cast<Rpp32f*>(kernel), kernelSize, 
                                    RPPI_CHN_PLANAR, 3);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_custom_convolution_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize, Rpp32f scale)
+rppi_custom_convolution_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize)
 {
     custom_convolution_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                                   static_cast<Rpp32f*>(kernel), kernelSize, scale, 
+                                   static_cast<Rpp32f*>(kernel), kernelSize, 
                                    RPPI_CHN_PACKED, 3);
     return RPP_SUCCESS;
 }
@@ -59,13 +59,16 @@ int main(int argc, char** argv)
     Rpp32f scale = 119;
     Rpp32f kernel[119];
 
-    for (int i = 0; i < kernelSize.height * kernelSize.width; i++)
+    Rpp32f *kernelTemp;
+    kernelTemp = kernel;
+    for (int i = 0; i < (kernelSize.height * kernelSize.width); i++)
     {
-        kernel[i] = 1;
+        *kernelTemp = 1/ scale;
+        kernelTemp++;
     }
 
     printf("\nKernel Display: ");
-    displayPlanar(kernel, kernelSize, 1);
+    displayPlanarF(kernel, kernelSize, 1);
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -127,7 +130,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -141,7 +144,7 @@ int main(int argc, char** argv)
                 rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_custom_convolution_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, kernel, kernelSize, scale);
+                rppi_custom_convolution_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, kernel, kernelSize);
                 stop = high_resolution_clock::now();
 
                 rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -155,7 +158,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -164,7 +167,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+                rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -199,7 +202,7 @@ int main(int argc, char** argv)
         Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+        rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
         printf("\n\nOutput of custom_convolution:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
@@ -214,7 +217,7 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_custom_convolution_u8_pln3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+            rppi_custom_convolution_u8_pln3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
             printf("\n\nOutput of custom_convolution:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
@@ -224,7 +227,7 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+            rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
             printf("\n\nOutput of custom_convolution:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
@@ -250,11 +253,11 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
             }
             else if (channel == 3)
             {
-                rppi_custom_convolution_u8_pln3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+                rppi_custom_convolution_u8_pln3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
             }
             printf("\n\nOutput of custom_convolution:\n");
             displayPlanar(dstPtr, srcSize, channel);
@@ -268,11 +271,11 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
             }
             else if (channel == 3)
             {
-                rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize, scale);
+                rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
             }
             printf("\n\nOutput of custom_convolution:\n");
             displayPacked(dstPtr, srcSize, channel);
