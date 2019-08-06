@@ -46,6 +46,20 @@ RppStatus sobel_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     }
 
     compute_threshold_host(dstPtrIntermediate, srcSize, dstPtr, (T) 10, (T) 255, 2, chnFormat, channel);
+    /*
+    Rpp32s *dstPtrIntermediateTemp;
+    T *dstPtrTemp;
+    dstPtrIntermediateTemp = dstPtrIntermediate;
+    dstPtrTemp = dstPtr;
 
+    Rpp32s pixel;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+    {
+        *dstPtrTemp = (T) RPPPIXELCHECK(*dstPtrIntermediateTemp);
+        dstPtrTemp++;
+        dstPtrIntermediateTemp++;
+    }
+    */
     return RPP_SUCCESS;
 }

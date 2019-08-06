@@ -54,10 +54,10 @@ int main(int argc, char** argv)
     RppiSize srcSize, dstSize, kernelSize;
     unsigned int channel;
 
-    kernelSize.height = 9;
-    kernelSize.width = 5;
-    Rpp32f scale = 45;
-    Rpp32f kernel[45];
+    kernelSize.height = 7;
+    kernelSize.width = 17;
+    Rpp32f scale = 119;
+    Rpp32f kernel[119];
 
     for (int i = 0; i < kernelSize.height * kernelSize.width; i++)
     {

@@ -7,214 +7,6 @@ project(amd_rpp VERSION 0.1)
 
 
 add_executable(
-    rppi_blur
-    src/image_augmentations/rppi_blur.cpp
-)
-target_include_directories(rppi_blur
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_blur
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_custom_convolution
-    src/filter_operations/rppi_custom_convolution.cpp
-)
-target_include_directories(rppi_custom_convolution
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_custom_convolution
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_non_max_suppression
-    src/filter_operations/rppi_non_max_suppression.cpp
-)
-target_include_directories(rppi_non_max_suppression
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_non_max_suppression
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_warp_perspective
-    src/geometry_transforms/rppi_warp_perspective.cpp
-)
-target_include_directories(rppi_warp_perspective
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_warp_perspective
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_local_binary_pattern
-    src/computer_vision/rppi_local_binary_pattern.cpp
-)
-target_include_directories(rppi_local_binary_pattern
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_local_binary_pattern
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_gaussian_image_pyramid
-    src/computer_vision/rppi_gaussian_image_pyramid.cpp
-)
-target_include_directories(rppi_gaussian_image_pyramid
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_gaussian_image_pyramid
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_laplacian_image_pyramid
-    src/computer_vision/rppi_laplacian_image_pyramid.cpp
-)
-target_include_directories(rppi_laplacian_image_pyramid
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_laplacian_image_pyramid
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_data_object_copy
-    src/computer_vision/rppi_data_object_copy.cpp
-)
-target_include_directories(rppi_data_object_copy
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_data_object_copy
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_max
-    src/statistical_operations/rppi_max.cpp
-)
-target_include_directories(rppi_max
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_max
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_pixelate
-    src/image_augmentations/rppi_pixelate.cpp
-)
-target_include_directories(rppi_pixelate
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_pixelate
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_pad_image
-    src/geometry_transforms/rppi_pad_image.cpp
-)
-target_include_directories(rppi_pad_image
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_pad_image
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_corner_pad_image
-    src/geometry_transforms/rppi_corner_pad_image.cpp
-)
-target_include_directories(rppi_corner_pad_image
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_corner_pad_image
-    ${OpenCV_LIBS}
-)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#[[
-add_executable(
     rppi_absolute_difference
     src/arithmetic_operations/rppi_absolute_difference.cpp
 )
@@ -456,7 +248,7 @@ target_link_libraries(
 
 
 
-]]
+
 add_executable(
     rppi_box_filter
     src/filter_operations/rppi_box_filter.cpp
@@ -516,7 +308,37 @@ target_link_libraries(
     rppi_sobel_filter
     ${OpenCV_LIBS}
 )
-#[[
+
+add_executable(
+    rppi_custom_convolution
+    src/filter_operations/rppi_custom_convolution.cpp
+)
+target_include_directories(rppi_custom_convolution
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_custom_convolution
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_non_max_suppression
+    src/filter_operations/rppi_non_max_suppression.cpp
+)
+target_include_directories(rppi_non_max_suppression
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_non_max_suppression
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -862,6 +684,21 @@ target_include_directories(rppi_corner_pad_image
 )
 target_link_libraries(
     rppi_corner_pad_image
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_warp_perspective
+    src/geometry_transforms/rppi_warp_perspective.cpp
+)
+target_include_directories(rppi_warp_perspective
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_warp_perspective
     ${OpenCV_LIBS}
 )
 
@@ -1361,6 +1198,36 @@ target_link_libraries(
 )
 
 add_executable(
+    rppi_gaussian_image_pyramid
+    src/computer_vision/rppi_gaussian_image_pyramid.cpp
+)
+target_include_directories(rppi_gaussian_image_pyramid
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_gaussian_image_pyramid
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_laplacian_image_pyramid
+    src/computer_vision/rppi_laplacian_image_pyramid.cpp
+)
+target_include_directories(rppi_laplacian_image_pyramid
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_laplacian_image_pyramid
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_data_object_copy
     src/computer_vision/rppi_data_object_copy.cpp
 )
@@ -1374,4 +1241,3 @@ target_link_libraries(
     rppi_data_object_copy
     ${OpenCV_LIBS}
 )
-]]
