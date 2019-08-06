@@ -52,6 +52,21 @@ target_link_libraries(
 )
 
 add_executable(
+    rppi_accumulate_squared
+    src/arithmetic_operations/rppi_accumulate_squared.cpp
+)
+target_include_directories(rppi_accumulate_squared
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_accumulate_squared
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_add
     src/arithmetic_operations/rppi_add.cpp
 )

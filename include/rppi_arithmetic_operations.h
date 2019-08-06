@@ -169,6 +169,19 @@ rppi_tensor_subtract_u8_host(RppPtr_t srcPtr1,RppPtr_t srcPtr2, RppPtr_t dstPtr,
 
 RppStatus
 rppi_tensor_multiply_u8_host(RppPtr_t srcPtr1,RppPtr_t srcPtr2, RppPtr_t dstPtr, Rpp32u tensorDimension, RppPtr_t tensorDimensionValues);
+
+// ----------------------------------------
+// Host accumulate_squared functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_accumulate_squared_u8_pln1_host(RppPtr_t srcPtr,RppiSize srcSize);
+
+RppStatus
+rppi_accumulate_squared_u8_pln3_host(RppPtr_t srcPtr,RppiSize srcSize);
+
+RppStatus
+rppi_accumulate_squared_u8_pkd3_host(RppPtr_t srcPtr,RppiSize srcSize);
  
 #ifdef __cplusplus
 }
