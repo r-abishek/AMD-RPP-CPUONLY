@@ -14,12 +14,9 @@ RppStatus erode_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     RppiSize srcSizeMod;
     srcSizeMod.width = srcSize.width + (2 * bound);
     srcSizeMod.height = srcSize.height + (2 * bound);
-    Rpp8u *srcPtrMod = (Rpp8u *)calloc(srcSizeMod.height * srcSizeMod.width * channel, sizeof(Rpp8u));
+    T *srcPtrMod = (T *)calloc(srcSizeMod.height * srcSizeMod.width * channel, sizeof(T));
 
     generate_evenly_padded_image_host(srcPtr, srcSize, srcPtrMod, srcSizeMod, chnFormat, channel);
-    
-    Rpp32u remainingElementsInRowPlanar = srcSizeMod.width - kernelSize;
-    Rpp32u remainingElementsInRowPacked = (srcSizeMod.width - kernelSize) * channel;
     
     T *srcPtrWindow, *dstPtrTemp;
     srcPtrWindow = srcPtrMod;
@@ -27,6 +24,9 @@ RppStatus erode_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     
     if (chnFormat == RPPI_CHN_PLANAR)
     {
+        Rpp32u remainingElementsInRow = srcSizeMod.width - kernelSize;
+        Rpp32u rowIncrement = kernelSize - 1;
+
         for (int c = 0; c < channel; c++)
         {
             for (int i = 0; i < srcSize.height; i++)
@@ -34,18 +34,21 @@ RppStatus erode_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                 for (int j = 0; j < srcSize.width; j++)
                 {
                     erode_kernel_host(srcPtrWindow, dstPtrTemp, srcSize, 
-                                      kernelSize, remainingElementsInRowPlanar, 
+                                      kernelSize, remainingElementsInRow, 
                                       chnFormat, channel);
                     srcPtrWindow++;
                     dstPtrTemp++;
                 }
-                srcPtrWindow += (kernelSize - 1);
+                srcPtrWindow += rowIncrement;
             }
-            srcPtrWindow += ((kernelSize - 1) * srcSizeMod.width);
+            srcPtrWindow += (rowIncrement * srcSizeMod.width);
         }
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
+        Rpp32u remainingElementsInRow = (srcSizeMod.width - kernelSize) * channel;
+        Rpp32u rowIncrement = (kernelSize - 1) * channel;
+
         for (int i = 0; i < srcSize.height; i++)
         {
             for (int j = 0; j < srcSize.width; j++)
@@ -53,13 +56,13 @@ RppStatus erode_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                 for (int c = 0; c < channel; c++)
                 {   
                     erode_kernel_host(srcPtrWindow, dstPtrTemp, srcSize, 
-                                      kernelSize, remainingElementsInRowPacked, 
+                                      kernelSize, remainingElementsInRow, 
                                       chnFormat, channel);
                     srcPtrWindow++;
                     dstPtrTemp++;
                 }
             }
-            srcPtrWindow += ((kernelSize - 1) * channel);
+            srcPtrWindow += rowIncrement;
         }
     }
 

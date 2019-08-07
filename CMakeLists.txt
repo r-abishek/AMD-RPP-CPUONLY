@@ -362,7 +362,7 @@ target_link_libraries(
 
 
 
-]]
+
 add_executable(
     rppi_histogram
     src/statistical_operations/rppi_histogram.cpp
@@ -542,7 +542,7 @@ target_link_libraries(
     rppi_integral
     ${OpenCV_LIBS}
 )
-#[[
+
 
 
 
@@ -1157,7 +1157,7 @@ target_link_libraries(
 
 
 
-
+]]
 add_executable(
     rppi_erode
     src/morphological_transforms/rppi_erode.cpp
@@ -1187,7 +1187,7 @@ target_link_libraries(
     rppi_dilate
     ${OpenCV_LIBS}
 )
-
+#[[
 
 
 
