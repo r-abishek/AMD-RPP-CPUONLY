@@ -12,8 +12,6 @@ RppStatus sobel_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     T *srcPtrMod = (T *)calloc(srcSizeMod.height * srcSizeMod.width * channel, sizeof(T));
     generate_evenly_padded_image_host(srcPtr, srcSize, srcPtrMod, srcSizeMod, chnFormat, channel);
 
-    Rpp32s *dstPtrIntermediate = (Rpp32s *)calloc(srcSize.height * srcSize.width * channel, sizeof(Rpp32s));
-
     RppiSize rppiKernelSize;
     rppiKernelSize.height = 3;
     rppiKernelSize.width = 3;
@@ -22,13 +20,13 @@ RppStatus sobel_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     {
         Rpp32f *kernelX = (Rpp32f *)calloc(3 * 3, sizeof(Rpp32f));
         generate_sobel_kernel_host(kernelX, 1);
-        convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediate, srcSize, kernelX, rppiKernelSize, chnFormat, channel);
+        convolve_image_host(srcPtrMod, srcSizeMod, dstPtr, srcSize, kernelX, rppiKernelSize, chnFormat, channel);
     }
     else if (sobelType == 1)
     {
         Rpp32f *kernelY = (Rpp32f *)calloc(3 * 3, sizeof(Rpp32f));
         generate_sobel_kernel_host(kernelY, 2);
-        convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediate, srcSize, kernelY, rppiKernelSize, chnFormat, channel);
+        convolve_image_host(srcPtrMod, srcSizeMod, dstPtr, srcSize, kernelY, rppiKernelSize, chnFormat, channel);
     }
     else if (sobelType == 2)
     {
@@ -42,24 +40,8 @@ RppStatus sobel_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         Rpp32s *dstPtrIntermediateY = (Rpp32s *)calloc(srcSize.height * srcSize.width * channel, sizeof(Rpp32s));
         convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediateY, srcSize, kernelY, rppiKernelSize, chnFormat, channel);
 
-        compute_magnitude_host(dstPtrIntermediateX, dstPtrIntermediateY, srcSize, dstPtrIntermediate, chnFormat, channel);
+        compute_magnitude_host(dstPtrIntermediateX, dstPtrIntermediateY, srcSize, dstPtr, chnFormat, channel);
     }
 
-    compute_threshold_host(dstPtrIntermediate, srcSize, dstPtr, (T) 10, (T) 255, 2, chnFormat, channel);
-    /*
-    Rpp32s *dstPtrIntermediateTemp;
-    T *dstPtrTemp;
-    dstPtrIntermediateTemp = dstPtrIntermediate;
-    dstPtrTemp = dstPtr;
-
-    Rpp32s pixel;
-
-    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
-    {
-        *dstPtrTemp = (T) RPPPIXELCHECK(*dstPtrIntermediateTemp);
-        dstPtrTemp++;
-        dstPtrIntermediateTemp++;
-    }
-    */
     return RPP_SUCCESS;
 }

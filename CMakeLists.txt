@@ -263,7 +263,7 @@ target_link_libraries(
 
 
 
-
+]]
 add_executable(
     rppi_box_filter
     src/filter_operations/rppi_box_filter.cpp
@@ -353,7 +353,7 @@ target_link_libraries(
     rppi_non_max_suppression
     ${OpenCV_LIBS}
 )
-
+#[[
 
 
 
@@ -725,7 +725,7 @@ target_link_libraries(
 
 
 
-]]
+
 add_executable(
     rppi_rgb_to_hsv
     src/color_model_conversions/rppi_rgb_to_hsv.cpp
@@ -875,7 +875,7 @@ target_link_libraries(
     rppi_look_up_table
     ${OpenCV_LIBS}
 )
-#[[
+
 
 
 

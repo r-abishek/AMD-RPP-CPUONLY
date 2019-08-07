@@ -379,7 +379,7 @@ RppStatus generate_sobel_kernel_host(Rpp32f* kernel, Rpp32u type)
 
         for (int i = 0; i < 9; i++)
         {
-            *kernelTemp = *kernelXTemp / 9;
+            *kernelTemp = *kernelXTemp;
             kernelTemp++;
             kernelXTemp++;
         }
@@ -392,7 +392,7 @@ RppStatus generate_sobel_kernel_host(Rpp32f* kernel, Rpp32u type)
 
         for (int i = 0; i < 9; i++)
         {
-            *kernelTemp = *kernelYTemp / 9;
+            *kernelTemp = *kernelYTemp;
             kernelTemp++;
             kernelYTemp++;
         }
@@ -1834,11 +1834,12 @@ RppStatus compute_hsl_to_rgb_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
     return RPP_SUCCESS;
 }
 
-template <typename T>
-RppStatus compute_magnitude_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize, T* dstPtr,
+template <typename T, typename U>
+RppStatus compute_magnitude_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize, U* dstPtr,
                          RppiChnFormat chnFormat, Rpp32u channel)
 {
-    T *srcPtr1Temp, *srcPtr2Temp, *dstPtrTemp;
+    T *srcPtr1Temp, *srcPtr2Temp;
+    U *dstPtrTemp;
     srcPtr1Temp = srcPtr1;
     srcPtr2Temp = srcPtr2;
     dstPtrTemp = dstPtr;
@@ -1852,7 +1853,7 @@ RppStatus compute_magnitude_host(T* srcPtr1, T* srcPtr2, RppiSize srcSize, T* ds
         srcPtr2Value = (Rpp32s) *srcPtr2Temp;
         pixel = sqrt((srcPtr1Value * srcPtr1Value) + (srcPtr2Value * srcPtr2Value));
         pixel = RPPPIXELCHECK(pixel);
-        *dstPtrTemp =(T) round(pixel);
+        *dstPtrTemp =(U) round(pixel);
         srcPtr1Temp++;
         srcPtr2Temp++;
         dstPtrTemp++;
