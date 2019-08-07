@@ -5,7 +5,7 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 
-
+#[[
 add_executable(
     rppi_absolute_difference
     src/arithmetic_operations/rppi_absolute_difference.cpp
@@ -194,7 +194,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     rppi_bitwise_AND
     src/logical_operations/rppi_bitwise_AND.cpp
@@ -362,7 +362,7 @@ target_link_libraries(
 
 
 
-
+]]
 add_executable(
     rppi_histogram
     src/statistical_operations/rppi_histogram.cpp
@@ -542,7 +542,7 @@ target_link_libraries(
     rppi_integral
     ${OpenCV_LIBS}
 )
-
+#[[
 
 
 
