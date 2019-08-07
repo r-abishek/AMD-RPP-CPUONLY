@@ -13,24 +13,12 @@ RppStatus channel_combine_host(T* srcPtr1, T* srcPtr2, T* srcPtr3, RppiSize srcS
 
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        for (int i = 0; i < srcSize.height * srcSize.width; i++)
-        {
-            *dstPtrTemp = *srcPtr1Temp;
-            srcPtr1Temp++;
-            dstPtrTemp++;
-        }
-        for (int i = 0; i < srcSize.height * srcSize.width; i++)
-        {
-            *dstPtrTemp = *srcPtr2Temp;
-            srcPtr2Temp++;
-            dstPtrTemp++;
-        }
-        for (int i = 0; i < srcSize.height * srcSize.width; i++)
-        {
-            *dstPtrTemp = *srcPtr3Temp;
-            srcPtr3Temp++;
-            dstPtrTemp++;
-        }
+        Rpp32u increment = srcSize.height * srcSize.width;
+        memcpy(dstPtrTemp, srcPtr1Temp, srcSize.height * srcSize.width * sizeof(T));
+        dstPtrTemp += increment;
+        memcpy(dstPtrTemp, srcPtr2Temp, srcSize.height * srcSize.width * sizeof(T));
+        dstPtrTemp += increment;
+        memcpy(dstPtrTemp, srcPtr3Temp, srcSize.height * srcSize.width * sizeof(T));
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {

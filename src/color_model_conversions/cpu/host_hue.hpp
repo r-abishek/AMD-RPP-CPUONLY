@@ -70,12 +70,7 @@ RppStatus hue_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                 srcPtrTemp++;
                 dstPtrTemp++;
             }
-            for (int i = 0; i < (2 * srcSize.height * srcSize.width); i++)
-            {
-                *dstPtrTemp = *srcPtrTemp;
-                srcPtrTemp++;
-                dstPtrTemp++;
-            }
+            memcpy(dstPtrTemp, srcPtrTemp, 2 * srcSize.height * srcSize.width * sizeof(T));
         }
         else if (chnFormat == RPPI_CHN_PACKED)
         {

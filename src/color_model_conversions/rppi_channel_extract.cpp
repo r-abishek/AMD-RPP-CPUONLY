@@ -134,7 +134,7 @@ int main(int argc, char** argv)
         namedWindow("Output Image", WINDOW_NORMAL );
         imshow("Output Image", imageOut);
 
-        imwrite( "googleBlueChannel.jpg", imageOut );
+        //imwrite( "googleBlueChannel.jpg", imageOut );
 
         waitKey(0);
 

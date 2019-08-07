@@ -46,12 +46,9 @@ RppStatus saturation_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
 
         if (chnFormat == RPPI_CHN_PLANAR)
         {
-            for (int i = 0; i < (srcSize.height * srcSize.width); i++)
-            {
-                *dstPtrTemp = *srcPtrTemp;
-                srcPtrTemp++;
-                dstPtrTemp++;
-            }
+            memcpy(dstPtrTemp, srcPtrTemp, srcSize.height * srcSize.width * sizeof(T));
+            dstPtrTemp += srcSize.height * srcSize.width;
+            srcPtrTemp += srcSize.height * srcSize.width;
             for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
                 *dstPtrTemp = *srcPtrTemp * saturationFactor;
@@ -60,12 +57,7 @@ RppStatus saturation_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                 srcPtrTemp++;
                 dstPtrTemp++;
             }
-            for (int i = 0; i < (srcSize.height * srcSize.width); i++)
-            {
-                *dstPtrTemp = *srcPtrTemp;
-                srcPtrTemp++;
-                dstPtrTemp++;
-            }
+            memcpy(dstPtrTemp, srcPtrTemp, srcSize.height * srcSize.width * sizeof(T));
         }
         else if (chnFormat == RPPI_CHN_PACKED)
         {

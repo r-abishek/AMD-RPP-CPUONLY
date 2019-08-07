@@ -16,12 +16,7 @@ RppStatus channel_extract_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     if (chnFormat == RPPI_CHN_PLANAR)
     {
         srcPtrTemp = srcPtr + (extractChannelNumber * srcSize.height * srcSize.width);
-        for (int i = 0; i < srcSize.height * srcSize.width; i++)
-        {
-            *dstPtrTemp = *srcPtrTemp;
-            srcPtrTemp++;
-            dstPtrTemp++;
-        }
+        memcpy(dstPtrTemp, srcPtrTemp, srcSize.height * srcSize.width * sizeof(T));
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
