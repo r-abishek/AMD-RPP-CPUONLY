@@ -25,7 +25,7 @@ rppi_gamma_correction_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
 {
     gamma_correction_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     gamma,
-                                    1);
+                                    RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
 
@@ -37,7 +37,7 @@ rppi_gamma_correction_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
 {
     gamma_correction_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     gamma,
-                                    3);
+                                    RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
 
@@ -49,7 +49,7 @@ rppi_gamma_correction_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
 {
     gamma_correction_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     gamma,
-                                    3);
+                                    RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
 

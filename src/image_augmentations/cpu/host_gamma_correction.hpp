@@ -3,7 +3,7 @@
 template <typename T>
 RppStatus gamma_correction_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                    Rpp32f gamma,
-                                   Rpp32u channel)
+                                   RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTemp, *dstPtrTemp;
     srcPtrTemp = srcPtr;

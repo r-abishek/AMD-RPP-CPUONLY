@@ -183,7 +183,8 @@ int main(int argc, char** argv)
         channel = 1;
         srcSize.height = 3;
         srcSize.width = 4;
-        Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
+        //Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
+        Rpp8u srcPtr[12] = {0, 1, 28, 126, 127, 128, 129, 191, 192, 193, 254, 255};
         Rpp32u *outputHistogram = (Rpp32u *) calloc (bins, sizeof(Rpp32u));
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);

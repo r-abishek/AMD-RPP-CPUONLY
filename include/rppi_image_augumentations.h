@@ -1,5 +1,5 @@
-#ifndef RPPI_IMAGE_AUGMENTATIONS_H
-#define RPPI_IMAGE_AUGMENTATIONS_H
+#ifndef RPPI_IMAGE_AUGMENTATIONS
+#define RPPI_IMAGE_AUGMENTATIONS
  
 #include "rppdefs.h"
 #ifdef __cplusplus
@@ -111,12 +111,13 @@ param[in] adjustmentValue adjustment value used in color temperature correction
 */
 
 RppStatus
-rppi_color_temperature_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp8s adjustmentValue);
+rppi_color_temperature_u8_pln1_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dstPtr,Rpp32s adjustmentValue);
 
 RppStatus
-rppi_color_temperature_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                          Rpp8s adjustmentValue);
+rppi_color_temperature_u8_pln3_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dstPtr,Rpp32s adjustmentValue);
+
+RppStatus
+rppi_color_temperature_u8_pkd3_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dstPtr,Rpp32s adjustmentValue);
 
 // ----------------------------------------
 // Host pixelate functions declaration 
@@ -148,7 +149,7 @@ rppi_pixelate_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                              Rpp32u kernelSize, Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
 
 // ----------------------------------------
-// Host jitterAdd functions declaration 
+// Host jitter functions declaration 
 // ----------------------------------------
 /* Introduces jitter in the entire image
 *param[in] srcPtr input image
@@ -163,15 +164,15 @@ rppi_pixelate_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
 */
 
 RppStatus
-rppi_jitterAdd_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+rppi_jitter_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                              Rpp32u maxJitterX, Rpp32u maxJitterY);
 
 RppStatus
-rppi_jitterAdd_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+rppi_jitter_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                              Rpp32u maxJitterX, Rpp32u maxJitterY);
 
 RppStatus
-rppi_jitterAdd_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+rppi_jitter_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                              Rpp32u maxJitterX, Rpp32u maxJitterY);
 
 // ----------------------------------------
@@ -244,7 +245,7 @@ RppStatus
 rppi_lens_correction_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32f strength, Rpp32f zoom);
 
 // ----------------------------------------
-// Host occlusionAdd functions declaration 
+// Host occlusion functions declaration 
 // ----------------------------------------
 /* Introduces occlusion in a region of the first image by taking a crop from a region in the second image
 *param[in] srcPtr1 input image 1
@@ -266,40 +267,41 @@ rppi_lens_correction_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t ds
 */
 
 RppStatus
-rppi_occlusionAdd_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
+rppi_occlusion_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
                                Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
                                Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2);
 
 RppStatus
-rppi_occlusionAdd_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
+rppi_occlusion_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
                                Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
                                Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2);
 
 RppStatus
-rppi_occlusionAdd_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
+rppi_occlusion_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
                                Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
                                Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2);
 
 // ----------------------------------------
-// Host snowy functions declaration 
+// Host snow functions declaration 
 // ----------------------------------------
-/* Introduces snowy effect in the entire image
+/* Introduces snow effect in the entire image
 *param[in] srcPtr input image
 *param[in] srcSize dimensions of the input images
 *param[out] dstPtr output image
-*param[in] strength strength of snowy effect desired
+*param[in] strength strength of snow effect desired
 *returns a  RppStatus enumeration. 
 *retval RPP_SUCCESS : No error succesful completion
 *retval RPP_ERROR : Error 
 */
 
 RppStatus
-rppi_snowyRGB_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                         Rpp32f strength);
+rppi_snow_u8_pln1_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dstPtr,Rpp32f snowValue);
 
 RppStatus
-rppi_snowyRGB_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
-                         Rpp32f strength);
+rppi_snow_u8_pln3_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dstPtr,Rpp32f snowValue);
+
+RppStatus
+rppi_snow_u8_pkd3_host(RppPtr_t srcPtr,RppiSize srcSize,RppPtr_t dstPtr,Rpp32f snowValue);
 
 // ----------------------------------------
 // Host random_shadow functions declaration 

@@ -1,5 +1,5 @@
-#ifndef RPPI_STATISTICAL_OPERATIONS_H
-#define RPPI_STATISTICAL_OPERATIONS_H
+#ifndef RPPI_STATISTICAL_OPERATIONS
+#define RPPI_STATISTICAL_OPERATIONS
  
 #include "rppdefs.h"
 #ifdef __cplusplus
@@ -149,15 +149,15 @@ rppi_histogram_perChannel_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u
 
 RppStatus
 rppi_histogram_subimage_perChannel_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
-                                     unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2);
+                                     Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
 
 RppStatus
 rppi_histogram_subimage_perChannel_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
-                                     unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2);
+                                     Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
 
 RppStatus
 rppi_histogram_subimage_perChannel_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp32u* outputHistogram, Rpp32u bins, 
-                                     unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2);
+                                     Rpp32u x1, Rpp32u y1, Rpp32u x2, Rpp32u y2);
 
 // ----------------------------------------
 // Host equalize_histogram_perChannel functions declaration 
@@ -171,6 +171,20 @@ rppi_equalize_histogram_perChannel_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSiz
 
 RppStatus
 rppi_equalize_histogram_perChannel_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr);
+
+
+// ----------------------------------------
+// Host thresholding functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_thresholding_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp8u min, Rpp8u max);
+
+RppStatus
+rppi_thresholding_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp8u min, Rpp8u max);
+
+RppStatus
+rppi_thresholding_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp8u min, Rpp8u max);
  
 #ifdef __cplusplus
 }

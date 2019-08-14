@@ -1,5 +1,5 @@
-#ifndef RPPI_PIXEL_ARRANGEMENT_CONVERSIONS_H
-#define RPPI_PIXEL_ARRANGEMENT_CONVERSIONS_H
+#ifndef RPPI_PIXEL_ARRANGEMENT_CONVERSIONS
+#define RPPI_PIXEL_ARRANGEMENT_CONVERSIONS
  
 #include "rppdefs.h"
 #ifdef __cplusplus
@@ -25,6 +25,12 @@ rppi_planar_to_packed_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
 RppStatus
 rppi_planar_to_packed_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr);
 
+RppStatus 
+rppi_planar_to_packed_s32_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr);
+
+RppStatus
+rppi_planar_to_packed_s32_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr);
+
 // ----------------------------------------
 // Host packed_to_planar functions declaration 
 // ----------------------------------------
@@ -42,6 +48,12 @@ rppi_packed_to_planar_u8_pkd1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t d
 
 RppStatus
 rppi_packed_to_planar_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr);
+
+RppStatus 
+rppi_packed_to_planar_s32_pkd1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr);
+
+RppStatus
+rppi_packed_to_planar_s32_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr);
 
 #ifdef __cplusplus
 }

@@ -21,10 +21,10 @@ using namespace std::chrono;
 
 RppStatus
 rppi_warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
-                                  RppPtr_t affine)
+                                  Rpp32f* affine)
 {
     warp_affine_output_size_host<Rpp32f>(srcSize, dstSizePtr,
-                                         static_cast<Rpp32f*>(affine));
+                                         affine);
 
     return RPP_SUCCESS;
 
@@ -32,10 +32,10 @@ rppi_warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
 
 RppStatus
 rppi_warp_affine_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
-                              RppPtr_t affine)
+                              Rpp32f* affine)
 {
     warp_affine_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            static_cast<Rpp32f*>(affine),
+                            affine,
                             RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
@@ -44,10 +44,10 @@ rppi_warp_affine_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
 
 RppStatus
 rppi_warp_affine_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
-                              RppPtr_t affine)
+                              Rpp32f* affine)
 {
     warp_affine_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            static_cast<Rpp32f*>(affine),
+                            affine,
                             RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
@@ -56,10 +56,10 @@ rppi_warp_affine_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
 
 RppStatus
 rppi_warp_affine_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
-                              RppPtr_t affine)
+                              Rpp32f* affine)
 {
     warp_affine_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), dstSize,
-                            static_cast<Rpp32f*>(affine),
+                            affine,
                             RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
@@ -77,6 +77,8 @@ int main(int argc, char** argv)
 
     //Rpp32f affine[6] = {0.707, -0.707, 0, -0.707, 0.707, 0};
     Rpp32f affine[6] = {1.35, 0.3, 0, -0.75, 1.1, 0};
+    //Mat affineMat = Mat(2, 3, CV_32FC1, affine);
+    //_InputArray affineReshaped = _InputArray(affineMat);
 /*    
     printf("\nEnter the 2x3 affine transformation matrix:");
     for (int i = 0; i < 6; i++)
@@ -137,6 +139,11 @@ int main(int argc, char** argv)
         auto stop = high_resolution_clock::now();
 
         Mat imageOut;
+        
+        //Mat imageOutOpenCV;
+        //imageOutOpenCV.rows = dstSize.height;
+        //imageOutOpenCV.cols = dstSize.width;
+        //warpAffine(imageIn,imageOutOpenCV,affineReshaped,imageOutOpenCV.size());
 
         if (type == 1)
         {   
@@ -197,6 +204,9 @@ int main(int argc, char** argv)
 
         namedWindow("Input and Output Images", WINDOW_NORMAL );
         imshow("Input and Output Images", images);
+
+        //namedWindow("OpenCV Output Image", WINDOW_NORMAL );
+        //imshow("OpenCV Output Image", imageOutOpenCV);
 
         waitKey(0);
 

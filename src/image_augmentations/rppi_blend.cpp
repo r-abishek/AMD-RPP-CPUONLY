@@ -24,7 +24,7 @@ rppi_blend_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, Rp
 {
     blend_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     alpha,
-                                    1);
+                                    RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
 
@@ -35,7 +35,7 @@ rppi_blend_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, Rp
 {
     blend_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     alpha,
-                                    3);
+                                    RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
 
@@ -46,7 +46,7 @@ rppi_blend_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, Rp
 {
     blend_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
                                     alpha,
-                                    3);
+                                    RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
 
@@ -61,6 +61,9 @@ int main(int argc, char** argv)
     RppiSize srcSize;
     unsigned int channel;
     Rpp32f alpha = 0.5;
+
+    printf("\nEnter alpha value: ");
+    scanf("%f", &alpha);
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -185,6 +188,8 @@ int main(int argc, char** argv)
 
         namedWindow("2 Input Images and Output Image", WINDOW_NORMAL );
         imshow("2 Input Images and Output Image", images);
+
+        imwrite("images/noisyImageOutput.jpg", imageOut);
 
         waitKey(0);
 

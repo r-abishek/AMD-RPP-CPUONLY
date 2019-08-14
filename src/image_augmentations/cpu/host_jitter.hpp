@@ -3,7 +3,7 @@
 #include <time.h>
 
 template <typename T>
-RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
+RppStatus jitter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                     Rpp32u maxJitterX, Rpp32u maxJitterY, 
                     RppiChnFormat chnFormat, Rpp32u channel)
 {
@@ -19,12 +19,8 @@ RppStatus jitterAdd_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     T *srcPtrBeginJitter, *dstPtrBeginJitter;
     srcPtrTemp = srcPtr;
     dstPtrTemp = dstPtrForJitter;
-    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
-    {
-        *dstPtrTemp = *srcPtrTemp;
-        srcPtrTemp++;
-        dstPtrTemp++;
-    }
+    
+    memcpy(dstPtr, srcPtr, channel * srcSize.height * srcSize.width * sizeof(T));
 
     srand (time(NULL));
     int jitteredPixelLocDiffX, jitteredPixelLocDiffY;

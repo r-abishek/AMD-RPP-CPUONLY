@@ -69,7 +69,8 @@ void cast(int *intSrcPtr, Rpp8u *srcPtr, RppiSize srcSize, Rpp32u channel)
     }
 }
 
-void displayPlanar(Rpp8u *pArr, RppiSize size, Rpp32u channel)
+template <typename T>
+void displayPlanar(T *pArr, RppiSize size, Rpp32u channel)
 {
     int p = 0;
     for(int c = 0; c < channel; c++)
@@ -77,7 +78,7 @@ void displayPlanar(Rpp8u *pArr, RppiSize size, Rpp32u channel)
         printf("\n\nChannel %d:\n", c+1);
         for (int i = 0; i < (size.height * size.width); i++)
         {
-            printf("%d\t\t", *(pArr + p));
+            printf("%d\t\t", (int) *(pArr + p));
             if (((i + 1) % size.width) == 0)
             {
                 printf("\n");
@@ -87,7 +88,8 @@ void displayPlanar(Rpp8u *pArr, RppiSize size, Rpp32u channel)
     }
 }
 
-void displayPacked(Rpp8u *pArr, RppiSize size, Rpp32u channel)
+template <typename T>
+void displayPacked(T *pArr, RppiSize size, Rpp32u channel)
 {
     int p = 0;
     for (int i = 0; i < size.height; i++)
@@ -96,7 +98,7 @@ void displayPacked(Rpp8u *pArr, RppiSize size, Rpp32u channel)
         {
             for (int j = 0; j < size.width; j++)
             {
-                printf("%d\t\t", *(pArr + p + c + (j * channel)));
+                printf("%d\t\t", (int) *(pArr + p + c + (j * channel)));
             }
             printf("\n");
         }
@@ -139,4 +141,58 @@ void displayPackedF(Rpp32f *pArr, RppiSize size, Rpp32u channel)
         printf("\n");
         p += (channel * size.width);
     }
+}
+
+template <typename T>
+void displayTensor(T *pArr, Rpp32u size)
+{
+    int p = 0, count = 0;
+    for (int i = 0; i < size; i++, count++)
+    {
+        printf("%d\t", (int) *(pArr + p));
+        p++;
+        if (count == 19)
+        {
+            printf("\n");
+            count = 0;
+        }
+    }
+    printf("\n");
+}
+
+template <typename T>
+void displayTensorF(T *pArr, Rpp32u size)
+{
+    int p = 0, count = 0;
+    for (int i = 0; i < size; i++, count++)
+    {
+        printf("%0.6f\t", (int) *(pArr + p));
+        p++;
+        if (count == 19)
+        {
+            printf("\n");
+            count = 0;
+        }
+    }
+    printf("\n");
+}
+
+template <typename T>
+void displayHistogram(T *outputHistogram, Rpp32u bins)
+{
+    printf("\nHistogram for the image is:\n");
+    Rpp32u *outputHistogramTemp;
+    outputHistogramTemp = outputHistogram;
+    int count = 1;
+    for (int i = 0; i < bins; i++, count++)
+    {
+        printf("%d\t", *outputHistogramTemp);
+        outputHistogramTemp++;
+        if (count == 20)
+        {
+            printf("\n");
+            count = 0;
+        }
+    }
+    printf("\n");
 }

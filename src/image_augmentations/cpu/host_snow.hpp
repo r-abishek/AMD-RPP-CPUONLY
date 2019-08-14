@@ -1,9 +1,9 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T, typename U>
-RppStatus snowy_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
+RppStatus snow_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                     Rpp32f strength,
-                    RppiChnFormat chnFormat, unsigned channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     if (strength < 0 || strength > 1)
     {
@@ -55,18 +55,13 @@ RppStatus snowy_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
     }
     else if (channel == 3)
     {
-        for (int i = 0; i < (3 * srcSize.height * srcSize.width); i++)
-        {
-            *srcPtrRGBTemp = *srcPtrTemp;
-            srcPtrRGBTemp++;
-            srcPtrTemp++;
-        }
+        memcpy(srcPtrRGB, srcPtr, 3 * srcSize.height * srcSize.width * sizeof(T));
     }
 
     Rpp32f *srcPtrHSL = (Rpp32f *)calloc(3 * srcSize.height * srcSize.width, sizeof(Rpp32f));
     if (chnFormat == RPPI_CHN_PLANAR)
     {
-        rgb_to_hsl_host(srcPtrRGB, srcSize, srcPtrHSL, RPPI_CHN_PLANAR, 3);
+        compute_rgb_to_hsl_host(srcPtrRGB, srcSize, srcPtrHSL, RPPI_CHN_PLANAR, 3);
 
         Rpp32f *srcPtrHSLTemp;
         srcPtrHSLTemp = srcPtrHSL + (2 * srcSize.height * srcSize.width);
@@ -84,11 +79,11 @@ RppStatus snowy_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
             srcPtrHSLTemp++;
         }
 
-        hsl_to_rgb_host(srcPtrHSL, srcSize, dstPtrRGB, RPPI_CHN_PLANAR, 3);
+        compute_hsl_to_rgb_host(srcPtrHSL, srcSize, dstPtrRGB, RPPI_CHN_PLANAR, 3);
     }
     else if (chnFormat == RPPI_CHN_PACKED)
     {
-        rgb_to_hsl_host(srcPtrRGB, srcSize, srcPtrHSL, RPPI_CHN_PACKED, 3);
+        compute_rgb_to_hsl_host(srcPtrRGB, srcSize, srcPtrHSL, RPPI_CHN_PACKED, 3);
 
         Rpp32f *srcPtrHSLTemp;
         srcPtrHSLTemp = srcPtrHSL + 2;
@@ -106,7 +101,7 @@ RppStatus snowy_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
             srcPtrHSLTemp = srcPtrHSLTemp + channel;
         }
 
-        hsl_to_rgb_host(srcPtrHSL, srcSize, dstPtrRGB, RPPI_CHN_PACKED, 3);
+        compute_hsl_to_rgb_host(srcPtrHSL, srcSize, dstPtrRGB, RPPI_CHN_PACKED, 3);
     }
 
     if (channel == 1)
@@ -129,9 +124,6 @@ RppStatus snowy_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                 dstPtrTemp++;
             }
         }
-        
-        
-        
     }
     else if (channel == 3)
     {

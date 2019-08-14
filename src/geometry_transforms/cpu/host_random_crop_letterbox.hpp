@@ -13,6 +13,75 @@ RppStatus random_crop_letterbox_host(T* srcPtr, RppiSize srcSize, T* dstPtr, Rpp
         return RPP_ERROR;
     }
 
+    Rpp32u borderWidth = (5 * RPPMIN2(dstSize.height, dstSize.width) / 100);
+
+    RppiSize srcSizeSubImage;
+    T* srcPtrSubImage;
+    compute_subimage_location_host(srcPtr, &srcPtrSubImage, srcSize, &srcSizeSubImage, x1, y1, x2, y2, chnFormat, channel);
+
+    RppiSize srcSizeSubImagePadded;
+    srcSizeSubImagePadded.height = srcSizeSubImage.height + (2 * borderWidth);
+    srcSizeSubImagePadded.width = srcSizeSubImage.width + (2 * borderWidth);
+
+    T *srcPtrCrop = (T *)calloc(channel * srcSizeSubImage.height * srcSizeSubImage.width, sizeof(T));
+    generate_crop_host(srcPtr, srcSize, srcPtrSubImage, srcSizeSubImage, srcPtrCrop, chnFormat, channel);
+
+    T *srcPtrCropPadded = (T *)calloc(channel * srcSizeSubImagePadded.height * srcSizeSubImagePadded.width, sizeof(T));
+    generate_evenly_padded_image_host(srcPtrCrop, srcSizeSubImage, srcPtrCropPadded, srcSizeSubImagePadded, chnFormat, channel);
+
+    resize_kernel_host(srcPtrCropPadded, srcSizeSubImagePadded, dstPtr, dstSize, chnFormat, channel);
+/*
+    T *srcPtrCropPaddedTemp, *dstPtrTemp;
+    srcPtrCropPaddedTemp = srcPtrCropPadded;
+    dstPtrTemp = dstPtr;
+
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int c = 0; c < channel; c++)
+        {
+            dstPtrTemp = dstPtr + (c * dstSize.height * dstSize.width);
+            for (int i = 0; i < srcSizeSubImagePadded.height; i++)
+            {
+                for (int j = 0; j < srcSizeSubImagePadded.width; j++)
+                {
+                    *dstPtrTemp = *srcPtrCropPaddedTemp;
+                    dstPtrTemp++;
+                    srcPtrCropPaddedTemp++;
+                }
+                dstPtrTemp = dstPtrTemp + (dstSize.width - srcSizeSubImagePadded.width);
+            }
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        for (int i = 0; i < srcSizeSubImagePadded.height; i++)
+        {
+            for (int j = 0; j < srcSizeSubImagePadded.width; j++)
+            {
+                for (int c = 0; c < channel; c++)
+                {
+                    *dstPtrTemp = *srcPtrCropPaddedTemp;
+                    dstPtrTemp++;
+                    srcPtrCropPaddedTemp++;
+                }
+            }
+            dstPtrTemp = dstPtrTemp + (channel * (dstSize.width - srcSizeSubImagePadded.width));
+        }
+    }
+*/
+    return RPP_SUCCESS;
+    
+}
+/*
+{
+    if ((RPPINRANGE(x1, 0, srcSize.width - 1) == 0) 
+        || (RPPINRANGE(x2, 0, srcSize.width - 1) == 0) 
+        || (RPPINRANGE(y1, 0, srcSize.height - 1) == 0) 
+        || (RPPINRANGE(y2, 0, srcSize.height - 1) == 0))
+    {
+        return RPP_ERROR;
+    }
+
     RppiSize srcNewSize;
     int xDiff = (int) x2 - (int) x1;
     int yDiff = (int) y2 - (int) y1;
@@ -67,3 +136,4 @@ RppStatus random_crop_letterbox_host(T* srcPtr, RppiSize srcSize, T* dstPtr, Rpp
     return RPP_SUCCESS;
     
 }
+*/

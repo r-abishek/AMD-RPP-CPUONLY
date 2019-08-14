@@ -8,7 +8,7 @@ RppStatus equalize_histogram_perChannel_host(T* srcPtr, RppiSize srcSize, T* dst
     T *srcPtrChannelBegin, *dstPtrChannelBegin;
     srcPtrChannelBegin = srcPtr;
     dstPtrChannelBegin = dstPtr;
-    Rpp32u bins = (Rpp32u)(std::numeric_limits<unsigned char>::max()) + 1;
+    Rpp32u bins = (Rpp32u)(std::numeric_limits<Rpp8u>::max()) + 1;
     Rpp32u *histogram = (Rpp32u *) calloc(bins, sizeof(Rpp32u));
     T *lookUpTable = (T *) calloc (bins, sizeof(T));
     Rpp32f multiplier = 255.0 / ((Rpp32f)(srcSize.height * srcSize.width));

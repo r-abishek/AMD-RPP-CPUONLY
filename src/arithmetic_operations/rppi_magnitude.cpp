@@ -1,15 +1,15 @@
-// rppi_occlusionAdd
+// rppi_magnitude
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_image_augumentations.h"
+#include "rppi_arithmetic_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
 #include "cpu/rpp_cpu_input_and_display.hpp"
 #include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
-#include "cpu/host_occlusionAdd.hpp"
+#include "cpu/host_magnitude.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -20,39 +20,30 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_occlusionAdd_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
-                               Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
-                               Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2)
+rppi_magnitude_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    occlusionAdd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize1, srcSize2, static_cast<Rpp8u*>(dstPtr), 
-                             src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2, 
-                             RPPI_CHN_PLANAR, 1);
+    magnitude_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                    RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
 
 }
 
 RppStatus
-rppi_occlusionAdd_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
-                               Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
-                               Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2)
+rppi_magnitude_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    occlusionAdd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize1, srcSize2, static_cast<Rpp8u*>(dstPtr), 
-                             src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2, 
-                             RPPI_CHN_PLANAR, 3);
+    magnitude_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                    RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
 
 }
 
 RppStatus
-rppi_occlusionAdd_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize1, RppiSize srcSize2, RppPtr_t dstPtr, 
-                               Rpp32u src1x1, Rpp32u src1y1, Rpp32u src1x2, Rpp32u src1y2, 
-                               Rpp32u src2x1, Rpp32u src2y1, Rpp32u src2x2, Rpp32u src2y2)
+rppi_magnitude_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr)
 {
-    occlusionAdd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize1, srcSize2, static_cast<Rpp8u*>(dstPtr), 
-                             src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2, 
-                             RPPI_CHN_PACKED, 3);
+    magnitude_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                    RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
 
@@ -64,7 +55,7 @@ rppi_occlusionAdd_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 
 int main(int argc, char** argv)
 {
-    RppiSize srcSize1, srcSize2, dstSize;
+    RppiSize srcSize, dstSize;
     unsigned int channel;
 
     int input;
@@ -107,41 +98,23 @@ int main(int argc, char** argv)
             return -1;
         }
 
-        srcSize1.height = imageIn1.rows;
-        srcSize1.width = imageIn1.cols;
-        srcSize2.height = imageIn2.rows;
-        srcSize2.width = imageIn2.cols;
+        if ((imageIn1.rows != imageIn2.rows) || (imageIn1.cols != imageIn2.cols) || (imageIn1.channels() != imageIn2.channels()))
+        {
+            printf("Both images must have the same height, width and channels \n");
+            return -1;
+        }
 
-        dstSize.height = srcSize1.height;
-        dstSize.width = srcSize1.width;
+        srcSize.height = imageIn1.rows;
+        srcSize.width = imageIn1.cols;
+        dstSize.height = srcSize.height;
+        dstSize.width = srcSize.width;
         
-        printf("\nInput1 Height - %d, Input1 Width - %d, Input1 Channels - %d\n", srcSize1.height, srcSize1.width, channel);
+        printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr1 = imageIn1.data;
-
-        printf("\nInput2 Height - %d, Input2 Width - %d, Input2 Channels - %d\n", srcSize2.height, srcSize2.width, channel);
         Rpp8u *srcPtr2 = imageIn2.data;
         
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-
-        Rpp32u src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2;
-        //src1x1 = 100;
-        //src1y1 = 100;
-        //src1x2 = 400;
-        //src1y2 = 400;
-        //src2x1 = 100;
-        //src2y1 = 100;
-        //src2x2 = 400;
-        //src2y2 = 400;
-
-        src1x1 = 100;
-        src1y1 = 400;
-        src1x2 = 400;
-        src1y2 = 600;
-        src2x1 = 0;
-        src2y1 = 350;
-        src2x2 = 700;
-        src2y2 = 700;
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
@@ -154,7 +127,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_occlusionAdd_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_magnitude_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -163,14 +136,14 @@ int main(int argc, char** argv)
             else if (channel == 3)
             {
                 printf("\nExecuting pln3...\n");
-                Rpp8u *srcPtr1Temp = (Rpp8u *)calloc(channel * srcSize1.height * srcSize1.width, sizeof(Rpp8u));
-                Rpp8u *srcPtr2Temp = (Rpp8u *)calloc(channel * srcSize2.height * srcSize2.width, sizeof(Rpp8u));
+                Rpp8u *srcPtr1Temp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+                Rpp8u *srcPtr2Temp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
                 Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-                rppi_packed_to_planar_u8_pkd3_host(srcPtr1, srcSize1, srcPtr1Temp);
-                rppi_packed_to_planar_u8_pkd3_host(srcPtr2, srcSize2, srcPtr2Temp);
+                rppi_packed_to_planar_u8_pkd3_host(srcPtr1, srcSize, srcPtr1Temp);
+                rppi_packed_to_planar_u8_pkd3_host(srcPtr2, srcSize, srcPtr2Temp);
 
                 start = high_resolution_clock::now();
-                rppi_occlusionAdd_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize1, srcSize2, dstPtrTemp, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_magnitude_u8_pln3_host(srcPtr1Temp, srcPtr2Temp, srcSize, dstPtrTemp);
                 stop = high_resolution_clock::now();
 
                 rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -184,7 +157,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_occlusionAdd_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_magnitude_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -193,7 +166,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_occlusionAdd_u8_pkd3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_magnitude_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -215,9 +188,7 @@ int main(int argc, char** argv)
 
         return 0;
     }
-
-    printf("\nEntering pixel values doesn't makes sense for occlusionAdd!");
-/*    
+    
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
@@ -234,8 +205,8 @@ int main(int argc, char** argv)
         displayPlanar(srcPtr1, srcSize, channel);
         printf("\n\nInput 2:\n");
         displayPlanar(srcPtr2, srcSize, channel);
-        rppi_occlusionAdd_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
-        printf("\n\nOutput of Multiplication:\n");
+        rppi_magnitude_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+        printf("\n\nOutput of magnitudeition:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -252,8 +223,8 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPlanar(srcPtr2, srcSize, channel);
-            rppi_occlusionAdd_u8_pln3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
-            printf("\n\nOutput of Multiplication:\n");
+            rppi_magnitude_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+            printf("\n\nOutput of magnitudeition:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -265,8 +236,8 @@ int main(int argc, char** argv)
             displayPacked(srcPtr1, srcSize, channel);
             printf("\n\nInput 2:\n");
             displayPacked(srcPtr2, srcSize, channel);
-            rppi_occlusionAdd_u8_pkd3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
-            printf("\n\nOutput of Multiplication:\n");
+            rppi_magnitude_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
+            printf("\n\nOutput of magnitudeition:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -298,13 +269,13 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_occlusionAdd_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_magnitude_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_occlusionAdd_u8_pln3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_magnitude_u8_pln3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of Multiplication:\n");
+            printf("\n\nOutput of magnitudeition:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -321,15 +292,14 @@ int main(int argc, char** argv)
             displayPacked(srcPtr2, srcSize, channel);
             if (channel == 1)
             {
-                rppi_occlusionAdd_u8_pln1_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_magnitude_u8_pln1_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
             else if (channel == 3)
             {
-                rppi_occlusionAdd_u8_pkd3_host(srcPtr1, srcPtr2, srcSize1, srcSize2, dstPtr, src1x1, src1y1, src1x2, src1y2, src2x1, src2y1, src2x2, src2y2);
+                rppi_magnitude_u8_pkd3_host(srcPtr1, srcPtr2, srcSize, dstPtr);
             }
-            printf("\n\nOutput of Multiplication:\n");
+            printf("\n\nOutput of magnitudeition:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }
-*/
 }

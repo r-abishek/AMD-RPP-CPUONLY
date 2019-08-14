@@ -24,7 +24,7 @@ rppi_accumulate_weighted_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSi
 {
     accumulate_weighted_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize,
                                     alpha,
-                                    1);
+                                    RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
 
@@ -35,7 +35,7 @@ rppi_accumulate_weighted_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSi
 {
     accumulate_weighted_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize,
                                     alpha,
-                                    3);
+                                    RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
 
@@ -46,7 +46,7 @@ rppi_accumulate_weighted_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSi
 {
     accumulate_weighted_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), static_cast<Rpp8u*>(srcPtr2), srcSize,
                                     alpha,
-                                    3);
+                                    RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
 

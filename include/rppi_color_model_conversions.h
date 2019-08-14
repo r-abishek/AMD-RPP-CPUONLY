@@ -1,5 +1,5 @@
-#ifndef RPPI_COLOR_MODEL_CONVERSIONS_H
-#define RPPI_COLOR_MODEL_CONVERSIONS_H
+#ifndef RPPI_COLOR_MODEL_CONVERSIONS
+#define RPPI_COLOR_MODEL_CONVERSIONS
  
 #include "rppdefs.h"
 #ifdef __cplusplus
@@ -207,6 +207,44 @@ rppi_exposureHSV_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr
 RppStatus
 rppi_exposureHSV_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp32f exposureFactor);
+
+// ----------------------------------------
+// Host channel_extract functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_channel_extract_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                  Rpp32u extractChannelNumber);
+
+RppStatus
+rppi_channel_extract_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                  Rpp32u extractChannelNumber);
+
+// ----------------------------------------
+// Host channel_combine functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_channel_combine_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppPtr_t srcPtr3, RppiSize srcSize, RppPtr_t dstPtr);
+
+RppStatus
+rppi_channel_combine_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppPtr_t srcPtr3, RppiSize srcSize, RppPtr_t dstPtr);
+
+// ----------------------------------------
+// Host look_up_table functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_look_up_table_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp8u *lutPtr);
+
+RppStatus
+rppi_look_up_table_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp8u *lutPtr);
+
+RppStatus
+rppi_look_up_table_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
+                         Rpp8u *lutPtr);
  
 #ifdef __cplusplus
 }

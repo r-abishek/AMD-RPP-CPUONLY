@@ -3,7 +3,7 @@
 template <typename T, typename U>
 RppStatus blend_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
                                    Rpp32f alpha,
-                                   Rpp32u channel)
+                                   RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtr1Temp, *dstPtrTemp;
     U *srcPtr2Temp;

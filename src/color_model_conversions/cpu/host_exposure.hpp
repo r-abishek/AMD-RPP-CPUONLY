@@ -3,7 +3,7 @@
 template <typename T, typename U>
 RppStatus exposure_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
                     Rpp32f exposureFactor,
-                    RppiChnFormat chnFormat, unsigned channel)
+                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtrTemp, *dstPtrTemp;
     srcPtrTemp = srcPtr;

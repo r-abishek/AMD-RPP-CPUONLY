@@ -1,5 +1,5 @@
-#ifndef RPPI_GEOMETRY_TRANSFORMS_H
-#define RPPI_GEOMETRY_TRANSFORMS_H
+#ifndef RPPI_GEOMETRY_TRANSFORMS
+#define RPPI_GEOMETRY_TRANSFORMS
  
 #include "rppdefs.h"
 #ifdef __cplusplus
@@ -194,6 +194,45 @@ rppi_transpose_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
 
 RppStatus
 rppi_transpose_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize);
+
+// ----------------------------------------
+// Host pad_image functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_pad_image_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize);
+
+RppStatus
+rppi_pad_image_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize);
+
+RppStatus
+rppi_pad_image_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize);
+
+// ----------------------------------------
+// Host corner_pad_image functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_corner_pad_image_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u padType);
+
+RppStatus
+rppi_corner_pad_image_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u padType);
+
+RppStatus
+rppi_corner_pad_image_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u padType);
+
+// ----------------------------------------
+// Host opposite_edge_pad_image functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_opposite_edge_pad_image_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u padType);
+
+RppStatus
+rppi_opposite_edge_pad_image_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u padType);
+
+RppStatus
+rppi_opposite_edge_pad_image_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u padType);
  
 #ifdef __cplusplus
 }

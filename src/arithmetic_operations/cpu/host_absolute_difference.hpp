@@ -2,7 +2,7 @@
 
 template <typename T, typename U>
 RppStatus absolute_difference_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
-                                   Rpp32u channel)
+                                   RppiChnFormat chnFormat, Rpp32u channel)
 {
     T *srcPtr1Temp, *dstPtrTemp;
     U *srcPtr2Temp;
@@ -10,11 +10,11 @@ RppStatus absolute_difference_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* 
     srcPtr2Temp = srcPtr2;
     dstPtrTemp = dstPtr;
 
-    Rpp32f pixel;
+    Rpp32s pixel;
 
     for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
-        pixel = ((Rpp32f) (*srcPtr1Temp)) - ((Rpp32f) (*srcPtr2Temp));
+        pixel = ((Rpp32s) (*srcPtr1Temp)) - ((Rpp32s) (*srcPtr2Temp));
         pixel = RPPABS(pixel);
         pixel = RPPPIXELCHECK(pixel);
         *dstPtrTemp =(T) pixel;

@@ -1,15 +1,15 @@
-// rppi_jitterAdd
+// rppi_custom_convolution
 
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_image_augumentations.h"
+#include "rppi_filter_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
 #include "cpu/rpp_cpu_input_and_display.hpp"
 #include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
-#include "cpu/host_jitterAdd.hpp"
+#include "cpu/host_custom_convolution.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -18,34 +18,30 @@ using namespace std::chrono;
 
 
 
-
 RppStatus
-rppi_jitterAdd_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             unsigned int maxJitterX, unsigned int maxJitterY)
+rppi_custom_convolution_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize)
 {
-    jitterAdd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     maxJitterX, maxJitterY, 
-                     RPPI_CHN_PLANAR, 1);
+    custom_convolution_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                   static_cast<Rpp32f*>(kernel), kernelSize, 
+                                   RPPI_CHN_PLANAR, 1);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_jitterAdd_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             unsigned int maxJitterX, unsigned int maxJitterY)
+rppi_custom_convolution_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize)
 {
-    jitterAdd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     maxJitterX, maxJitterY, 
-                     RPPI_CHN_PLANAR, 3);
+    custom_convolution_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                   static_cast<Rpp32f*>(kernel), kernelSize, 
+                                   RPPI_CHN_PLANAR, 3);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_jitterAdd_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
-                             unsigned int maxJitterX, unsigned int maxJitterY)
+rppi_custom_convolution_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppPtr_t kernel, RppiSize kernelSize)
 {
-    jitterAdd_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
-                     maxJitterX, maxJitterY, 
-                     RPPI_CHN_PACKED, 3);
+    custom_convolution_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr),
+                                   static_cast<Rpp32f*>(kernel), kernelSize, 
+                                   RPPI_CHN_PACKED, 3);
     return RPP_SUCCESS;
 }
 
@@ -55,9 +51,24 @@ rppi_jitterAdd_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
 
 int main(int argc, char** argv)
 {
-    RppiSize srcSize, dstSize;
+    RppiSize srcSize, dstSize, kernelSize;
     unsigned int channel;
-    unsigned int maxJitterX, maxJitterY;
+
+    kernelSize.height = 7;
+    kernelSize.width = 17;
+    Rpp32f scale = 119;
+    Rpp32f kernel[119];
+
+    Rpp32f *kernelTemp;
+    kernelTemp = kernel;
+    for (int i = 0; i < (kernelSize.height * kernelSize.width); i++)
+    {
+        *kernelTemp = 1/ scale;
+        kernelTemp++;
+    }
+
+    printf("\nKernel Display: ");
+    displayPlanarF(kernel, kernelSize, 1);
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -101,14 +112,6 @@ int main(int argc, char** argv)
         srcSize.width = imageIn.cols;
         dstSize.height = srcSize.height;
         dstSize.width = srcSize.width;
-        //maxJitterX = 2;
-        //maxJitterY = 2;
-
-        printf("\nEnter maxJitterX: ");
-        scanf("%d", &maxJitterX);
-
-        printf("\nEnter maxJitterY: ");
-        scanf("%d", &maxJitterY);
 
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
@@ -127,7 +130,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_jitterAdd_u8_pln1_host(srcPtr, srcSize, dstPtr, maxJitterX, maxJitterY);
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -141,7 +144,7 @@ int main(int argc, char** argv)
                 rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_jitterAdd_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, maxJitterX, maxJitterY);
+                rppi_custom_convolution_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, kernel, kernelSize);
                 stop = high_resolution_clock::now();
 
                 rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -155,7 +158,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_jitterAdd_u8_pln1_host(srcPtr, srcSize, dstPtr, maxJitterX, maxJitterY);
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -164,7 +167,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_jitterAdd_u8_pkd3_host(srcPtr, srcSize, dstPtr, maxJitterX, maxJitterY);
+                rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -189,8 +192,6 @@ int main(int argc, char** argv)
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
-    maxJitterX = 1;
-    maxJitterY = 1;
 
     if (matrix == 1)
     {
@@ -201,8 +202,8 @@ int main(int argc, char** argv)
         Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_jitterAdd_u8_pln1_host(srcPtr, srcSize, dstPtr, maxJitterX, maxJitterY);
-        printf("\n\nOutput of jitterAdd:\n");
+        rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
+        printf("\n\nOutput of custom_convolution:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
@@ -216,8 +217,8 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_jitterAdd_u8_pln3_host(srcPtr, srcSize, dstPtr, maxJitterX, maxJitterY);
-            printf("\n\nOutput of jitterAdd:\n");
+            rppi_custom_convolution_u8_pln3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
+            printf("\n\nOutput of custom_convolution:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -226,8 +227,8 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_jitterAdd_u8_pkd3_host(srcPtr, srcSize, dstPtr, maxJitterX, maxJitterY);
-            printf("\n\nOutput of jitterAdd:\n");
+            rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
+            printf("\n\nOutput of custom_convolution:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
     }
@@ -252,13 +253,13 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_jitterAdd_u8_pln1_host(srcPtr, srcSize, dstPtr, maxJitterX, maxJitterY);
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
             }
             else if (channel == 3)
             {
-                rppi_jitterAdd_u8_pln3_host(srcPtr, srcSize, dstPtr, maxJitterX, maxJitterY);
+                rppi_custom_convolution_u8_pln3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
             }
-            printf("\n\nOutput of jitterAdd:\n");
+            printf("\n\nOutput of custom_convolution:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
         else if (type == 2)
@@ -270,13 +271,13 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_jitterAdd_u8_pln1_host(srcPtr, srcSize, dstPtr, maxJitterX, maxJitterY);
+                rppi_custom_convolution_u8_pln1_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
             }
             else if (channel == 3)
             {
-                rppi_jitterAdd_u8_pkd3_host(srcPtr, srcSize, dstPtr, maxJitterX, maxJitterY);
+                rppi_custom_convolution_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernel, kernelSize);
             }
-            printf("\n\nOutput of jitterAdd:\n");
+            printf("\n\nOutput of custom_convolution:\n");
             displayPacked(dstPtr, srcSize, channel);
         }
     }

@@ -16,7 +16,7 @@ RppStatus bilateral_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     RppiSize srcSizeMod;
     srcSizeMod.height = srcSize.height + (2 * bound);
     srcSizeMod.width = srcSize.width + (2 * bound);
-    T *srcPtrMod = (T *)calloc(srcSizeMod.width * srcSizeMod.height * channel, sizeof(T));
+    T *srcPtrMod = (T *)calloc(srcSizeMod.height * srcSizeMod.width * channel, sizeof(T));
     
     generate_evenly_padded_image_host(srcPtr, srcSize, srcPtrMod, srcSizeMod, chnFormat, channel);
 
@@ -33,6 +33,13 @@ RppStatus bilateral_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     srcPtrWindow = srcPtrMod;
     dstPtrTemp = dstPtr;
 
+    T maxVal = (T)(std::numeric_limits<T>::max());
+    T minVal = (T)(std::numeric_limits<T>::min());
+
+    RppiSize rppiKernelSize;
+    rppiKernelSize.height = kernelSize;
+    rppiKernelSize.width = kernelSize;
+
     if (chnFormat == RPPI_CHN_PLANAR)
     {
         for (int c = 0; c < channel; c++)
@@ -45,7 +52,7 @@ RppStatus bilateral_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                                       srcPtrWindow, srcSizeMod, remainingElementsInRowPlanar, incrementToWindowCenterPlanar, 
                                                       chnFormat, channel);
                     convolution_kernel_host(srcPtrWindow, dstPtrTemp, srcSize, 
-                                            kernel, kernelSize, remainingElementsInRowPlanar, 
+                                            kernel, rppiKernelSize, remainingElementsInRowPlanar, maxVal, minVal, 
                                             chnFormat, channel);
                     srcPtrWindow++;
                     dstPtrTemp++;
@@ -67,7 +74,7 @@ RppStatus bilateral_filter_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                                       srcPtrWindow, srcSizeMod, remainingElementsInRowPacked, incrementToWindowCenterPacked, 
                                                       chnFormat, channel);
                     convolution_kernel_host(srcPtrWindow, dstPtrTemp, srcSize, 
-                                            kernel, kernelSize, remainingElementsInRowPacked, 
+                                            kernel, rppiKernelSize, remainingElementsInRowPacked, maxVal, minVal, 
                                             chnFormat, channel);
                     srcPtrWindow++;
                     dstPtrTemp++;

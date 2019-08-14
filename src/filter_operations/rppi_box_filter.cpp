@@ -55,6 +55,9 @@ int main(int argc, char** argv)
     unsigned int channel;
     unsigned int kernelSize = 11;
 
+    printf("\nEnter kernelSize: ");
+    scanf("%d", &kernelSize);
+    
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
@@ -188,20 +191,6 @@ int main(int argc, char** argv)
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
         rppi_box_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
-        /*
-        if (kernelSize == 3)
-        {
-            rppi_box_filter3x3_u8_pln1_host(srcPtr, srcSize, dstPtr);
-        }
-        else if (kernelSize == 5)
-        {
-            rppi_box_filter5x5_u8_pln1_host(srcPtr, srcSize, dstPtr);
-        }
-        else if (kernelSize == 7)
-        {
-            rppi_box_filter7x7_u8_pln1_host(srcPtr, srcSize, dstPtr);
-        }
-        */
         printf("\n\nOutput of box_filter:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
@@ -217,20 +206,6 @@ int main(int argc, char** argv)
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
             rppi_box_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize);
-            /*
-            if (kernelSize == 3)
-            {
-                rppi_box_filter3x3_u8_pln3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 5)
-            {
-                rppi_box_filter5x5_u8_pln3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 7)
-            {
-                rppi_box_filter7x7_u8_pln3_host(srcPtr, srcSize, dstPtr);
-            }
-            */
             printf("\n\nOutput of box_filter:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
@@ -241,20 +216,6 @@ int main(int argc, char** argv)
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
             rppi_box_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize);
-            /*
-            if (kernelSize == 3)
-            {
-                rppi_box_filter3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 5)
-            {
-                rppi_box_filter5x5_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 7)
-            {
-                rppi_box_filter7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-            }
-            */
             printf("\n\nOutput of box_filter:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
@@ -281,38 +242,10 @@ int main(int argc, char** argv)
             if (channel == 1)
             {
                 rppi_box_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_box_filter3x3_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_box_filter5x5_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_box_filter7x7_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                */
             }
             else if (channel == 3)
             {
                 rppi_box_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_box_filter3x3_u8_pln3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_box_filter5x5_u8_pln3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_box_filter7x7_u8_pln3_host(srcPtr, srcSize, dstPtr);
-                }
-                */
             }
             printf("\n\nOutput of box_filter:\n");
             displayPlanar(dstPtr, srcSize, channel);
@@ -327,38 +260,10 @@ int main(int argc, char** argv)
             if (channel == 1)
             {
                 rppi_box_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_box_filter3x3_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_box_filter5x5_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_box_filter7x7_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                */
             }
             else if (channel == 3)
             {
                 rppi_box_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_box_filter3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_box_filter5x5_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_box_filter7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-                }
-                */
             }
             printf("\n\nOutput of box_filter:\n");
             displayPacked(dstPtr, srcSize, channel);
