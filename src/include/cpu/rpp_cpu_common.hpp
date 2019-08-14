@@ -305,12 +305,105 @@ RppStatus generate_corner_padded_image_host(T* srcPtr, RppiSize srcSize, T* srcP
     return RPP_SUCCESS;
 }
 
-RppStatus generate_box_kernel_host(Rpp32f* kernel, Rpp32u kernelSize)
+template <typename T>
+RppStatus generate_opposite_edge_padded_image_host(T* srcPtr, RppiSize srcSize, T* srcPtrMod, RppiSize srcSizeMod, Rpp32u padType, 
+                                                   RppiChnFormat chnFormat, Rpp32u channel)
+{
+    T *srcPtrTemp, *srcPtrModTemp;
+    srcPtrTemp = srcPtr;
+    srcPtrModTemp = srcPtrMod;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        if (padType == 1)
+        {
+            Rpp32u imageDim = srcSize.height * srcSize.width;
+            Rpp32u boundY = (srcSizeMod.height - srcSize.height) / 2;
+
+            for (int c = 0; c < channel; c++)
+            {    
+                memset (srcPtrModTemp,(T) 0,boundY * srcSizeMod.width * sizeof(T));
+                srcPtrModTemp += (boundY * srcSizeMod.width);
+
+                memcpy(srcPtrModTemp, srcPtrTemp, imageDim * sizeof(T));
+                srcPtrModTemp += imageDim;
+                srcPtrTemp += imageDim;
+
+                memset (srcPtrModTemp,(T) 0,boundY * srcSizeMod.width * sizeof(T));
+                srcPtrModTemp += (boundY * srcSizeMod.width);
+            }
+        }
+        
+        if (padType == 2)
+        {
+            Rpp32u boundX = (srcSizeMod.width - srcSize.width) / 2;
+
+            for (int c = 0; c < channel; c++)
+            {
+                for (int i = 0; i < srcSize.height; i++)
+                {
+                    memset (srcPtrModTemp,(T) 0,boundX * sizeof(T));
+                    srcPtrModTemp += boundX;
+
+                    memcpy(srcPtrModTemp, srcPtrTemp, srcSize.width * sizeof(T));
+                    srcPtrModTemp += srcSize.width;
+                    srcPtrTemp += srcSize.width;
+
+                    memset (srcPtrModTemp,(T) 0,boundX * sizeof(T));
+                    srcPtrModTemp += boundX;
+                }
+            }
+        }
+    }
+    else if(chnFormat == RPPI_CHN_PACKED)
+    {
+        if (padType == 1)
+        {
+            Rpp32u imageDim = srcSize.height * srcSize.width;
+            Rpp32u boundY = (srcSizeMod.height - srcSize.height) / 2;
+            Rpp32u numOfPixelsHrBorder = boundY * channel * srcSizeMod.width;
+
+            memset (srcPtrModTemp,(T) 0,numOfPixelsHrBorder * sizeof(T));
+            srcPtrModTemp += (numOfPixelsHrBorder);
+
+            memcpy(srcPtrModTemp, srcPtrTemp, channel * imageDim * sizeof(T));
+            srcPtrModTemp += (channel * imageDim);
+            srcPtrTemp += (channel * imageDim);
+
+            memset (srcPtrModTemp,(T) 0,numOfPixelsHrBorder * sizeof(T));
+            srcPtrModTemp += (numOfPixelsHrBorder);
+        }
+
+        if (padType == 2)
+        {
+            Rpp32u boundX = (srcSizeMod.width - srcSize.width) / 2;
+            Rpp32u numOfPixelsVtBorder = boundX * channel;
+            Rpp32u elementsInRow = channel * srcSize.width;
+
+            for (int i = 0; i < srcSize.height; i++)
+            {
+                memset (srcPtrModTemp,(T) 0,numOfPixelsVtBorder * sizeof(T));
+                srcPtrModTemp += (numOfPixelsVtBorder);
+
+                memcpy(srcPtrModTemp, srcPtrTemp, elementsInRow * sizeof(T));
+                srcPtrModTemp += elementsInRow;
+                srcPtrTemp += elementsInRow;
+
+                memset (srcPtrModTemp,(T) 0,numOfPixelsVtBorder * sizeof(T));
+                srcPtrModTemp += (numOfPixelsVtBorder);
+            }
+        }
+    }
+
+    return RPP_SUCCESS;
+}
+
+RppStatus generate_box_kernel_host(Rpp32f* kernel, RppiSize kernelSize)
 {
     Rpp32f* kernelTemp;
     kernelTemp = kernel;
-    Rpp32f kernelValue = 1.0 / (Rpp32f) (kernelSize * kernelSize);
-    for (int i = 0; i < (kernelSize * kernelSize); i++)
+    Rpp32f kernelValue = 1.0 / (Rpp32f) (kernelSize.height * kernelSize.width);
+    for (int i = 0; i < (kernelSize.height * kernelSize.width); i++)
     {
         *kernelTemp = kernelValue;
         kernelTemp++;
@@ -366,6 +459,8 @@ RppStatus generate_crop_host(T* srcPtr, RppiSize srcSize, T* srcPtrSubImage, Rpp
     return RPP_SUCCESS;
 }
 
+// Unoptimized
+///*
 RppStatus generate_sobel_kernel_host(Rpp32f* kernel, Rpp32u type)
 {
     Rpp32f* kernelTemp;
@@ -404,7 +499,35 @@ RppStatus generate_sobel_kernel_host(Rpp32f* kernel, Rpp32u type)
 
     return RPP_SUCCESS;
 }
+//*/
 
+// Optimized - Separable Kernel
+/*
+RppStatus generate_sobel_kernel_host(Rpp32f* kernel, Rpp32u type)
+{
+    Rpp32f* kernelTemp;
+    kernelTemp = kernel;
+
+    if (type == 1)
+    {
+        *kernel = -1;
+        *(kernel + 1) = 0;
+        *(kernel + 2) = 1;
+    }
+    else if (type == 2)
+    {
+        *kernel = 1;
+        *(kernel + 1) = 2;
+        *(kernel + 2) = 1;
+    }
+    else
+    {
+        return RPP_ERROR;
+    }
+
+    return RPP_SUCCESS;
+}
+*/
 
 
 
@@ -762,6 +885,102 @@ RppStatus dilate_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize,
     return RPP_SUCCESS;
 }
 
+//O(1)
+///*
+template<typename T>
+RppStatus median_filter_row_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
+                                       Rpp32u kernelSize, Rpp32u remainingElementsInRow, Rpp32f limit, Rpp32u *histogram, 
+                                       RppiChnFormat chnFormat, Rpp32u channel)
+{
+    T* srcPtrWindowTemp;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        srcPtrWindowTemp = srcPtrWindow - 1;
+        for (int m = 0; m < kernelSize; m++)
+        {
+            *(histogram + (Rpp32u) *(srcPtrWindowTemp)) -= 1;
+            srcPtrWindowTemp += kernelSize;
+            *(histogram + (Rpp32u) *(srcPtrWindowTemp)) += 1;
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        srcPtrWindowTemp = srcPtrWindow - channel;
+        for (int m = 0; m < kernelSize; m++)
+        {
+            *(histogram + (Rpp32u) *(srcPtrWindowTemp)) -= 1;
+            srcPtrWindowTemp += (kernelSize * channel);
+            *(histogram + (Rpp32u) *(srcPtrWindowTemp)) += 1;
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+
+    Rpp32u sum = 0;
+    Rpp32u *histogramTemp;
+    histogramTemp = histogram;
+    while (sum < limit)
+    {
+        sum += *(histogramTemp);
+        histogramTemp++;
+    }
+
+    *dstPtrPixel = (T) (histogramTemp - histogram);
+
+    return RPP_SUCCESS;
+}
+//*/
+
+//O(r)
+///*
+template<typename T>
+RppStatus median_filter_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
+                                       Rpp32u kernelSize, Rpp32u remainingElementsInRow, Rpp32f limit, Rpp32u *histogram, 
+                                       RppiChnFormat chnFormat, Rpp32u channel)
+{
+    T* srcPtrWindowTemp;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        srcPtrWindowTemp = srcPtrWindow - 1;
+        for (int m = 0; m < kernelSize; m++)
+        {
+            *(histogram + (Rpp32u) *(srcPtrWindowTemp)) -= 1;
+            srcPtrWindowTemp += kernelSize;
+            *(histogram + (Rpp32u) *(srcPtrWindowTemp)) += 1;
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        srcPtrWindowTemp = srcPtrWindow - channel;
+        for (int m = 0; m < kernelSize; m++)
+        {
+            *(histogram + (Rpp32u) *(srcPtrWindowTemp)) -= 1;
+            srcPtrWindowTemp += (kernelSize * channel);
+            *(histogram + (Rpp32u) *(srcPtrWindowTemp)) += 1;
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+
+    Rpp32u sum = 0;
+    Rpp32u *histogramTemp;
+    histogramTemp = histogram;
+    while (sum < limit)
+    {
+        sum += *(histogramTemp);
+        histogramTemp++;
+    }
+
+    *dstPtrPixel = (T) (histogramTemp - histogram);
+
+    return RPP_SUCCESS;
+}
+//*/
+
+//O(r^2)
+/*
 template<typename T>
 RppStatus median_filter_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
                                        Rpp32u kernelSize, Rpp32u remainingElementsInRow, 
@@ -807,6 +1026,7 @@ RppStatus median_filter_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize sr
 
     return RPP_SUCCESS;
 }
+*/
 
 template<typename T>
 RppStatus local_binary_pattern_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
@@ -942,9 +1162,10 @@ RppStatus non_max_suppression_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiS
         {
             for (int n = 0; n < kernelSize; n++)
             {
-                if (*srcPtrWindowTemp > pixel)
+                if (windowCenter < *srcPtrWindowTemp)
                 {
-                    pixel = *srcPtrWindowTemp;
+                    *dstPtrPixel = (T) 0;
+                    return RPP_SUCCESS;
                 }
                 srcPtrWindowTemp++;
             }
@@ -957,23 +1178,17 @@ RppStatus non_max_suppression_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiS
         {
             for (int n = 0; n < kernelSize; n++)
             {
-                if (*srcPtrWindowTemp > pixel)
+                if (windowCenter < *srcPtrWindowTemp)
                 {
-                    pixel = *srcPtrWindowTemp;
+                    *dstPtrPixel = (T) 0;
+                    return RPP_SUCCESS;
                 }
                 srcPtrWindowTemp += channel;
             }
             srcPtrWindowTemp += remainingElementsInRow;
         }
     }
-    if (windowCenter >= pixel)
-    {
-        *dstPtrPixel = windowCenter;
-    }
-    else
-    {
-        *dstPtrPixel = (T) 0;
-    }
+    *dstPtrPixel = windowCenter;
 
     return RPP_SUCCESS;
 }

@@ -184,27 +184,17 @@ int main(int argc, char** argv)
     if (matrix == 1)
     {
         channel = 1;
-        srcSize.height = 3;
-        srcSize.width = 4;
-        Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
-        Rpp8u dstPtr[12] = {0};
+        //srcSize.height = 3;
+        //srcSize.width = 4;
+        //Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
+        //Rpp8u dstPtr[12] = {0};
+        srcSize.height = 4;
+        srcSize.width = 9;
+        Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
+        Rpp8u dstPtr[36] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
         rppi_median_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
-        /*
-        if (kernelSize == 3)
-        {
-            rppi_median_filter3x3_u8_pln1_host(srcPtr, srcSize, dstPtr);
-        }
-        else if (kernelSize == 5)
-        {
-            rppi_median_filter5x5_u8_pln1_host(srcPtr, srcSize, dstPtr);
-        }
-        else if (kernelSize == 7)
-        {
-            rppi_median_filter7x7_u8_pln1_host(srcPtr, srcSize, dstPtr);
-        }
-        */
         printf("\n\nOutput of median_filter:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
@@ -220,20 +210,6 @@ int main(int argc, char** argv)
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
             rppi_median_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize);
-            /*
-            if (kernelSize == 3)
-            {
-                rppi_median_filter3x3_u8_pln3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 5)
-            {
-                rppi_median_filter5x5_u8_pln3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 7)
-            {
-                rppi_median_filter7x7_u8_pln3_host(srcPtr, srcSize, dstPtr);
-            }
-            */
             printf("\n\nOutput of median_filter:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
@@ -244,20 +220,6 @@ int main(int argc, char** argv)
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
             rppi_median_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize);
-            /*
-            if (kernelSize == 3)
-            {
-                rppi_median_filter3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 5)
-            {
-                rppi_median_filter5x5_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-            }
-            else if (kernelSize == 7)
-            {
-                rppi_median_filter7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-            }
-            */
             printf("\n\nOutput of median_filter:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
@@ -284,38 +246,10 @@ int main(int argc, char** argv)
             if (channel == 1)
             {
                 rppi_median_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_median_filter3x3_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_median_filter5x5_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_median_filter7x7_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                */
             }
             else if (channel == 3)
             {
                 rppi_median_filter_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_median_filter3x3_u8_pln3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_median_filter5x5_u8_pln3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_median_filter7x7_u8_pln3_host(srcPtr, srcSize, dstPtr);
-                }
-                */
             }
             printf("\n\nOutput of median_filter:\n");
             displayPlanar(dstPtr, srcSize, channel);
@@ -330,38 +264,10 @@ int main(int argc, char** argv)
             if (channel == 1)
             {
                 rppi_median_filter_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_median_filter3x3_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_median_filter5x5_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_median_filter7x7_u8_pln1_host(srcPtr, srcSize, dstPtr);
-                }
-                */
             }
             else if (channel == 3)
             {
                 rppi_median_filter_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize);
-                /*
-                if (kernelSize == 3)
-                {
-                    rppi_median_filter3x3_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 5)
-                {
-                    rppi_median_filter5x5_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-                }
-                else if (kernelSize == 7)
-                {
-                    rppi_median_filter7x7_u8_pkd3_host(srcPtr, srcSize, dstPtr);
-                }
-                */
             }
             printf("\n\nOutput of median_filter:\n");
             displayPacked(dstPtr, srcSize, channel);

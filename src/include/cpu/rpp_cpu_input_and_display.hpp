@@ -176,3 +176,23 @@ void displayTensorF(T *pArr, Rpp32u size)
     }
     printf("\n");
 }
+
+template <typename T>
+void displayHistogram(T *outputHistogram, Rpp32u bins)
+{
+    printf("\nHistogram for the image is:\n");
+    Rpp32u *outputHistogramTemp;
+    outputHistogramTemp = outputHistogram;
+    int count = 1;
+    for (int i = 0; i < bins; i++, count++)
+    {
+        printf("%d\t", *outputHistogramTemp);
+        outputHistogramTemp++;
+        if (count == 20)
+        {
+            printf("\n");
+            count = 0;
+        }
+    }
+    printf("\n");
+}

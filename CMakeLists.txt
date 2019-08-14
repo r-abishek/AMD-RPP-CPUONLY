@@ -702,6 +702,22 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+
+add_executable(
+    rppi_opposite_edge_pad_image
+    src/geometry_transforms/rppi_opposite_edge_pad_image.cpp
+)
+target_include_directories(rppi_opposite_edge_pad_image
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_opposite_edge_pad_image
+    ${OpenCV_LIBS}
+)
+
 add_executable(
     rppi_warp_perspective
     src/geometry_transforms/rppi_warp_perspective.cpp
