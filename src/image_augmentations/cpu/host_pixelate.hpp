@@ -24,7 +24,10 @@ RppStatus pixelate_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     Rpp32f *kernel = (Rpp32f *)calloc(kernelSize * kernelSize, sizeof(Rpp32f));
 
-    generate_box_kernel_host(kernel, kernelSize);
+    RppiSize rppiKernelSize;
+    rppiKernelSize.height = kernelSize;
+    rppiKernelSize.width = kernelSize;
+    generate_box_kernel_host(kernel, rppiKernelSize);
 
     RppiSize srcSizeMod, srcSizeSubImage;
     T *srcPtrMod, *srcPtrSubImage, *dstPtrSubImage;
@@ -44,9 +47,6 @@ RppStatus pixelate_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         srcPtrMod = srcPtrSubImage - (bound * srcSize.width * channel) - (bound * channel);
     }
 
-    RppiSize rppiKernelSize;
-    rppiKernelSize.height = kernelSize;
-    rppiKernelSize.width = kernelSize;
     convolve_subimage_host(srcPtrMod, srcSizeMod, dstPtrSubImage, srcSizeSubImage, srcSize, kernel, rppiKernelSize, chnFormat, channel);
 
     return RPP_SUCCESS;
