@@ -1193,6 +1193,106 @@ RppStatus non_max_suppression_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiS
     return RPP_SUCCESS;
 }
 
+template<typename T>
+RppStatus canny_non_max_suppression_kernel_host(T* dstPtrPixel, T windowCenter, T *position1Ptr, T *position2Ptr)
+{
+    if ((windowCenter > *position1Ptr) && (windowCenter > *position2Ptr))
+    {
+        *dstPtrPixel = windowCenter;
+    }
+    else
+    {
+        *dstPtrPixel = (T) 0;
+    }
+
+    return RPP_SUCCESS;
+}
+
+template<typename T>
+RppStatus canny_hysterisis_edge_tracing_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
+                                       Rpp32u kernelSize, Rpp32u remainingElementsInRow, T windowCenter, Rpp32u bound, 
+                                       RppiChnFormat chnFormat, Rpp32u channel)
+{
+    T pixel;
+
+    T* srcPtrWindowTemp;
+    srcPtrWindowTemp = srcPtrWindow;
+    pixel = *srcPtrWindowTemp;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                if (*srcPtrWindowTemp == (T) 255)
+                {
+                    *dstPtrPixel = (T) 255;
+                    return RPP_SUCCESS;
+                }
+                srcPtrWindowTemp++;
+            }
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                if (windowCenter < *srcPtrWindowTemp)
+                {
+                    *dstPtrPixel = (T) 0;
+                    return RPP_SUCCESS;
+                }
+                srcPtrWindowTemp += channel;
+            }
+            srcPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    *dstPtrPixel = (T) 0;
+
+    return RPP_SUCCESS;
+}
+
+template<typename T, typename U>
+RppStatus harris_corner_detector_kernel_host(T* srcPtrWindowX, T* srcPtrWindowY, U* dstPtrPixel, RppiSize srcSize, 
+                                             Rpp32u kernelSize, Rpp32u remainingElementsInRow, Rpp32f kValue, 
+                                             RppiChnFormat chnFormat, Rpp32u channel)
+{
+    //T pixel;
+
+    T *srcPtrWindowTempX, *srcPtrWindowTempY;
+    srcPtrWindowTempX = srcPtrWindowX;
+    srcPtrWindowTempY = srcPtrWindowY;
+
+    Rpp32f sumXX = 0, sumYY = 0, sumXY = 0, valX = 0, valY = 0;
+    //pixel = *srcPtrWindowTemp;
+    
+    for (int m = 0; m < kernelSize; m++)
+    {
+        for (int n = 0; n < kernelSize; n++)
+        {
+            valX = (Rpp32f) *srcPtrWindowTempX;
+            valY = (Rpp32f) *srcPtrWindowTempY;
+            sumXX += (valX * valX);
+            sumYY += (valY * valY);
+            sumXY += (valX * valY);
+
+            srcPtrWindowTempX++;
+            srcPtrWindowTempY++;
+        }
+        srcPtrWindowTempX += remainingElementsInRow;
+        srcPtrWindowTempY += remainingElementsInRow;
+    }
+    Rpp32f det = (sumXX * sumYY) - (sumXY * sumXY);
+    Rpp32f trace = (Rpp32f) sumXX + (Rpp32f) sumYY;
+    *dstPtrPixel = (U) ((det) - (kValue * trace * trace));
+
+    return RPP_SUCCESS;
+}
+
 
 
 
