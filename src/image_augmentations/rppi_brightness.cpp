@@ -63,7 +63,7 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    Rpp32f alpha = 0.5;
+    Rpp32f alpha = 1;
     Rpp32s beta = 35;
      
     int input;

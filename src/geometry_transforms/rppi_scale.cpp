@@ -19,16 +19,16 @@ using namespace std::chrono;
 
 
 
-RppStatus
-rppi_scale_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
-                             Rpp32f percentage)
-{
-    scale_output_size_host(srcSize, dstSizePtr,
-                            percentage);
-
-    return RPP_SUCCESS;
-
-}
+//RppStatus
+//rppi_scale_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
+//                             Rpp32f percentage)
+//{
+//    scale_output_size_host(srcSize, dstSizePtr,
+//                            percentage);
+//
+//    return RPP_SUCCESS;
+//
+//}
 
 RppStatus
 rppi_scale_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
@@ -79,6 +79,14 @@ int main(int argc, char** argv)
     printf("\nEnter percentage to scale to: ");
     scanf("%f", &percentage);
 
+    unsigned int dstWidth;
+    printf("\nEnter destination Width: ");
+    scanf("%d", &dstWidth);
+    
+    unsigned int dstHeight;
+    printf("\nEnter destination Height: ");
+    scanf("%d", &dstHeight);
+
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
@@ -123,7 +131,9 @@ int main(int argc, char** argv)
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
         
-        rppi_scale_output_size_host(srcSize, &dstSize, percentage);
+        //rppi_scale_output_size_host(srcSize, &dstSize, percentage);
+        dstSize.height = dstHeight;
+        dstSize.width = dstWidth;
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
@@ -209,7 +219,7 @@ int main(int argc, char** argv)
         printf("\nInput Height - %d, Input Width - %d\n", srcSize.height, srcSize.width);
         Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
         
-        rppi_scale_output_size_host(srcSize, &dstSize, percentage);
+        //rppi_scale_output_size_host(srcSize, &dstSize, percentage);
         printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
@@ -229,7 +239,7 @@ int main(int argc, char** argv)
         {
             Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
             
-            rppi_scale_output_size_host(srcSize, &dstSize, percentage);
+            //rppi_scale_output_size_host(srcSize, &dstSize, percentage);
             printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
             Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
@@ -243,7 +253,7 @@ int main(int argc, char** argv)
         {
             Rpp8u srcPtr[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
             
-            rppi_scale_output_size_host(srcSize, &dstSize, percentage);
+            //rppi_scale_output_size_host(srcSize, &dstSize, percentage);
             printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
             Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
@@ -268,7 +278,7 @@ int main(int argc, char** argv)
         int *intSrcPtr = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
         printf("\nInput Height - %d, Input Width - %d\n", srcSize.height, srcSize.width);
         
-        rppi_scale_output_size_host(srcSize, &dstSize, percentage);
+        //rppi_scale_output_size_host(srcSize, &dstSize, percentage);
         printf("\nOutput Height - %d, Output Width - %d\n", dstSize.height, dstSize.width);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 

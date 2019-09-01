@@ -75,8 +75,13 @@ int main(int argc, char** argv)
     RppiSize srcSize, dstSize;
     unsigned int channel;
 
-    //Rpp32f affine[6] = {0.707, -0.707, 0, -0.707, 0.707, 0};
-    Rpp32f affine[6] = {1.35, 0.3, 0, -0.75, 1.1, 0};
+    //Rpp32f affine[6] = {0.707, 0.707, 0, -0.707, 0.707, 0};
+    //Rpp32f affine[6] = {1.35, 0.3, 0, -0.75, 1.1, 0};
+    //Rpp32f affine[6] = {1, -2, 0, 1, 0, 2};
+    //Rpp32f affine[6] = {0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
+    //Rpp32f affine[6] = {1, 0.5773, 0, 0, 1, 0};
+    //Rpp32f affine[6] = {1, 0, 100, 0, 1, 0};
+    Rpp32f affine[6] = {-1, 0, 0, 0, -1, 0};
     //Mat affineMat = Mat(2, 3, CV_32FC1, affine);
     //_InputArray affineReshaped = _InputArray(affineMat);
 /*    
@@ -87,6 +92,14 @@ int main(int argc, char** argv)
         scanf("%f", &affine[i]);
     }
 */
+    unsigned int dstWidth;
+    printf("\nEnter destination Width: ");
+    scanf("%d", &dstWidth);
+
+    unsigned int dstHeight;
+    printf("\nEnter destination Height: ");
+    scanf("%d", &dstHeight);
+
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
@@ -131,7 +144,11 @@ int main(int argc, char** argv)
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
         
-        rppi_warp_affine_output_size_host(srcSize, &dstSize, affine);
+        //rppi_warp_affine_output_size_host(srcSize, &dstSize, affine);
+        //dstSize.height = imageIn.rows;
+        //dstSize.width = imageIn.cols;
+        dstSize.height = dstHeight;
+        dstSize.width = dstWidth;
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         

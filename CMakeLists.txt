@@ -5,204 +5,6 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 
-
-add_executable(
-    rppi_vignette
-    src/image_augmentations/rppi_vignette.cpp
-)
-target_include_directories(rppi_vignette
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_vignette
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_random_shadow
-    src/image_augmentations/rppi_random_shadow.cpp
-)
-target_include_directories(rppi_random_shadow
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_random_shadow
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_flip
-    src/geometry_transforms/rppi_flip.cpp
-)
-target_include_directories(rppi_flip
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_flip
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_brightness
-    src/image_augmentations/rppi_brightness.cpp
-)
-target_include_directories(rppi_brightness
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_brightness
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_gamma_correction
-    src/image_augmentations/rppi_gamma_correction.cpp
-)
-target_include_directories(rppi_gamma_correction
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_gamma_correction
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_warp_affine
-    src/geometry_transforms/rppi_warp_affine.cpp
-)
-target_include_directories(rppi_warp_affine
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_warp_affine
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_fish_eye_effect
-    src/image_augmentations/rppi_fish_eye_effect.cpp
-)
-target_include_directories(rppi_fish_eye_effect
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_fish_eye_effect
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_lens_correction
-    src/image_augmentations/rppi_lens_correction.cpp
-)
-target_include_directories(rppi_lens_correction
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_lens_correction
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_snow
-    src/image_augmentations/rppi_snow.cpp
-)
-target_include_directories(rppi_snow
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_snow
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_canny_edge_detector
-    src/computer_vision/rppi_canny_edge_detector.cpp
-)
-target_include_directories(rppi_canny_edge_detector
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_canny_edge_detector
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_convert_bit_depth
-    src/computer_vision/rppi_convert_bit_depth.cpp
-)
-target_include_directories(rppi_convert_bit_depth
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_convert_bit_depth
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_harris_corner_detector
-    src/computer_vision/rppi_harris_corner_detector.cpp
-)
-target_include_directories(rppi_harris_corner_detector
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_harris_corner_detector
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_blur
-    src/image_augmentations/rppi_blur.cpp
-)
-target_include_directories(rppi_blur
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_blur
-    ${OpenCV_LIBS}
-)
-
-
-#[[
 add_executable(
     rppi_absolute_difference
     src/arithmetic_operations/rppi_absolute_difference.cpp
@@ -1469,4 +1271,48 @@ target_link_libraries(
     rppi_data_object_copy
     ${OpenCV_LIBS}
 )
-]]
+
+add_executable(
+    rppi_canny_edge_detector
+    src/computer_vision/rppi_canny_edge_detector.cpp
+)
+target_include_directories(rppi_canny_edge_detector
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_canny_edge_detector
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_convert_bit_depth
+    src/computer_vision/rppi_convert_bit_depth.cpp
+)
+target_include_directories(rppi_convert_bit_depth
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_convert_bit_depth
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_harris_corner_detector
+    src/computer_vision/rppi_harris_corner_detector.cpp
+)
+target_include_directories(rppi_harris_corner_detector
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_harris_corner_detector
+    ${OpenCV_LIBS}
+)
