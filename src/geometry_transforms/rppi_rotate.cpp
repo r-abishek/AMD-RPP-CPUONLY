@@ -19,16 +19,16 @@ using namespace std::chrono;
 
 
 
-RppStatus
-rppi_rotate_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
-                             Rpp32f angleDeg)
-{
-    rotate_output_size_host(srcSize, dstSizePtr,
-                            angleDeg);
-
-    return RPP_SUCCESS;
-
-}
+//RppStatus
+//rppi_rotate_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
+//                             Rpp32f angleDeg)
+//{
+//    rotate_output_size_host(srcSize, dstSizePtr,
+//                            angleDeg);
+//
+//    return RPP_SUCCESS;
+//
+//}
 
 RppStatus
 rppi_rotate_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
@@ -76,6 +76,16 @@ int main(int argc, char** argv)
     unsigned int channel;
 
     Rpp32f angleDeg = 65;
+    printf("\nEnter rotation angle: ");
+    scanf("%f", &angleDeg);
+
+    unsigned int dstWidth;
+    printf("\nEnter destination Width: ");
+    scanf("%d", &dstWidth);
+
+    unsigned int dstHeight;
+    printf("\nEnter destination Height: ");
+    scanf("%d", &dstHeight);
 
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -121,7 +131,11 @@ int main(int argc, char** argv)
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
         
-        rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
+        //rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
+        //dstSize.height = imageIn.rows;
+        //dstSize.width = imageIn.cols;
+        dstSize.height = dstHeight;
+        dstSize.width = dstWidth;
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
@@ -206,7 +220,7 @@ int main(int argc, char** argv)
         srcSize.width = 4;
         Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
         
-        rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
+        //rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
         printf("Height - %d, Width - %d", dstSize.height, dstSize.width);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
@@ -225,7 +239,7 @@ int main(int argc, char** argv)
         {
             Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
             
-            rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
+            //rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
             Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
             printf("\n\nInput:\n");
@@ -238,7 +252,7 @@ int main(int argc, char** argv)
         {
             Rpp8u srcPtr[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
             
-            rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
+            //rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
             Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
             printf("\n\nInput:\n");
@@ -260,7 +274,7 @@ int main(int argc, char** argv)
         Rpp8u *srcPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         int *intSrcPtr = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
         
-        rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
+        //rppi_rotate_output_size_host(srcSize, &dstSize, angleDeg);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
         if (type == 1)

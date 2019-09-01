@@ -35,7 +35,9 @@ RppStatus contrast_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
             srcPtrTemp = srcPtr + (c * srcSize.height * srcSize.width);
             for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
-                *dstPtrTemp = (U) (((((Rpp32f) (*srcPtrTemp)) - min) * ((new_max - new_min) / (max - min))) + new_min);
+                pixel = ((((Rpp32f) (*srcPtrTemp)) - min) * ((new_max - new_min) / (max - min))) + new_min;
+                pixel = RPPPIXELCHECK(pixel);
+                *dstPtrTemp = (U) pixel;
                 srcPtrTemp++;
                 dstPtrTemp++;
             }
@@ -65,7 +67,9 @@ RppStatus contrast_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
             srcPtrTemp = srcPtr + c;
             for (int i = 0; i < (srcSize.height * srcSize.width); i++)
             {
-                *dstPtrTemp = (U) (((((Rpp32f) (*srcPtrTemp)) - min) * ((new_max - new_min) / (max - min))) + new_min);
+                pixel = ((((Rpp32f) (*srcPtrTemp)) - min) * ((new_max - new_min) / (max - min))) + new_min;
+                pixel = RPPPIXELCHECK(pixel);
+                *dstPtrTemp = (U) pixel;
                 srcPtrTemp = srcPtrTemp + channel;
                 dstPtrTemp = dstPtrTemp + channel;
             }

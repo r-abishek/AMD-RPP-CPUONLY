@@ -5,7 +5,6 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 
-#[[
 add_executable(
     rppi_absolute_difference
     src/arithmetic_operations/rppi_absolute_difference.cpp
@@ -263,7 +262,7 @@ target_link_libraries(
 
 
 
-]]
+
 add_executable(
     rppi_box_filter
     src/filter_operations/rppi_box_filter.cpp
@@ -353,7 +352,7 @@ target_link_libraries(
     rppi_non_max_suppression
     ${OpenCV_LIBS}
 )
-#[[
+
 
 
 
@@ -1272,4 +1271,3 @@ target_link_libraries(
     rppi_data_object_copy
     ${OpenCV_LIBS}
 )
-]]

@@ -110,6 +110,10 @@ int main(int argc, char** argv)
         //y1 = 210;
         //x2 = 700;
         //y2 = 150;
+        //x1 = 0;
+        //y1 = 0;
+        //x2 = 1279;
+        //y2 = 719;
 
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
