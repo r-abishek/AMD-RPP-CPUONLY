@@ -12,13 +12,13 @@ RppStatus pixelate_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     Rpp32u bound = ((kernelSize - 1) / 2);
 
-    if ((RPPINRANGE(x1, bound, srcSize.width - 1 - bound) == 0) 
-        || (RPPINRANGE(x2, bound, srcSize.width - 1 - bound) == 0) 
-        || (RPPINRANGE(y1, bound, srcSize.height - 1 - bound) == 0) 
-        || (RPPINRANGE(y2, bound, srcSize.height - 1 - bound) == 0))
-    {
-        return RPP_ERROR;
-    }
+    //if ((RPPINRANGE(x1, bound, srcSize.width - 1 - bound) == 0) 
+    //    || (RPPINRANGE(x2, bound, srcSize.width - 1 - bound) == 0) 
+    //    || (RPPINRANGE(y1, bound, srcSize.height - 1 - bound) == 0) 
+    //    || (RPPINRANGE(y2, bound, srcSize.height - 1 - bound) == 0))
+    //{
+    //    return RPP_ERROR;
+    //}
 
     memcpy(dstPtr, srcPtr, channel * srcSize.height * srcSize.width * sizeof(T));
 
