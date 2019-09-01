@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    Rpp32f newMin = 55, newMax = 240;
+    Rpp32f newMin = 30, newMax = 380;
      
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
