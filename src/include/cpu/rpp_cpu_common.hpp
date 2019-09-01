@@ -1196,7 +1196,7 @@ RppStatus non_max_suppression_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiS
 template<typename T>
 RppStatus canny_non_max_suppression_kernel_host(T* dstPtrPixel, T windowCenter, T *position1Ptr, T *position2Ptr)
 {
-    if ((windowCenter > *position1Ptr) && (windowCenter > *position2Ptr))
+    if ((windowCenter >= *position1Ptr) && (windowCenter >= *position2Ptr))
     {
         *dstPtrPixel = windowCenter;
     }
@@ -1219,37 +1219,18 @@ RppStatus canny_hysterisis_edge_tracing_kernel_host(T* srcPtrWindow, T* dstPtrPi
     srcPtrWindowTemp = srcPtrWindow;
     pixel = *srcPtrWindowTemp;
     
-    if (chnFormat == RPPI_CHN_PLANAR)
+    for (int m = 0; m < kernelSize; m++)
     {
-        for (int m = 0; m < kernelSize; m++)
+        for (int n = 0; n < kernelSize; n++)
         {
-            for (int n = 0; n < kernelSize; n++)
+            if (*srcPtrWindowTemp == (T) 255)
             {
-                if (*srcPtrWindowTemp == (T) 255)
-                {
-                    *dstPtrPixel = (T) 255;
-                    return RPP_SUCCESS;
-                }
-                srcPtrWindowTemp++;
+                *dstPtrPixel = (T) 255;
+                return RPP_SUCCESS;
             }
-            srcPtrWindowTemp += remainingElementsInRow;
+            srcPtrWindowTemp++;
         }
-    }
-    else if (chnFormat == RPPI_CHN_PACKED)
-    {
-        for (int m = 0; m < kernelSize; m++)
-        {
-            for (int n = 0; n < kernelSize; n++)
-            {
-                if (windowCenter < *srcPtrWindowTemp)
-                {
-                    *dstPtrPixel = (T) 0;
-                    return RPP_SUCCESS;
-                }
-                srcPtrWindowTemp += channel;
-            }
-            srcPtrWindowTemp += remainingElementsInRow;
-        }
+        srcPtrWindowTemp += remainingElementsInRow;
     }
     *dstPtrPixel = (T) 0;
 

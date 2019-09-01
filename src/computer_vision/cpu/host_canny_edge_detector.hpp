@@ -2,6 +2,7 @@
 
 template <typename T>
 RppStatus canny_edge_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
+                                   T maxThreshold, T minThreshold, 
                                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     // RGB to Greyscale Conversion
@@ -146,9 +147,9 @@ RppStatus canny_edge_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     generate_evenly_padded_image_host(dstPtrGreyscale, srcSize, srcPtrMod, srcSizeMod, chnFormat, newChannel);
     
-    Rpp32f minThresholdRatio=0.05, maxThresholdRatio=0.09;
-    T maxThreshold = (T) ((Rpp32f) max * maxThresholdRatio);
-    T minThreshold = (T) ((Rpp32f) maxThreshold * minThresholdRatio);
+    //Rpp32f minThresholdRatio=0.05, maxThresholdRatio=0.09;
+    //T maxThreshold = (T) ((Rpp32f) max * maxThresholdRatio);
+    //T minThreshold = (T) ((Rpp32f) maxThreshold * minThresholdRatio);
     
     srcPtrWindowCenter = srcPtrWindow + (bound * srcSizeMod.width) + bound;
     Rpp32u toNeighborhood1 = 1;
@@ -166,122 +167,8 @@ RppStatus canny_edge_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     {
         for (int j = 0; j < srcSize.width; j++)
         {
-            gradient = atan(RPPABS((Rpp32f) *dstPtrIntermediateYTemp) / RPPABS((Rpp32f) *dstPtrIntermediateXTemp));
-            //printf("\ngradient = %0.4f", gradient);
-            if (RPPABS(gradient) > 1.178097)
-            {
-                //position1Ptr = srcPtrWindow + toNeighborhood3;
-                //position2Ptr = srcPtrWindow + toNeighborhood7;
-                position1Ptr = srcPtrWindow + toNeighborhood1;
-                position2Ptr = srcPtrWindow + toNeighborhood5;
-            }
-            else if (gradient > 0.392699)
-            {
-                //position1Ptr = srcPtrWindow;
-                //position2Ptr = srcPtrWindow + toNeighborhood4;
-                position1Ptr = srcPtrWindow + toNeighborhood2;
-                position2Ptr = srcPtrWindow + toNeighborhood6;
-            }
-            else if (gradient < -0.392699)
-            {
-                //position1Ptr = srcPtrWindow + toNeighborhood2;
-                //position2Ptr = srcPtrWindow + toNeighborhood6;
-                position1Ptr = srcPtrWindow;
-                position2Ptr = srcPtrWindow + toNeighborhood4;
-            }
-            else
-            {
-                //position1Ptr = srcPtrWindow + toNeighborhood1;
-                //position2Ptr = srcPtrWindow + toNeighborhood5;
-                position1Ptr = srcPtrWindow + toNeighborhood3;
-                position2Ptr = srcPtrWindow + toNeighborhood7;
-            }
-
-            canny_non_max_suppression_kernel_host(dstPtrGreyscaleTemp, *srcPtrWindowCenter, position1Ptr, position2Ptr);
-            
-            if (*dstPtrGreyscaleTemp > maxThreshold)
-            {
-                *dstPtrGreyscaleTemp = (T) 255;
-            }
-            else if (*dstPtrGreyscaleTemp < minThreshold)
-            {
-                *dstPtrGreyscaleTemp = (T) 0;
-            }
-            else
-            {
-                *dstPtrGreyscaleTemp = (T) 100;
-            }
-
-            srcPtrWindow++;
-            srcPtrWindowCenter++;
-            dstPtrGreyscaleTemp++;
-            dstPtrIntermediateXTemp++;
-            dstPtrIntermediateYTemp++;
-        }
-        srcPtrWindow += (kernelSize - 1);
-        srcPtrWindowCenter += (kernelSize - 1);
-    }
-
-    srcPtrWindow = srcPtrMod;
-    dstPtrGreyscaleTemp = dstPtrGreyscale;
-    generate_evenly_padded_image_host(dstPtrGreyscale, srcSize, srcPtrMod, srcSizeMod, chnFormat, newChannel);
-
-    srcPtrWindowCenter = srcPtrWindow + (bound * srcSizeMod.width) + bound;
-    Rpp32u remainingElementsInRow = srcSizeMod.width - kernelSize;
-    
-    for (int i = 0; i < srcSize.height; i++)
-    {
-        for (int j = 0; j < srcSize.width; j++)
-        {
-            if (*srcPtrWindowCenter == (T) 100)
-            {
-                canny_hysterisis_edge_tracing_kernel_host(srcPtrWindow, dstPtrGreyscaleTemp, srcSize, 
-                                kernelSize, remainingElementsInRow, *srcPtrWindowCenter, bound, 
-                                chnFormat, newChannel);
-            }
-            srcPtrWindow++;
-            srcPtrWindowCenter++;
-            dstPtrGreyscaleTemp++;
-        }
-        srcPtrWindow += (kernelSize - 1);
-        srcPtrWindowCenter += (kernelSize - 1);
-    }
-
-/*
-    Rpp32f gradient, slope;
-    Rpp32s *dstPtrIntermediateXTemp, *dstPtrIntermediateYTemp;
-    dstPtrIntermediateXTemp = dstPtrIntermediateX;
-    dstPtrIntermediateYTemp = dstPtrIntermediateY;
-
-    T *srcPtrWindow, *dstPtrGreyscaleTemp, *srcPtrWindowCenter;
-    srcPtrWindow = srcPtrMod;
-    dstPtrGreyscaleTemp = dstPtrGreyscale;
-
-    generate_evenly_padded_image_host(dstPtrGreyscale, srcSize, srcPtrMod, srcSizeMod, chnFormat, newChannel);
-    
-    Rpp32f minThresholdRatio=0.05, maxThresholdRatio=0.2;
-    T maxThreshold = (T) ((Rpp32f) max * maxThresholdRatio);
-    T minThreshold = (T) ((Rpp32f) maxThreshold * minThresholdRatio);
-    
-    srcPtrWindowCenter = srcPtrWindow + (bound * srcSizeMod.width) + bound;
-    Rpp32u toNeighborhood1 = 1;
-    Rpp32u toNeighborhood2 = 2;
-    Rpp32u toNeighborhood3 = srcSizeMod.width + 2;
-    Rpp32u toNeighborhood4 = 2 * (srcSizeMod.width + 1);
-    Rpp32u toNeighborhood5 = (2 * srcSizeMod.width) + 1;
-    Rpp32u toNeighborhood6 = 2 * srcSizeMod.width;
-    Rpp32u toNeighborhood7 = srcSizeMod.width;
-    T *position1Ptr, *position2Ptr;
-    dstPtrIntermediateXTemp = dstPtrIntermediateX;
-    dstPtrIntermediateYTemp = dstPtrIntermediateY;
-    
-    for (int i = 0; i < srcSize.height; i++)
-    {
-        for (int j = 0; j < srcSize.width; j++)
-        {
-            slope = (Rpp32f) *dstPtrIntermediateYTemp / (Rpp32f) *dstPtrIntermediateXTemp;
-            gradient = atan(slope);
-            if (RPPABS(gradient) > 1.178097)
+            gradient = atan((Rpp32f) *dstPtrIntermediateYTemp / (Rpp32f) *dstPtrIntermediateXTemp);
+            if (gradient > 1.178097 || gradient < -1.178097)
             {
                 position1Ptr = srcPtrWindow + toNeighborhood1;
                 position2Ptr = srcPtrWindow + toNeighborhood5;
@@ -351,8 +238,6 @@ RppStatus canny_edge_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         srcPtrWindow += (kernelSize - 1);
         srcPtrWindowCenter += (kernelSize - 1);
     }
-*/
-
 
 
 

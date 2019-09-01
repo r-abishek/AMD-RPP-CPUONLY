@@ -5,6 +5,7 @@ FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
 
+#[[
 add_executable(
     rppi_absolute_difference
     src/arithmetic_operations/rppi_absolute_difference.cpp
@@ -1202,7 +1203,7 @@ target_link_libraries(
     rppi_dilate
     ${OpenCV_LIBS}
 )
-
+]]
 
 
 
