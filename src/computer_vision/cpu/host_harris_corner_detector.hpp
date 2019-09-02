@@ -2,7 +2,7 @@
 
 template <typename T>
 RppStatus harris_corner_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr, 
-                                      Rpp32u kernelSize, Rpp32f kValue, 
+                                      Rpp32u kernelSize, Rpp32f kValue, Rpp32u threshold, 
                                       RppiChnFormat chnFormat, Rpp32u channel)
 {
     // RGB to Greyscale Conversion
@@ -77,13 +77,13 @@ RppStatus harris_corner_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
     Rpp32f *kernelX = (Rpp32f *)calloc(3 * 3, sizeof(Rpp32f));
     generate_sobel_kernel_host(kernelX, 1);
-    T *dstPtrIntermediateX = (T *)calloc(srcSize.height * srcSize.width * newChannel, sizeof(T));
-    convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediateX, srcSize, kernelX, rppiSobelKernelSize, chnFormat, newChannel);
+    T *srcPtrDerivativeX = (T *)calloc(srcSize.height * srcSize.width * newChannel, sizeof(T));
+    convolve_image_host(srcPtrMod, srcSizeMod, srcPtrDerivativeX, srcSize, kernelX, rppiSobelKernelSize, chnFormat, newChannel);
 
     Rpp32f *kernelY = (Rpp32f *)calloc(3 * 3, sizeof(Rpp32f));
     generate_sobel_kernel_host(kernelY, 2);
-    T *dstPtrIntermediateY = (T *)calloc(srcSize.height * srcSize.width * newChannel, sizeof(T));
-    convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediateY, srcSize, kernelY, rppiSobelKernelSize, chnFormat, newChannel);
+    T *srcPtrDerivativeY = (T *)calloc(srcSize.height * srcSize.width * newChannel, sizeof(T));
+    convolve_image_host(srcPtrMod, srcSizeMod, srcPtrDerivativeY, srcSize, kernelY, rppiSobelKernelSize, chnFormat, newChannel);
     
     
     
@@ -93,15 +93,15 @@ RppStatus harris_corner_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     // Pad x and y gradient images
     
     int bound = (kernelSize - 1) / 2;
-    RppiSize dstPtrIntermediateSizeMod;
-    dstPtrIntermediateSizeMod.height = srcSize.height + (2 * bound);
-    dstPtrIntermediateSizeMod.width = srcSize.width + (2 * bound);
+    RppiSize srcSizeDerivativeMod;
+    srcSizeDerivativeMod.height = srcSize.height + (2 * bound);
+    srcSizeDerivativeMod.width = srcSize.width + (2 * bound);
 
-    T *dstPtrIntermediateXmod = (T *)calloc(dstPtrIntermediateSizeMod.height * dstPtrIntermediateSizeMod.width * newChannel, sizeof(T));
-    generate_evenly_padded_image_host(dstPtrIntermediateX, srcSize, dstPtrIntermediateXmod, dstPtrIntermediateSizeMod, chnFormat, newChannel);
+    T *srcPtrDerivativeXmod = (T *)calloc(srcSizeDerivativeMod.height * srcSizeDerivativeMod.width * newChannel, sizeof(T));
+    generate_evenly_padded_image_host(srcPtrDerivativeX, srcSize, srcPtrDerivativeXmod, srcSizeDerivativeMod, chnFormat, newChannel);
 
-    T *dstPtrIntermediateYmod = (T *)calloc(dstPtrIntermediateSizeMod.height * dstPtrIntermediateSizeMod.width * newChannel, sizeof(T));
-    generate_evenly_padded_image_host(dstPtrIntermediateY, srcSize, dstPtrIntermediateYmod, dstPtrIntermediateSizeMod, chnFormat, newChannel);
+    T *srcPtrDerivativeYmod = (T *)calloc(srcSizeDerivativeMod.height * srcSizeDerivativeMod.width * newChannel, sizeof(T));
+    generate_evenly_padded_image_host(srcPtrDerivativeY, srcSize, srcPtrDerivativeYmod, srcSizeDerivativeMod, chnFormat, newChannel);
 
 
 
@@ -116,28 +116,20 @@ RppStatus harris_corner_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     dstPtrGreyscaleTemp = dstPtrGreyscale;
 
     T *srcPtrWindowX, *srcPtrWindowY;
-    srcPtrWindowX = dstPtrIntermediateXmod;
-    srcPtrWindowY = dstPtrIntermediateYmod;
+    srcPtrWindowX = srcPtrDerivativeXmod;
+    srcPtrWindowY = srcPtrDerivativeYmod;
     
 
-    Rpp32u remainingElementsInRow = dstPtrIntermediateSizeMod.width - kernelSize;
-    Rpp32f min = 255, max = 0;
+    Rpp32u remainingElementsInRow = srcSizeDerivativeMod.width - kernelSize;
+    Rpp32f min = 65535, max = -65535;
 
     for (int i = 0; i < srcSize.height; i++)
     {
         for (int j = 0; j < srcSize.width; j++)
         {
             harris_corner_detector_kernel_host(srcPtrWindowX, srcPtrWindowY, dstPtrGreyscaleTemp, srcSize, 
-                                                kernelSize, remainingElementsInRow, kValue, 
+                                                kernelSize, remainingElementsInRow, kValue, &min, &max, 
                                                 chnFormat, channel);
-            if (*dstPtrGreyscaleTemp > max)
-            {
-                max = *dstPtrGreyscaleTemp;
-            }
-            if (*dstPtrGreyscaleTemp < min)
-            {
-                min = *dstPtrGreyscaleTemp;
-            }
             srcPtrWindowX++;
             srcPtrWindowY++;
             dstPtrGreyscaleTemp++;
@@ -146,6 +138,36 @@ RppStatus harris_corner_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         srcPtrWindowY += (kernelSize - 1);
     }
     printf("\nMax = %0.4f, Min = %0.4f", max, min);
+
+    T *dstPtrGreyscaleMod = (T *)calloc(srcSizeDerivativeMod.height * srcSizeDerivativeMod.width * newChannel, sizeof(T));
+    generate_evenly_padded_image_host(dstPtrGreyscale, srcSize, dstPtrGreyscaleMod, srcSizeDerivativeMod, chnFormat, newChannel);
+    
+    T *dstPtrGreyscaleWindow;
+    T windowCenter;
+    dstPtrGreyscaleWindow = dstPtrGreyscaleMod;
+    dstPtrGreyscaleTemp = dstPtrGreyscale;
+    
+    Rpp32u windowCenterPosIncrement = (bound * srcSizeDerivativeMod.width) + bound;
+
+    for (int i = 0; i < srcSize.height; i++)
+    {
+        for (int j = 0; j < srcSize.width; j++)
+        {
+            windowCenter = (T) *(dstPtrGreyscaleWindow + windowCenterPosIncrement);
+            non_max_suppression_kernel_host(dstPtrGreyscaleWindow, dstPtrGreyscaleTemp, srcSize, 
+                                kernelSize, remainingElementsInRow, windowCenter, 
+                                chnFormat, newChannel);
+            dstPtrGreyscaleWindow++;
+            dstPtrGreyscaleTemp++;
+        }
+        dstPtrGreyscaleWindow += (kernelSize - 1);
+    }
+
+
+
+
+
+
 
 
 

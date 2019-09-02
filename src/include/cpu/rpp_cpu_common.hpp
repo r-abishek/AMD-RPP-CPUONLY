@@ -1239,17 +1239,16 @@ RppStatus canny_hysterisis_edge_tracing_kernel_host(T* srcPtrWindow, T* dstPtrPi
 
 template<typename T, typename U>
 RppStatus harris_corner_detector_kernel_host(T* srcPtrWindowX, T* srcPtrWindowY, U* dstPtrPixel, RppiSize srcSize, 
-                                             Rpp32u kernelSize, Rpp32u remainingElementsInRow, Rpp32f kValue, 
+                                             Rpp32u kernelSize, Rpp32u remainingElementsInRow, Rpp32f kValue, Rpp32f *min, Rpp32f *max, 
                                              RppiChnFormat chnFormat, Rpp32u channel)
 {
-    //T pixel;
+    Rpp32f pixel;
 
     T *srcPtrWindowTempX, *srcPtrWindowTempY;
     srcPtrWindowTempX = srcPtrWindowX;
     srcPtrWindowTempY = srcPtrWindowY;
 
     Rpp32f sumXX = 0, sumYY = 0, sumXY = 0, valX = 0, valY = 0;
-    //pixel = *srcPtrWindowTemp;
     
     for (int m = 0; m < kernelSize; m++)
     {
@@ -1268,8 +1267,26 @@ RppStatus harris_corner_detector_kernel_host(T* srcPtrWindowX, T* srcPtrWindowY,
         srcPtrWindowTempY += remainingElementsInRow;
     }
     Rpp32f det = (sumXX * sumYY) - (sumXY * sumXY);
-    Rpp32f trace = (Rpp32f) sumXX + (Rpp32f) sumYY;
-    *dstPtrPixel = (U) ((det) - (kValue * trace * trace));
+    Rpp32f trace = sumXX + sumYY;
+    pixel = (det) - (kValue * trace * trace);
+
+    if (pixel < *min)
+    {
+        *min = pixel;
+    }
+    if (pixel > *max)
+    {
+        *max = pixel;
+    }
+
+    if (pixel > 5000000000)
+    {
+        *dstPtrPixel = (T) 255;
+    }
+    else
+    {
+        *dstPtrPixel = (T) 0;
+    }
 
     return RPP_SUCCESS;
 }
