@@ -142,6 +142,23 @@ rppi_harris_corner_detector_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppP
                                          Rpp32u nonmaxKernelSize);
 
 
+// ----------------------------------------
+// Host tensor_convert_bit_depth functions declaration
+// ----------------------------------------
+
+RppStatus
+rppi_tensor_convert_bit_depth_u8s8_host(RppPtr_t srcPtr, RppPtr_t dstPtr, 
+                                        Rpp32u tensorDimension, RppPtr_t tensorDimensionValues);
+
+RppStatus
+rppi_tensor_convert_bit_depth_u8u16_host(RppPtr_t srcPtr, RppPtr_t dstPtr, 
+                                        Rpp32u tensorDimension, RppPtr_t tensorDimensionValues);
+
+RppStatus
+rppi_tensor_convert_bit_depth_u8s16_host(RppPtr_t srcPtr, RppPtr_t dstPtr, 
+                                        Rpp32u tensorDimension, RppPtr_t tensorDimensionValues);
+
+
 #ifdef __cplusplus
 }
 #endif
