@@ -1238,8 +1238,11 @@ RppStatus canny_hysterisis_edge_tracing_kernel_host(T* srcPtrWindow, T* dstPtrPi
 }
 
 template<typename T, typename U>
+//RppStatus harris_corner_detector_kernel_host(T* srcPtrWindowX, T* srcPtrWindowY, U* dstPtrPixel, RppiSize srcSize, 
+//                                             Rpp32u kernelSize, Rpp32u remainingElementsInRow, Rpp32f kValue, Rpp32f *min, Rpp32f *max, Rpp32f threshold, 
+//                                             RppiChnFormat chnFormat, Rpp32u channel)
 RppStatus harris_corner_detector_kernel_host(T* srcPtrWindowX, T* srcPtrWindowY, U* dstPtrPixel, RppiSize srcSize, 
-                                             Rpp32u kernelSize, Rpp32u remainingElementsInRow, Rpp32f kValue, Rpp32f *min, Rpp32f *max, 
+                                             Rpp32u kernelSize, Rpp32u remainingElementsInRow, Rpp32f kValue, Rpp32f threshold, 
                                              RppiChnFormat chnFormat, Rpp32u channel)
 {
     Rpp32f pixel;
@@ -1270,22 +1273,92 @@ RppStatus harris_corner_detector_kernel_host(T* srcPtrWindowX, T* srcPtrWindowY,
     Rpp32f trace = sumXX + sumYY;
     pixel = (det) - (kValue * trace * trace);
 
-    if (pixel < *min)
-    {
-        *min = pixel;
-    }
-    if (pixel > *max)
-    {
-        *max = pixel;
-    }
+    //if (pixel < *min)
+    //{
+    //    *min = pixel;
+    //}
+    //if (pixel > *max)
+    //{
+    //    *max = pixel;
+    //}
 
-    if (pixel > 5000000000)
+    if (pixel > threshold)
     {
-        *dstPtrPixel = (T) 255;
+        *dstPtrPixel = (U) pixel;
     }
     else
     {
-        *dstPtrPixel = (T) 0;
+        *dstPtrPixel = (U) 0;
+    }
+
+    return RPP_SUCCESS;
+}
+
+template<typename T>
+RppStatus harris_corner_set_maximum_kernel_host(T* dstPtrWindow, Rpp32u kernelSize, Rpp32u remainingElementsInRow, 
+                                                  RppiChnFormat chnFormat, Rpp32u channel)
+{
+    T* dstPtrWindowTemp;
+    dstPtrWindowTemp = dstPtrWindow;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                *dstPtrWindowTemp = (T) 255;
+                dstPtrWindowTemp++;
+            }
+            dstPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                *dstPtrWindowTemp = (T) 255;
+                dstPtrWindowTemp += channel;
+            }
+            dstPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+
+    return RPP_SUCCESS;
+}
+
+template<typename T>
+RppStatus harris_corner_set_minimum_kernel_host(T* dstPtrWindow, Rpp32u kernelSize, Rpp32u remainingElementsInRow, 
+                                                  RppiChnFormat chnFormat, Rpp32u channel)
+{
+    T* dstPtrWindowTemp;
+    dstPtrWindowTemp = dstPtrWindow;
+    
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                *dstPtrWindowTemp = (T) 0;
+                dstPtrWindowTemp++;
+            }
+            dstPtrWindowTemp += remainingElementsInRow;
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        for (int m = 0; m < kernelSize; m++)
+        {
+            for (int n = 0; n < kernelSize; n++)
+            {
+                *dstPtrWindowTemp = (T) 0;
+                dstPtrWindowTemp += channel;
+            }
+            dstPtrWindowTemp += remainingElementsInRow;
+        }
     }
 
     return RPP_SUCCESS;

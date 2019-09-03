@@ -19,28 +19,43 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_harris_corner_detector_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u kernelSize, Rpp32f kValue, Rpp32u threshold)
+rppi_harris_corner_detector_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                         Rpp32u gaussianKernelSize, Rpp32f stdDev, 
+                                         Rpp32u kernelSize, Rpp32f kValue, Rpp32f threshold, 
+                                         Rpp32u nonmaxKernelSize)
 {
     harris_corner_detector_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
+                                       gaussianKernelSize, stdDev, 
                                        kernelSize, kValue, threshold, 
+                                       nonmaxKernelSize, 
                                        RPPI_CHN_PLANAR, 1);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_harris_corner_detector_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u kernelSize, Rpp32f kValue, Rpp32u threshold)
+rppi_harris_corner_detector_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                         Rpp32u gaussianKernelSize, Rpp32f stdDev, 
+                                         Rpp32u kernelSize, Rpp32f kValue, Rpp32f threshold, 
+                                         Rpp32u nonmaxKernelSize)
 {
     harris_corner_detector_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
+                                       gaussianKernelSize, stdDev, 
                                        kernelSize, kValue, threshold, 
+                                       nonmaxKernelSize, 
                                        RPPI_CHN_PLANAR, 3);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_harris_corner_detector_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u kernelSize, Rpp32f kValue, Rpp32u threshold)
+rppi_harris_corner_detector_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                         Rpp32u gaussianKernelSize, Rpp32f stdDev, 
+                                         Rpp32u kernelSize, Rpp32f kValue, Rpp32f threshold, 
+                                         Rpp32u nonmaxKernelSize)
 {
     harris_corner_detector_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
+                                       gaussianKernelSize, stdDev, 
                                        kernelSize, kValue, threshold, 
+                                       nonmaxKernelSize, 
                                        RPPI_CHN_PACKED, 3);
     return RPP_SUCCESS;
 }
@@ -53,14 +68,13 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize, dstSize;
     unsigned int channel;
-    unsigned int kernelSize = 3;
-    float kValue = 0.05;
-    printf("\nEnter kValue [0.04 - 0.06]: ");
-    scanf("%f", &kValue);
 
-    unsigned int threshold = 100;
-    printf("\nEnter minimum threshold below which Harris scores are discarded (0-255): ");
-    scanf("%d", &threshold);
+    unsigned int gaussianKernelSize = 3;
+    float stdDev = 0.75;
+    unsigned int kernelSize = 3;
+    float kValue = 0.04;
+    float threshold = 4000000000;
+    unsigned int nonmaxKernelSize = 3;
     
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -122,7 +136,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_harris_corner_detector_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, kValue, threshold);
+                rppi_harris_corner_detector_u8_pln1_host(srcPtr, srcSize, dstPtr, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -136,7 +150,7 @@ int main(int argc, char** argv)
                 rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_harris_corner_detector_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, kernelSize, kValue, threshold);
+                rppi_harris_corner_detector_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
                 stop = high_resolution_clock::now();
 
                 rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -150,7 +164,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_harris_corner_detector_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, kValue, threshold);
+                rppi_harris_corner_detector_u8_pln1_host(srcPtr, srcSize, dstPtr, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -159,7 +173,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_harris_corner_detector_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize, kValue, threshold);
+                rppi_harris_corner_detector_u8_pkd3_host(srcPtr, srcSize, dstPtr, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
@@ -194,7 +208,7 @@ int main(int argc, char** argv)
         Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_harris_corner_detector_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, kValue, threshold);
+        rppi_harris_corner_detector_u8_pln1_host(srcPtr, srcSize, dstPtr, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
         printf("\n\nOutput of harris_corner_detector:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
@@ -209,7 +223,7 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_harris_corner_detector_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize, kValue, threshold);
+            rppi_harris_corner_detector_u8_pln3_host(srcPtr, srcSize, dstPtr, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
             printf("\n\nOutput of harris_corner_detector:\n");
             displayPlanar(dstPtr, srcSize, channel);
         }
@@ -219,7 +233,7 @@ int main(int argc, char** argv)
             Rpp8u dstPtr[36] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_harris_corner_detector_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize, kValue, threshold);
+            rppi_harris_corner_detector_u8_pkd3_host(srcPtr, srcSize, dstPtr, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
             printf("\n\nOutput of harris_corner_detector:\n");
             displayPacked(dstPtr, srcSize, channel);
         } 
@@ -245,11 +259,11 @@ int main(int argc, char** argv)
             displayPlanar(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_harris_corner_detector_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, kValue, threshold);
+                rppi_harris_corner_detector_u8_pln1_host(srcPtr, srcSize, dstPtr, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
             }
             else if (channel == 3)
             {
-                rppi_harris_corner_detector_u8_pln3_host(srcPtr, srcSize, dstPtr, kernelSize, kValue, threshold);
+                rppi_harris_corner_detector_u8_pln3_host(srcPtr, srcSize, dstPtr, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
             }
             printf("\n\nOutput of harris_corner_detector:\n");
             displayPlanar(dstPtr, srcSize, channel);
@@ -263,11 +277,11 @@ int main(int argc, char** argv)
             displayPacked(srcPtr, srcSize, channel);
             if (channel == 1)
             {
-                rppi_harris_corner_detector_u8_pln1_host(srcPtr, srcSize, dstPtr, kernelSize, kValue, threshold);
+                rppi_harris_corner_detector_u8_pln1_host(srcPtr, srcSize, dstPtr, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
             }
             else if (channel == 3)
             {
-                rppi_harris_corner_detector_u8_pkd3_host(srcPtr, srcSize, dstPtr, kernelSize, kValue, threshold);
+                rppi_harris_corner_detector_u8_pkd3_host(srcPtr, srcSize, dstPtr, gaussianKernelSize, stdDev, kernelSize, kValue, threshold, nonmaxKernelSize);
             }
             printf("\n\nOutput of harris_corner_detector:\n");
             displayPacked(dstPtr, srcSize, channel);
