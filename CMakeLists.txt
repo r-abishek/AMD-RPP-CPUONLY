@@ -4,6 +4,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
+add_executable(
+    rppi_nonlinear_filter
+    src/filter_operations/rppi_nonlinear_filter.cpp
+)
+target_include_directories(rppi_nonlinear_filter
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_nonlinear_filter
+    ${OpenCV_LIBS}
+)
+
 
 #[[
 add_executable(
@@ -351,6 +366,21 @@ target_include_directories(rppi_non_max_suppression
 )
 target_link_libraries(
     rppi_non_max_suppression
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_nonlinear_filter
+    src/filter_operations/rppi_nonlinear_filter.cpp
+)
+target_include_directories(rppi_nonlinear_filter
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_nonlinear_filter
     ${OpenCV_LIBS}
 )
 
