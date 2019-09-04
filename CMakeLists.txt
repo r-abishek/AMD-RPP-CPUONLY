@@ -64,6 +64,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_remap
+    src/geometry_transforms/rppi_remap.cpp
+)
+target_include_directories(rppi_remap
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_remap
+    ${OpenCV_LIBS}
+)
+
 
 #[[
 add_executable(
@@ -794,6 +809,21 @@ target_link_libraries(
 )
 
 add_executable(
+    rppi_remap
+    src/geometry_transforms/rppi_remap.cpp
+)
+target_include_directories(rppi_remap
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_remap
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_warp_perspective
     src/geometry_transforms/rppi_warp_perspective.cpp
 )
@@ -1405,5 +1435,20 @@ target_include_directories(rppi_harris_corner_detector
 )
 target_link_libraries(
     rppi_harris_corner_detector
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_tensor_convert_bit_depth
+    src/computer_vision/rppi_tensor_convert_bit_depth.cpp
+)
+target_include_directories(rppi_tensor_convert_bit_depth
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_convert_bit_depth
     ${OpenCV_LIBS}
 )

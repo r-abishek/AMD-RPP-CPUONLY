@@ -233,6 +233,22 @@ rppi_opposite_edge_pad_image_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, Rpp
 
 RppStatus
 rppi_opposite_edge_pad_image_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, Rpp32u padType);
+
+// ----------------------------------------
+// Host remap functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_remap_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                        RppPtr_t rowRemapTable, RppPtr_t colRemapTable);
+
+RppStatus
+rppi_remap_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                        RppPtr_t rowRemapTable, RppPtr_t colRemapTable);
+
+RppStatus
+rppi_remap_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                        RppPtr_t rowRemapTable, RppPtr_t colRemapTable);
  
 #ifdef __cplusplus
 }
