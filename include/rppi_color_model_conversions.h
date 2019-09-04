@@ -245,6 +245,14 @@ rppi_look_up_table_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstP
 RppStatus
 rppi_look_up_table_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                          Rpp8u *lutPtr);
+
+// ----------------------------------------
+// Host tensor_look_up_table functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_tensor_look_up_table_u8_host(RppPtr_t srcPtr, RppPtr_t dstPtr, RppPtr_t lutPtr, 
+                        Rpp32u tensorDimension, RppPtr_t tensorDimensionValues);
  
 #ifdef __cplusplus
 }

@@ -49,6 +49,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_tensor_look_up_table
+    src/color_model_conversions/rppi_tensor_look_up_table.cpp
+)
+target_include_directories(rppi_tensor_look_up_table
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_look_up_table
+    ${OpenCV_LIBS}
+)
+
 
 #[[
 add_executable(
@@ -949,6 +964,21 @@ target_include_directories(rppi_look_up_table
 )
 target_link_libraries(
     rppi_look_up_table
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_tensor_look_up_table
+    src/color_model_conversions/rppi_tensor_look_up_table.cpp
+)
+target_include_directories(rppi_tensor_look_up_table
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_look_up_table
     ${OpenCV_LIBS}
 )
 
