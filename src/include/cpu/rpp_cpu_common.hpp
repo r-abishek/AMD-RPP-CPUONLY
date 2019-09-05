@@ -1364,6 +1364,39 @@ RppStatus harris_corner_set_minimum_kernel_host(T* dstPtrWindow, Rpp32u kernelSi
     return RPP_SUCCESS;
 }
 
+template<typename T, typename U>
+RppStatus match_template_kernel_host(T* srcPtrWindow, U* dstPtrWindow, 
+                                     T* templateImage, RppiSize templateImageSize, Rpp32u remainingElementsInRow)
+{
+    T *srcPtrWindowTemp, *templateImageTemp;
+    srcPtrWindowTemp = srcPtrWindow;
+    templateImageTemp = templateImage;
+
+    Rpp32f sumSqrDiff = 0, sumSqrIntTemplate = 0, sumSqrIntSrc = 0, srcValue, templateValue, diff;
+
+    for (int m = 0; m < templateImageSize.height; m++)
+    {
+        for (int n = 0; n < templateImageSize.width; n++)
+        {
+            srcValue = (Rpp32f) *srcPtrWindowTemp;
+            templateValue = (Rpp32f) *templateImageTemp;
+            diff = srcValue - templateValue;
+            
+            sumSqrDiff += (diff * diff);
+            sumSqrIntSrc += (srcValue * srcValue);
+            sumSqrIntTemplate += (templateValue * templateValue);
+
+            srcPtrWindowTemp++;
+            templateImageTemp++;
+        }
+        srcPtrWindowTemp += remainingElementsInRow;
+    }
+
+    *dstPtrWindow = sumSqrDiff / sqrt(sumSqrIntSrc * sumSqrIntTemplate);
+
+    return RPP_SUCCESS;
+}
+
 
 
 

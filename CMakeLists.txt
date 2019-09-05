@@ -4,80 +4,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
-add_executable(
-    rppi_nonlinear_filter
-    src/filter_operations/rppi_nonlinear_filter.cpp
-)
-target_include_directories(rppi_nonlinear_filter
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_nonlinear_filter
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_tensor_convert_bit_depth
-    src/computer_vision/rppi_tensor_convert_bit_depth.cpp
-)
-target_include_directories(rppi_tensor_convert_bit_depth
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_tensor_convert_bit_depth
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_fish_eye_effect
-    src/image_augmentations/rppi_fish_eye_effect.cpp
-)
-target_include_directories(rppi_fish_eye_effect
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_fish_eye_effect
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_tensor_look_up_table
-    src/color_model_conversions/rppi_tensor_look_up_table.cpp
-)
-target_include_directories(rppi_tensor_look_up_table
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_tensor_look_up_table
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_remap
-    src/geometry_transforms/rppi_remap.cpp
-)
-target_include_directories(rppi_remap
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_remap
-    ${OpenCV_LIBS}
-)
 
 
 #[[
@@ -1450,5 +1376,20 @@ target_include_directories(rppi_tensor_convert_bit_depth
 )
 target_link_libraries(
     rppi_tensor_convert_bit_depth
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_match_template
+    src/computer_vision/rppi_match_template.cpp
+)
+target_include_directories(rppi_match_template
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_match_template
     ${OpenCV_LIBS}
 )

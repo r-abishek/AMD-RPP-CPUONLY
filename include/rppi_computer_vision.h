@@ -159,6 +159,23 @@ rppi_tensor_convert_bit_depth_u8s16_host(RppPtr_t srcPtr, RppPtr_t dstPtr,
                                         Rpp32u tensorDimension, RppPtr_t tensorDimensionValues);
 
 
+// ----------------------------------------
+// Host match_template functions declaration
+// ----------------------------------------
+
+RppStatus
+rppi_match_template_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+                                 RppPtr_t templateImage, RppiSize templateImageSize);
+
+RppStatus
+rppi_match_template_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+                                 RppPtr_t templateImage, RppiSize templateImageSize);
+
+RppStatus
+rppi_match_template_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+                                 RppPtr_t templateImage, RppiSize templateImageSize);
+
+
 #ifdef __cplusplus
 }
 #endif
