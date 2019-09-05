@@ -25,7 +25,7 @@ rppi_remap_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                         RppPtr_t rowRemapTable, RppPtr_t colRemapTable)
 {
     remap_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
-                      static_cast<Rpp8u*>(rowRemapTable), static_cast<Rpp8u*>(colRemapTable), 
+                      static_cast<Rpp32u*>(rowRemapTable), static_cast<Rpp32u*>(colRemapTable), 
                       RPPI_CHN_PLANAR, 1);
 
     return RPP_SUCCESS;
@@ -36,7 +36,7 @@ rppi_remap_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                         RppPtr_t rowRemapTable, RppPtr_t colRemapTable)
 {
     remap_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
-                      static_cast<Rpp8u*>(rowRemapTable), static_cast<Rpp8u*>(colRemapTable), 
+                      static_cast<Rpp32u*>(rowRemapTable), static_cast<Rpp32u*>(colRemapTable), 
                       RPPI_CHN_PLANAR, 3);
 
     return RPP_SUCCESS;
@@ -47,7 +47,7 @@ rppi_remap_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
                         RppPtr_t rowRemapTable, RppPtr_t colRemapTable)
 {
     remap_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp8u*>(dstPtr), 
-                      static_cast<Rpp8u*>(rowRemapTable), static_cast<Rpp8u*>(colRemapTable), 
+                      static_cast<Rpp32u*>(rowRemapTable), static_cast<Rpp32u*>(colRemapTable), 
                       RPPI_CHN_PACKED, 3);
 
     return RPP_SUCCESS;
@@ -111,8 +111,8 @@ int main(int argc, char** argv)
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
 
-        Rpp8u *rowRemapTable = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-        Rpp8u *colRemapTable = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
+        Rpp32u *rowRemapTable = (Rpp32u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp32u));
+        Rpp32u *colRemapTable = (Rpp32u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp32u));
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
@@ -188,8 +188,8 @@ int main(int argc, char** argv)
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
 
-    Rpp8u rowRemapTable[12] = {0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2};
-    Rpp8u colRemapTable[12] = {3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0};
+    Rpp32u rowRemapTable[12] = {0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2};
+    Rpp32u colRemapTable[12] = {3, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0};
     
     if (matrix == 1)
     {
