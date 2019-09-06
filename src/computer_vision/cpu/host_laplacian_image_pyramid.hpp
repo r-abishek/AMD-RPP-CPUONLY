@@ -44,6 +44,40 @@ RppStatus laplacian_image_pyramid_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     convolve_image_host(srcPtr1Mod, srcSize1Mod, srcPtr1Convolved, srcSize1, kernel, rppiKernelSize, chnFormat, channel);
 
     compute_subtract_host(srcPtr1, srcPtr1Convolved, srcSize1, dstPtr, channel);
+
+    T *dstPtrTemp;
+    dstPtrTemp = dstPtr;
+
+    Rpp8u min = (Rpp8u) 255;
+    Rpp8u max = (Rpp8u) 0;
+
+    for (int i = 0; i < (channel * srcSize1.height * srcSize1.width); i++)
+    {
+        if(*dstPtrTemp != 0 && *dstPtrTemp > max)
+        {
+            max = *dstPtrTemp;
+        }
+        if(*dstPtrTemp != 0 && *dstPtrTemp < min)
+        {
+            min = *dstPtrTemp;
+        }
+        dstPtrTemp++;
+    }
+
+    if (max == min)
+    {
+        min -= 1;
+    }
+
+    dstPtrTemp = dstPtr;
+    for (int i = 0; i < (channel * srcSize1.height * srcSize1.width); i++)
+    {
+        if(*dstPtrTemp != 0)
+        {
+            *dstPtrTemp = (T)((((Rpp32f) (*dstPtrTemp - min)) / ((Rpp32f)(max - min))) * 255);
+        }
+        dstPtrTemp++;
+    }
         
     return RPP_SUCCESS;
 }
