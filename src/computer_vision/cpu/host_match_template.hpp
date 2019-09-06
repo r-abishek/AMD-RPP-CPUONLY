@@ -5,7 +5,7 @@ RppStatus match_template_host(T* srcPtr, RppiSize srcSize, U* dstPtr, RppiSize d
                                   T *templateImage, RppiSize templateImageSize, 
                                   RppiChnFormat chnFormat, Rpp32u channel)
 {
-    // RGB to Greyscale Conversion
+    // RGB to Greyscale Conversion for Image
 
     Rpp32u imageDim = srcSize.height * srcSize.width;
 
@@ -53,7 +53,64 @@ RppStatus match_template_host(T* srcPtr, RppiSize srcSize, U* dstPtr, RppiSize d
         memcpy(srcPtrGreyscale, srcPtr, imageDim * sizeof(T));
     }
 
-    Rpp32u newChannel = 1;
+    // RGB to Greyscale Conversion for Template
+
+    Rpp32u templateImageDim = templateImageSize.height * templateImageSize.width;
+
+    T *templateImageGreyscale = (T *)calloc(templateImageDim, sizeof(T));
+    T *templateImageGreyscaleTemp;
+    templateImageGreyscaleTemp = templateImageGreyscale;
+
+    if (channel == 3)
+    {
+        if (chnFormat == RPPI_CHN_PLANAR)
+        {
+            T *templateImageTempR, *templateImageTempG, *templateImageTempB;
+            templateImageTempR = templateImage;
+            templateImageTempG = templateImage + templateImageDim;
+            templateImageTempB = templateImageTempG + templateImageDim;
+
+            for (int i = 0; i < templateImageDim; i++)
+            {
+                *templateImageGreyscaleTemp = (T) (((Rpp32u)(*templateImageTempR) + (Rpp32u)(*templateImageTempG) + (Rpp32u)(*templateImageTempB)) / 3);
+                templateImageGreyscaleTemp++;
+                templateImageTempR++;
+                templateImageTempG++;
+                templateImageTempB++;
+            }
+        }
+        else if (chnFormat == RPPI_CHN_PACKED)
+        {
+            T *templateImageTempR, *templateImageTempG, *templateImageTempB;
+            templateImageTempR = templateImage;
+            templateImageTempG = templateImage + 1;
+            templateImageTempB = templateImageTempG + 1;
+            
+            for (int i = 0; i < templateImageDim; i++)
+            {
+                *templateImageGreyscaleTemp = (T) (((Rpp32u)(*templateImageTempR) + (Rpp32u)(*templateImageTempG) + (Rpp32u)(*templateImageTempB)) / 3);
+                templateImageGreyscaleTemp++;
+                templateImageTempR += channel;
+                templateImageTempG += channel;
+                templateImageTempB += channel;
+            }
+        }
+    }
+    else if (channel == 1)
+    {
+        memcpy(templateImageGreyscale, templateImage, templateImageDim * sizeof(T));
+    }
+
+    // Template Matching
+    
+    U *dstPtrTemp;
+    dstPtrTemp = dstPtr;
+    U peakValue = (U) 65535;
+    for (int i = 0; i < dstSize.height * dstSize.width; i++)
+    {
+        *dstPtrTemp = peakValue;
+        dstPtrTemp++;
+    }
     
     T *srcPtrWindow;
     U *dstPtrWindow;
@@ -63,25 +120,7 @@ RppStatus match_template_host(T* srcPtr, RppiSize srcSize, U* dstPtr, RppiSize d
     Rpp32u rowIter = srcSize.height - templateImageSize.height + 1;
     rowIter = RPPMIN2(rowIter, dstSize.height);
     Rpp32u colIter = srcSize.width - templateImageSize.width + 1;
-    Rpp32u colIterDiff = 0;
-    if (dstSize.width < colIter)
-    {
-        colIterDiff = RPPABS(colIter - dstSize.width);
-
-    }
-    //Rpp32u colIterDiff = RPPABS(colIter - dstSize.width);
     colIter = RPPMIN2(colIter, dstSize.width);
-
-    printf("\nrowIter = %d, colIter = %d", rowIter, colIter);
-
-    U *dstPtrTemp;
-    dstPtrTemp = dstPtr;
-    for (int i = 0; i < dstSize.height * dstSize.width; i++)
-    {
-        *dstPtrTemp = -1;
-        dstPtrTemp++;
-    }
-    //memset(dstPtr, -1, dstSize.height * dstSize.width * sizeof(U));
 
     Rpp32u widthDiff = RPPABS(srcSize.width - dstSize.width);
     Rpp32u remainingElementsInRow = srcSize.width - templateImageSize.width;
@@ -91,81 +130,13 @@ RppStatus match_template_host(T* srcPtr, RppiSize srcSize, U* dstPtr, RppiSize d
         for (int j = 0; j < colIter; j++)
         {
             match_template_kernel_host(srcPtrWindow, dstPtrWindow, 
-                                        templateImage, templateImageSize, remainingElementsInRow);
-            //*dstPtrTemp = *(srcPtrTemp + (*rowRemapTableTemp * srcSize.width) + *colRemapTableTemp);
+                                        templateImageGreyscale, templateImageSize, remainingElementsInRow);
             dstPtrWindow++;
             srcPtrWindow++;
         }
         srcPtrWindow += (templateImageSize.width - 1);
-        dstPtrWindow += (templateImageSize.width - 1 - widthDiff + colIterDiff);
+        dstPtrWindow += (templateImageSize.width - 1 - widthDiff);
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //if (chnFormat == RPPI_CHN_PLANAR)
-    //{
-    //    printf("\nEnter PLANAR");
-    //    dstPtrWindow = dstPtr;
-    //    srcPtrWindow = srcPtr;
-    //    Rpp32u remainingElementsInRow = srcSize.width * channel;
-    //    Rpp32u increment = (templateImageSize.width - 1) + ((templateImageSize.height - 1) * srcSize.width);
-    //    
-    //    //templateImageTemp = templateImage;
-    //    for (int c = 0; c < channel; c++)
-    //    {
-    //        printf("\nEnter channel");
-    //        for (int i = 0; i < rowIter; i++)
-    //        {
-    //            for (int j = 0; j < colIter; j++)
-    //            {
-    //                match_template_kernel_host(srcPtrWindow, dstPtrWindow, srcSize, 
-    //                                           templateImage, templateImageSize, remainingElementsInRow, 
-    //                                           chnFormat, channel);
-    //                dstPtrWindow++;
-    //                srcPtrWindow++;
-    //            }
-    //            srcPtrWindow += (templateImageSize.width - 1);
-    //            dstPtrWindow += (templateImageSize.width - 1);
-    //        }
-    //        srcPtrWindow += increment;
-    //        dstPtrWindow += increment;
-    //    }
-    //}
-    //else if (chnFormat == RPPI_CHN_PACKED)
-    //{
-    //    dstPtrTemp = dstPtr;
-    //    rowRemapTableTemp = rowRemapTable;
-    //    colRemapTableTemp = colRemapTable;
-    //    Rpp32u elementsInRow = srcSize.width * channel;
-    //    for (int i = 0; i < srcSize.height; i++)
-    //    {
-    //        for (int j = 0; j < srcSize.width; j++)
-    //        {
-    //            srcPtrTemp = srcPtr;
-    //            for (int c = 0; c < channel; c++)
-    //            {
-    //                *dstPtrTemp = *(srcPtrTemp + (*rowRemapTableTemp * elementsInRow) + (*colRemapTableTemp * channel));
-    //                dstPtrTemp++;
-    //                srcPtrTemp++;
-    //            }
-    //            rowRemapTableTemp++;
-    //            colRemapTableTemp++;
-    //        }
-    //    }
-    //}
     
     return RPP_SUCCESS;
 }

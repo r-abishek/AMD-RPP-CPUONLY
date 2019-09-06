@@ -18,6 +18,7 @@
 #define RPPCEIL(a)              ((int) (a + 1.0))
 #define RPPISEVEN(a)            ((a % 2 == 0) ? 1 : 0)
 #define RPPPIXELCHECK(pixel)    (pixel < (Rpp32f) 0) ? ((Rpp32f) 0) : ((pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255))
+#define RPP16UPIXELCHECK(pixel)    (pixel < (Rpp32f) 0) ? ((Rpp32f) 0) : ((pixel < (Rpp32f) 65535) ? pixel : ((Rpp32f) 65535))
 
 
 
@@ -1392,7 +1393,8 @@ RppStatus match_template_kernel_host(T* srcPtrWindow, U* dstPtrWindow,
         srcPtrWindowTemp += remainingElementsInRow;
     }
 
-    *dstPtrWindow = sumSqrDiff / sqrt(sumSqrIntSrc * sumSqrIntTemplate);
+    Rpp32f u16Normalizer = 65535 / 253;
+    *dstPtrWindow = (U) (RPP16UPIXELCHECK((sumSqrDiff / sqrt(sumSqrIntSrc * sumSqrIntTemplate)) * u16Normalizer));
 
     return RPP_SUCCESS;
 }

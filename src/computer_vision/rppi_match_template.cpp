@@ -22,7 +22,7 @@ RppStatus
 rppi_match_template_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
                                  RppPtr_t templateImage, RppiSize templateImageSize)
 {
-    match_template_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr), dstSize, 
+    match_template_host<Rpp8u, Rpp16u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp16u*>(dstPtr), dstSize, 
                                    static_cast<Rpp8u*>(templateImage), templateImageSize, 
                                    RPPI_CHN_PLANAR, 1);
     return RPP_SUCCESS;
@@ -32,7 +32,7 @@ RppStatus
 rppi_match_template_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
                                  RppPtr_t templateImage, RppiSize templateImageSize)
 {
-    match_template_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr), dstSize, 
+    match_template_host<Rpp8u, Rpp16u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp16u*>(dstPtr), dstSize, 
                                    static_cast<Rpp8u*>(templateImage), templateImageSize, 
                                    RPPI_CHN_PLANAR, 3);
     return RPP_SUCCESS;
@@ -42,7 +42,7 @@ RppStatus
 rppi_match_template_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
                                  RppPtr_t templateImage, RppiSize templateImageSize)
 {
-    match_template_host<Rpp8u, Rpp32f>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp32f*>(dstPtr), dstSize, 
+    match_template_host<Rpp8u, Rpp16u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp16u*>(dstPtr), dstSize, 
                                    static_cast<Rpp8u*>(templateImage), templateImageSize, 
                                    RPPI_CHN_PACKED, 3);
     return RPP_SUCCESS;
@@ -119,7 +119,7 @@ int main(int argc, char** argv)
         Rpp8u *templateImage = templateImageIn.data;
         
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
-        Rpp32f *dstPtr = (Rpp32f *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp32f));
+        Rpp16u *dstPtr = (Rpp16u *)calloc(dstSize.height * dstSize.width, sizeof(Rpp16u));
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
@@ -135,7 +135,7 @@ int main(int argc, char** argv)
                 rppi_match_template_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
                 stop = high_resolution_clock::now();
 
-                //imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                imageOut = Mat(dstSize.height, dstSize.width, CV_16UC1, dstPtr);
                 
             }
             else if (channel == 3)
@@ -149,9 +149,9 @@ int main(int argc, char** argv)
                 rppi_match_template_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, templateImage, templateImageSize);
                 stop = high_resolution_clock::now();
 
-                //rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+                rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
 
-                //imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+                imageOut = Mat(dstSize.height, dstSize.width, CV_16UC1, dstPtr);
             }
         }
         else if (type == 2)
@@ -163,7 +163,7 @@ int main(int argc, char** argv)
                 rppi_match_template_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
                 stop = high_resolution_clock::now();
 
-                //imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                imageOut = Mat(dstSize.height, dstSize.width, CV_16UC1, dstPtr);
             }
             else if (channel ==3)
             {
@@ -172,7 +172,7 @@ int main(int argc, char** argv)
                 rppi_match_template_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
                 stop = high_resolution_clock::now();
 
-                //imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+                imageOut = Mat(dstSize.height, dstSize.width, CV_16UC1, dstPtr);
             }
         }
 
@@ -183,23 +183,32 @@ int main(int argc, char** argv)
         //imageIn.copyTo(images(cv::Rect(0,0, imageIn.cols, imageIn.rows)));
         //imageOut.copyTo(images(cv::Rect(imageIn.cols,0, imageIn.cols, imageIn.rows)));
 
-        //namedWindow("Input and Output Images", WINDOW_NORMAL );
-        //imshow("Input and Output Images", images);
+        namedWindow("Input Image", WINDOW_NORMAL );
+        imshow("Input Image", imageIn);
 
-        //waitKey(0);
+        namedWindow("Output Image", WINDOW_NORMAL );
+        imshow("Output Image", imageOut);
 
-        Rpp32f min = *dstPtr;
-        Rpp32f *dstPtrTemp;
+        waitKey(0);
+
+        Rpp16u min = *dstPtr;
+        Rpp16u max = *dstPtr;
+        Rpp16u *dstPtrTemp;
         dstPtrTemp = dstPtr;
-        for (int i = 0; i < (channel * dstSize.height * dstSize.width); i++)
+        for (int i = 0; i < (dstSize.height * dstSize.width); i++)
         {
-            if (*dstPtrTemp < min && *dstPtrTemp >= 0)
+            if (*dstPtrTemp < min)
             {
                 min = *dstPtrTemp;
             }
+            if (*dstPtrTemp > max && *dstPtrTemp != 65535)
+            {
+                max = *dstPtrTemp;
+            }
             dstPtrTemp++;
         }
-        printf("\n\nMinimum metric value in the match_template output = %0.6f\n", min);
+        printf("\nMinimum metric value in the match_template output = %d", min);
+        printf("\nMaximum metric value in the match_template output = %d\n", max);
 
         return 0;
     }
@@ -218,26 +227,26 @@ int main(int argc, char** argv)
         templateImageSize.height = 1;
         templateImageSize.width = 3;
         Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
-        Rpp32f dstPtr[12] = {0};
+        Rpp16u dstPtr[12] = {0};
         Rpp8u templateImage[3] = {117, 113, 121};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
         rppi_match_template_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
         printf("\n\nOutput of match_template:\n");
-        displayPlanarF(dstPtr, dstSize, 1);
+        displayPlanar(dstPtr, dstSize, 1);
 
-        Rpp32f min = *dstPtr;
-        Rpp32f *dstPtrTemp;
+        Rpp16u min = *dstPtr;
+        Rpp16u *dstPtrTemp;
         dstPtrTemp = dstPtr;
-        for (int i = 0; i < (channel * dstSize.height * dstSize.width); i++)
+        for (int i = 0; i < (dstSize.height * dstSize.width); i++)
         {
-            if (*dstPtrTemp < min && *dstPtrTemp >= 0)
+            if (*dstPtrTemp < min)
             {
                 min = *dstPtrTemp;
             }
             dstPtrTemp++;
         }
-        printf("\n\nMinimum metric value in the match_template output = %0.6f\n", min);
+        printf("\n\nMinimum metric value in the match_template output = %d\n", min);
     }
     else if (matrix == 2)
     {
@@ -252,48 +261,48 @@ int main(int argc, char** argv)
         if (type == 1)
         {
             Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
-            Rpp32f dstPtr[12] = {0};
+            Rpp16u dstPtr[12] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
             rppi_match_template_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
             printf("\n\nOutput of match_template:\n");
-            displayPlanarF(dstPtr, dstSize, 1);
+            displayPlanar(dstPtr, dstSize, 1);
 
-            Rpp32f min = *dstPtr;
-            Rpp32f *dstPtrTemp;
+            Rpp16u min = *dstPtr;
+            Rpp16u *dstPtrTemp;
             dstPtrTemp = dstPtr;
-            for (int i = 0; i < (channel * dstSize.height * dstSize.width); i++)
+            for (int i = 0; i < (dstSize.height * dstSize.width); i++)
             {
-                if (*dstPtrTemp < min && *dstPtrTemp >= 0)
+                if (*dstPtrTemp < min)
                 {
                     min = *dstPtrTemp;
                 }
                 dstPtrTemp++;
             }
-            printf("\n\nMinimum metric value in the match_template output = %0.6f\n", min);
+            printf("\n\nMinimum metric value in the match_template output = %d\n", min);
         }
         else if (type == 2)
         {
             Rpp8u srcPtr[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
-            Rpp32f dstPtr[12] = {0};
+            Rpp16u dstPtr[12] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
             rppi_match_template_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
             printf("\n\nOutput of match_template:\n");
-            displayPackedF(dstPtr,dstSize, 1);
+            displayPacked(dstPtr,dstSize, 1);
 
-            Rpp32f min = *dstPtr;
-            Rpp32f *dstPtrTemp;
+            Rpp16u min = *dstPtr;
+            Rpp16u *dstPtrTemp;
             dstPtrTemp = dstPtr;
-            for (int i = 0; i < (channel * dstSize.height * dstSize.width); i++)
+            for (int i = 0; i < (dstSize.height * dstSize.width); i++)
             {
-                if (*dstPtrTemp < min && *dstPtrTemp >= 0)
+                if (*dstPtrTemp < min)
                 {
                     min = *dstPtrTemp;
                 }
                 dstPtrTemp++;
             }
-            printf("\n\nMinimum metric value in the match_template output = %0.6f\n", min);
+            printf("\n\nMinimum metric value in the match_template output = %d\n", min);
         } 
     }
     else if (matrix == 3)
