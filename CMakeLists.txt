@@ -6,65 +6,7 @@ project(amd_rpp VERSION 0.1)
 
 
 
-add_executable(
-    rppi_remap
-    src/geometry_transforms/rppi_remap.cpp
-)
-target_include_directories(rppi_remap
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_remap
-    ${OpenCV_LIBS}
-)
 
-add_executable(
-    rppi_subtract
-    src/arithmetic_operations/rppi_subtract.cpp
-)
-target_include_directories(rppi_subtract
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_subtract
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_non_max_suppression
-    src/filter_operations/rppi_non_max_suppression.cpp
-)
-target_include_directories(rppi_non_max_suppression
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_non_max_suppression
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_sobel_filter
-    src/filter_operations/rppi_sobel_filter.cpp
-)
-target_include_directories(rppi_sobel_filter
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_sobel_filter
-    ${OpenCV_LIBS}
-)
 
 #[[
 add_executable(
@@ -244,6 +186,21 @@ target_include_directories(rppi_tensor_multiply
 )
 target_link_libraries(
     rppi_tensor_multiply
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_tensor_matrix_multiply
+    src/arithmetic_operations/rppi_tensor_matrix_multiply.cpp
+)
+target_include_directories(rppi_tensor_matrix_multiply
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_matrix_multiply
     ${OpenCV_LIBS}
 )
 
@@ -824,6 +781,21 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_tensor_transpose
+    src/geometry_transforms/rppi_tensor_transpose.cpp
+)
+target_include_directories(rppi_tensor_transpose
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_tensor_transpose
+    ${OpenCV_LIBS}
+)
+
 
 
 
@@ -1309,7 +1281,7 @@ target_link_libraries(
     rppi_dilate
     ${OpenCV_LIBS}
 )
-]]
+
 
 
 
@@ -1453,3 +1425,4 @@ target_link_libraries(
     rppi_match_template
     ${OpenCV_LIBS}
 )
+]]

@@ -249,6 +249,15 @@ rppi_remap_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr,
 RppStatus
 rppi_remap_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                         RppPtr_t rowRemapTable, RppPtr_t colRemapTable);
+
+// ----------------------------------------
+// Host tensor_transpose functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_tensor_transpose_u8_host(RppPtr_t srcPtr, RppPtr_t dstPtr, 
+                              Rpp32u dimension1, Rpp32u dimension2, 
+                              Rpp32u tensorDimension, RppPtr_t tensorDimensionValues);
  
 #ifdef __cplusplus
 }

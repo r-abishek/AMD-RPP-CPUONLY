@@ -1399,6 +1399,79 @@ RppStatus match_template_kernel_host(T* srcPtrWindow, U* dstPtrWindow,
     return RPP_SUCCESS;
 }
 
+//RppStatus tensor_index_print_kernel_host(Rpp32u *loopCount, Rpp32u tensorDimension)
+//{
+//    Rpp32u *loopCountTemp;
+//    loopCountTemp = loopCount;
+//
+//    for (int i =0; i < tensorDimension; i++)
+//    {
+//        printf("%d  ", *loopCountTemp);
+//        loopCountTemp++;
+//    }
+//    printf("\n");
+//    
+//    return RPP_SUCCESS;
+//}
+
+RppStatus tensor_index_exchange_kernel_host(Rpp32u *loopCount, Rpp32u *loopCountTransposed, Rpp32u tensorDimension, Rpp32u dimension1, Rpp32u dimension2)
+{
+    memcpy(loopCountTransposed, loopCount, tensorDimension * sizeof(Rpp32u));
+
+    loopCountTransposed[dimension2] = loopCount[dimension1];
+    loopCountTransposed[dimension1] = loopCount[dimension2];
+    
+    return RPP_SUCCESS;
+}
+
+template<typename T>
+RppStatus tensor_transpose_iterate_kernel_host(T* srcPtr, T* dstPtr, 
+                                               Rpp32u tensorDimensionTemp, Rpp32u tensorDimension, 
+                                               Rpp32u *tensorDimensionValues, Rpp32u *tensorDimensionValuesProduct, 
+                                               Rpp32u *loopCount, Rpp32u *loopCountTransposed, 
+                                               Rpp32u dimension1, Rpp32u dimension2)
+{
+    if (tensorDimensionTemp >= tensorDimension)
+    {
+        Rpp32u dstPtrLoc = 0;
+        for (int i = tensorDimension - 1; i > 0 ; i--)
+        {
+            dstPtrLoc = dstPtrLoc + (loopCount[i] * tensorDimensionValuesProduct[i - 1]);
+        }
+        dstPtrLoc += loopCount[0];
+        //printf("\ndstValue was %d\n", *(dstPtr + dstPtrLoc));
+        
+        //tensor_index_print_kernel_host(loopCount, tensorDimension);
+        tensor_index_exchange_kernel_host(loopCount, loopCountTransposed, tensorDimension, dimension1, dimension2);
+        //tensor_index_print_kernel_host(loopCountTransposed, tensorDimension);
+        
+        Rpp32u srcPtrLoc = 0;
+        for (int i = tensorDimension - 1; i > 0 ; i--)
+        {
+            srcPtrLoc = srcPtrLoc + (loopCountTransposed[i] * tensorDimensionValuesProduct[i - 1]);
+        }
+        srcPtrLoc += loopCountTransposed[0];
+        //printf("New srcValue = %d", *(srcPtr + srcPtrLoc));
+
+        //printf("\n");
+        
+        *(dstPtr + dstPtrLoc) = *(srcPtr + srcPtrLoc);
+        
+        return RPP_SUCCESS;
+    }
+    for (int i = 0; i < *(tensorDimensionValues + tensorDimensionTemp); i++)
+    { 
+        *(loopCount + tensorDimensionTemp) = i;
+        tensor_transpose_iterate_kernel_host(srcPtr, dstPtr, 
+                                             tensorDimensionTemp + 1, tensorDimension, 
+                                             tensorDimensionValues, tensorDimensionValuesProduct, 
+                                             loopCount, loopCountTransposed, 
+                                             dimension1, dimension2);
+    }
+
+    return RPP_SUCCESS;
+}
+
 
 
 
