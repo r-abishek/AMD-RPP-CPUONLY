@@ -6,6 +6,52 @@ project(amd_rpp VERSION 0.1)
 
 
 
+add_executable(
+    rppi_canny_edge_detector
+    src/computer_vision/rppi_canny_edge_detector.cpp
+)
+target_include_directories(rppi_canny_edge_detector
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_canny_edge_detector
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_harris_corner_detector
+    src/computer_vision/rppi_harris_corner_detector.cpp
+)
+target_include_directories(rppi_harris_corner_detector
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_harris_corner_detector
+    ${OpenCV_LIBS}
+)
+
+
+add_executable(
+    rppi_fast_corner_detector
+    src/computer_vision/rppi_fast_corner_detector.cpp
+)
+target_include_directories(rppi_fast_corner_detector
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_fast_corner_detector
+    ${OpenCV_LIBS}
+)
+
 
 
 #[[
@@ -1423,6 +1469,21 @@ target_include_directories(rppi_match_template
 )
 target_link_libraries(
     rppi_match_template
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_fast_corner_detector
+    src/computer_vision/rppi_fast_corner_detector.cpp
+)
+target_include_directories(rppi_fast_corner_detector
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_fast_corner_detector
     ${OpenCV_LIBS}
 )
 ]]

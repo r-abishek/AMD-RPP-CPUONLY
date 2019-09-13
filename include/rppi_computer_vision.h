@@ -176,6 +176,26 @@ rppi_match_template_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dst
                                  RppPtr_t templateImage, RppiSize templateImageSize);
 
 
+// ----------------------------------------
+// Host fast_corner_detector functions declaration
+// ----------------------------------------
+
+RppStatus
+rppi_fast_corner_detector_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                         Rpp32u numOfPixels, Rpp8u threshold, 
+                                         Rpp32u nonmaxKernelSize);
+
+RppStatus
+rppi_fast_corner_detector_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                         Rpp32u numOfPixels, Rpp8u threshold, 
+                                         Rpp32u nonmaxKernelSize);
+
+RppStatus
+rppi_fast_corner_detector_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
+                                         Rpp32u numOfPixels, Rpp8u threshold, 
+                                         Rpp32u nonmaxKernelSize);
+
+
 #ifdef __cplusplus
 }
 #endif

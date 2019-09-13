@@ -18,7 +18,9 @@
 #define RPPCEIL(a)              ((int) (a + 1.0))
 #define RPPISEVEN(a)            ((a % 2 == 0) ? 1 : 0)
 #define RPPPIXELCHECK(pixel)    (pixel < (Rpp32f) 0) ? ((Rpp32f) 0) : ((pixel < (Rpp32f) 255) ? pixel : ((Rpp32f) 255))
-#define RPP16UPIXELCHECK(pixel)    (pixel < (Rpp32f) 0) ? ((Rpp32f) 0) : ((pixel < (Rpp32f) 65535) ? pixel : ((Rpp32f) 65535))
+#define RPP16UPIXELCHECK(pixel)     (pixel < (Rpp32f) 0) ? ((Rpp32f) 0) : ((pixel < (Rpp32f) 65535) ? pixel : ((Rpp32f) 65535))
+#define RPPISGREATER(pixel, value)  ((pixel > value) ? 1 : 0)
+#define RPPISLESSER(pixel, value)  ((pixel < value) ? 1 : 0)
 
 
 
@@ -1469,6 +1471,260 @@ RppStatus tensor_transpose_iterate_kernel_host(T* srcPtr, T* dstPtr,
                                              dimension1, dimension2);
     }
 
+    return RPP_SUCCESS;
+}
+
+template<typename T>
+RppStatus fast_corner_detector_kernel_host(T* srcPtrWindow, T* dstPtrPixel, RppiSize srcSize, 
+                                           Rpp32u* bresenhamCirclePositions, T threshold, Rpp32u numOfPixels)
+{
+    T centerPixel = *(srcPtrWindow + (3 * srcSize.width) + 3);
+    T max = (T) (RPPPIXELCHECK((Rpp32s) centerPixel + (Rpp32s) threshold));
+    T min = (T) (RPPPIXELCHECK((Rpp32s) centerPixel - (Rpp32s) threshold));
+
+    // Find Bresenham Circle for the pixel
+
+    Rpp32u *bresenhamCirclePositionsTemp;
+    bresenhamCirclePositionsTemp = bresenhamCirclePositions;
+    
+    T *bresenhamCircle = (T*) calloc(16, sizeof(T));
+    T *bresenhamCircleTemp;
+    bresenhamCircleTemp = bresenhamCircle;
+
+    //T* bresenhamCircleOutputMin = (T*) calloc(16, sizeof(T));
+    //T *bresenhamCircleOutputMinTemp;
+    //bresenhamCircleOutputMinTemp = bresenhamCircleOutputMin;
+
+    //T* bresenhamCircleOutputMax = (T*) calloc(16, sizeof(T));
+    //T *bresenhamCircleOutputMaxTemp;
+    //bresenhamCircleOutputMaxTemp = bresenhamCircleOutputMax;
+    
+    T* bresenhamCircleOutput = (T*) calloc(16, sizeof(T));
+
+    for (int i = 0; i < 16; i++)
+    {
+        *bresenhamCircleTemp = *(srcPtrWindow + *bresenhamCirclePositionsTemp);
+        bresenhamCircleTemp++;
+        bresenhamCirclePositionsTemp++;
+    }
+
+    //Rpp32u minConditions = 0;
+    //Rpp32u maxConditions = 0;
+    Rpp32u flag = 0;
+    
+    *bresenhamCircleOutput = (T) RPPISLESSER(*bresenhamCircle, min);
+    *(bresenhamCircleOutput + 8) = (T) RPPISLESSER(*(bresenhamCircle + 8), min);
+
+    if (*bresenhamCircleOutput == 1)
+    {
+        *(bresenhamCircleOutput + 4) = (T) RPPISLESSER(*(bresenhamCircle + 4), min);
+        *(bresenhamCircleOutput + 12) = (T) RPPISLESSER(*(bresenhamCircle + 12), min);
+        if (*(bresenhamCircleOutput + 8) == 1)
+        {
+            if (*(bresenhamCircleOutput + 4) == 1 || *(bresenhamCircleOutput + 12) == 1)
+            {
+                flag = 1;
+            }
+        }
+        else if (*(bresenhamCircleOutput + 4) == 1 && *(bresenhamCircleOutput + 12) == 1)
+        {
+            flag = 1;
+        }
+    }
+    else if (*(bresenhamCircleOutput + 8) == 1)
+    {
+        *(bresenhamCircleOutput + 4) = (T) RPPISLESSER(*(bresenhamCircle + 4), min);
+        *(bresenhamCircleOutput + 12) = (T) RPPISLESSER(*(bresenhamCircle + 12), min);
+        if (*(bresenhamCircleOutput + 4) == 1 && *(bresenhamCircleOutput + 12) == 1)
+        {
+            flag = 1;
+        }
+    }
+    if (flag == 0)
+    {
+        *bresenhamCircleOutput = (T) RPPISGREATER(*bresenhamCircle, max);
+        *(bresenhamCircleOutput + 8) = (T) RPPISGREATER(*(bresenhamCircle + 8), max);
+
+        if (*bresenhamCircleOutput == 1)
+        {
+            *(bresenhamCircleOutput + 4) = (T) RPPISGREATER(*(bresenhamCircle + 4), max);
+            *(bresenhamCircleOutput + 12) = (T) RPPISGREATER(*(bresenhamCircle + 12), max);
+            if (*(bresenhamCircleOutput + 8) == 1)
+            {
+                if (*(bresenhamCircleOutput + 4) == 1 || *(bresenhamCircleOutput + 12) == 1)
+                {
+                    flag = 2;
+                }
+            }
+            else if (*(bresenhamCircleOutput + 4) == 1 && *(bresenhamCircleOutput + 12) == 1)
+            {
+                flag = 2;
+            }
+        }
+        else if (*(bresenhamCircleOutput + 8) == 1)
+        {
+            *(bresenhamCircleOutput + 4) = (T) RPPISGREATER(*(bresenhamCircle + 4), max);
+            *(bresenhamCircleOutput + 12) = (T) RPPISGREATER(*(bresenhamCircle + 12), max);
+            if (*(bresenhamCircleOutput + 4) == 1 && *(bresenhamCircleOutput + 12) == 1)
+            {
+                flag = 2;
+            }
+        }
+    }
+    if (flag == 0)
+    {
+        *dstPtrPixel = (T) 0;
+
+        return RPP_SUCCESS;
+    }
+    else if (flag == 1)
+    {
+        *(bresenhamCircleOutput + 1) = (T) RPPISLESSER(*(bresenhamCircle + 1), min);
+        *(bresenhamCircleOutput + 2) = (T) RPPISLESSER(*(bresenhamCircle + 2), min);
+        *(bresenhamCircleOutput + 3) = (T) RPPISLESSER(*(bresenhamCircle + 3), min);
+        *(bresenhamCircleOutput + 5) = (T) RPPISLESSER(*(bresenhamCircle + 5), min);
+        *(bresenhamCircleOutput + 6) = (T) RPPISLESSER(*(bresenhamCircle + 6), min);
+        *(bresenhamCircleOutput + 7) = (T) RPPISLESSER(*(bresenhamCircle + 7), min);
+        *(bresenhamCircleOutput + 9) = (T) RPPISLESSER(*(bresenhamCircle + 9), min);
+        *(bresenhamCircleOutput + 10) = (T) RPPISLESSER(*(bresenhamCircle + 10), min);
+        *(bresenhamCircleOutput + 11) = (T) RPPISLESSER(*(bresenhamCircle + 11), min);
+        *(bresenhamCircleOutput + 13) = (T) RPPISLESSER(*(bresenhamCircle + 13), min);
+        *(bresenhamCircleOutput + 14) = (T) RPPISLESSER(*(bresenhamCircle + 14), min);
+        *(bresenhamCircleOutput + 15) = (T) RPPISLESSER(*(bresenhamCircle + 15), min);
+    }
+    else if (flag == 2)
+    {
+        *(bresenhamCircleOutput + 1) = (T) RPPISGREATER(*(bresenhamCircle + 1), max);
+        *(bresenhamCircleOutput + 2) = (T) RPPISGREATER(*(bresenhamCircle + 2), max);
+        *(bresenhamCircleOutput + 3) = (T) RPPISGREATER(*(bresenhamCircle + 3), max);
+        *(bresenhamCircleOutput + 5) = (T) RPPISGREATER(*(bresenhamCircle + 5), max);
+        *(bresenhamCircleOutput + 6) = (T) RPPISGREATER(*(bresenhamCircle + 6), max);
+        *(bresenhamCircleOutput + 7) = (T) RPPISGREATER(*(bresenhamCircle + 7), max);
+        *(bresenhamCircleOutput + 9) = (T) RPPISGREATER(*(bresenhamCircle + 9), max);
+        *(bresenhamCircleOutput + 10) = (T) RPPISGREATER(*(bresenhamCircle + 10), max);
+        *(bresenhamCircleOutput + 11) = (T) RPPISGREATER(*(bresenhamCircle + 11), max);
+        *(bresenhamCircleOutput + 13) = (T) RPPISGREATER(*(bresenhamCircle + 13), max);
+        *(bresenhamCircleOutput + 14) = (T) RPPISGREATER(*(bresenhamCircle + 14), max);
+        *(bresenhamCircleOutput + 15) = (T) RPPISGREATER(*(bresenhamCircle + 15), max);
+    }
+/*    
+    if (*bresenhamCircleOutput == 1)
+    {
+        conditions++;
+    }
+    
+    if (*(bresenhamCircleOutput + 8) == 1)
+    {
+        conditions++;
+    }
+
+    if (conditions == 2)
+    {
+        *dstPtrPixel = (T) 0;
+
+        return RPP_SUCCESS;
+    }
+    
+    *(bresenhamCircleOutput + 4) = (T) (RPPINRANGE(*(bresenhamCircle + 4), min, max));
+    *(bresenhamCircleOutput + 12) = (T) (RPPINRANGE(*(bresenhamCircle + 12), min, max));
+    
+    if (conditions == 1)
+    {
+        if (*(bresenhamCircleOutput + 4) == 1 || *(bresenhamCircleOutput + 12) == 1)
+        {
+            *dstPtrPixel = (T) 0;
+
+            return RPP_SUCCESS;
+        }
+    }
+    else if (conditions == 0)
+    {
+        if (*(bresenhamCircleOutput + 4) == 1 && *(bresenhamCircleOutput + 12) == 1)
+        {
+            *dstPtrPixel = (T) 0;
+
+            return RPP_SUCCESS;
+        }
+    }
+
+    *(bresenhamCircleOutput + 1) = (T) (RPPINRANGE(*(bresenhamCircle + 1), min, max));
+    *(bresenhamCircleOutput + 2) = (T) (RPPINRANGE(*(bresenhamCircle + 2), min, max));
+    *(bresenhamCircleOutput + 3) = (T) (RPPINRANGE(*(bresenhamCircle + 3), min, max));
+    *(bresenhamCircleOutput + 5) = (T) (RPPINRANGE(*(bresenhamCircle + 5), min, max));
+    *(bresenhamCircleOutput + 6) = (T) (RPPINRANGE(*(bresenhamCircle + 6), min, max));
+    *(bresenhamCircleOutput + 7) = (T) (RPPINRANGE(*(bresenhamCircle + 7), min, max));
+    *(bresenhamCircleOutput + 9) = (T) (RPPINRANGE(*(bresenhamCircle + 9), min, max));
+    *(bresenhamCircleOutput + 10) = (T) (RPPINRANGE(*(bresenhamCircle + 10), min, max));
+    *(bresenhamCircleOutput + 11) = (T) (RPPINRANGE(*(bresenhamCircle + 11), min, max));
+    *(bresenhamCircleOutput + 13) = (T) (RPPINRANGE(*(bresenhamCircle + 13), min, max));
+    *(bresenhamCircleOutput + 14) = (T) (RPPINRANGE(*(bresenhamCircle + 14), min, max));
+    *(bresenhamCircleOutput + 15) = (T) (RPPINRANGE(*(bresenhamCircle + 15), min, max));
+*/
+    // Find maximum contiguous pixels in bresenhamCircleOutput with value 1
+    
+    Rpp32u count = 0;
+    Rpp32u maxLength = 0;
+    
+    for (int i = 0; i < 32; i++)
+    {
+        if (*(bresenhamCircleOutput + (i % 16)) == 0)
+        {
+            count = 0;
+            if (i >= 16)
+            {
+                break;
+            } 
+        }
+        else
+        {
+            count++;
+            maxLength = RPPMAX2(maxLength, count);
+        }
+    }
+    
+    // Corner Classification
+
+    if (maxLength >= numOfPixels)
+    {
+        *dstPtrPixel = (T) 255;
+    }
+    else
+    {
+        *dstPtrPixel = (T) 0;
+    }
+    
+    
+    return RPP_SUCCESS;
+}
+
+template<typename T, typename U>
+RppStatus fast_corner_detector_score_function_kernel_host(T* srcPtrWindow, U* dstPtrPixel, RppiSize srcSize, 
+                                                          Rpp32u* bresenhamCirclePositions, U centerPixel)
+{
+    //U centerPixel = (U) *(srcPtrWindow + (3 * srcSize.width) + 3);
+    U* bresenhamCircle = (U*) calloc(16, sizeof(U));
+    U *bresenhamCircleTemp;
+    bresenhamCircleTemp = bresenhamCircle;
+    Rpp32u *bresenhamCirclePositionsTemp;
+    bresenhamCirclePositionsTemp = bresenhamCirclePositions;
+    
+    for (int i = 0; i < 16; i++)
+    {
+        *bresenhamCircleTemp = (U) *(srcPtrWindow + *bresenhamCirclePositionsTemp);
+        bresenhamCircleTemp++;
+        bresenhamCirclePositionsTemp++;
+    }
+
+    U score = 0;
+    bresenhamCircleTemp = bresenhamCircle;
+    for (int i = 0; i < 16; i++)
+    {
+        score += RPPABS(centerPixel - *bresenhamCircleTemp);
+        bresenhamCircleTemp++;
+    }
+
+    *dstPtrPixel = score;
+    
     return RPP_SUCCESS;
 }
 
