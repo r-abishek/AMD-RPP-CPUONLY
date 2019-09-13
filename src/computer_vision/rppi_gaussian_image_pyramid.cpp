@@ -180,6 +180,8 @@ int main(int argc, char** argv)
         namedWindow("Input and Output Images", WINDOW_NORMAL );
         imshow("Input and Output Images", images);
 
+        imwrite("images/outputGaussianPyrUp.jpg", imageOut);
+
         waitKey(0);
 
         return 0;

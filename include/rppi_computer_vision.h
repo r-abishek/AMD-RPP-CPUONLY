@@ -196,6 +196,20 @@ rppi_fast_corner_detector_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr
                                          Rpp32u nonmaxKernelSize);
 
 
+// ----------------------------------------
+// Host reconstruction_laplacian_image_pyramid functions declaration
+// ----------------------------------------
+
+RppStatus
+rppi_reconstruction_laplacian_image_pyramid_u8_pln1_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr);
+
+RppStatus
+rppi_reconstruction_laplacian_image_pyramid_u8_pln3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr);
+
+RppStatus
+rppi_reconstruction_laplacian_image_pyramid_u8_pkd3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr);
+
+
 #ifdef __cplusplus
 }
 #endif

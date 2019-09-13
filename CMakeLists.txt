@@ -52,6 +52,66 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_match_template
+    src/computer_vision/rppi_match_template.cpp
+)
+target_include_directories(rppi_match_template
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_match_template
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_reconstruction_laplacian_image_pyramid
+    src/computer_vision/rppi_reconstruction_laplacian_image_pyramid.cpp
+)
+target_include_directories(rppi_reconstruction_laplacian_image_pyramid
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_reconstruction_laplacian_image_pyramid
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_gaussian_image_pyramid
+    src/computer_vision/rppi_gaussian_image_pyramid.cpp
+)
+target_include_directories(rppi_gaussian_image_pyramid
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_gaussian_image_pyramid
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_laplacian_image_pyramid
+    src/computer_vision/rppi_laplacian_image_pyramid.cpp
+)
+target_include_directories(rppi_laplacian_image_pyramid
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_laplacian_image_pyramid
+    ${OpenCV_LIBS}
+)
+
 
 
 #[[
