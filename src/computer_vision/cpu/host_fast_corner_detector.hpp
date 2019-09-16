@@ -152,7 +152,7 @@ RppStatus fast_corner_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
         for (int j = 0; j < srcSize.width; j++)
         {
             windowCenter = (Rpp32u) *(srcPtrWindow + (3 * srcSizeMod.width) + 3);
-            //fast_corner_detector_score_function_kernel_host(srcPtrWindow, dstPtrGreyscale32uTemp, srcSize, bresenhamCirclePositions, windowCenter;
+            //fast_corner_detector_score_function_kernel_host(srcPtrWindow, dstPtrGreyscale32uTemp, srcSize, bresenhamCirclePositions, windowCenter);
             if (windowCenter != 0)
             {
                 fast_corner_detector_score_function_kernel_host(srcPtrWindow, dstPtrGreyscale32uTemp, srcSize, bresenhamCirclePositions, windowCenter);
