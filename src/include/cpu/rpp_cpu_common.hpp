@@ -2018,6 +2018,32 @@ RppStatus compute_transpose_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSiz
 }
 
 template <typename T, typename U>
+RppStatus compute_add_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr, 
+                   Rpp32u channel)
+{
+    T *srcPtr1Temp, *dstPtrTemp;
+    U *srcPtr2Temp;
+    srcPtr1Temp = srcPtr1;
+    srcPtr2Temp = srcPtr2;
+    dstPtrTemp = dstPtr;
+
+    Rpp32s pixel;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+    {
+        pixel = ((Rpp32s) (*srcPtr1Temp)) + ((Rpp32s) (*srcPtr2Temp));
+        pixel = RPPPIXELCHECK(pixel);
+        *dstPtrTemp =(T) pixel;
+        srcPtr1Temp++;
+        srcPtr2Temp++;
+        dstPtrTemp++;
+    }
+
+    return RPP_SUCCESS;
+
+}
+
+template <typename T, typename U>
 RppStatus compute_subtract_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
                         Rpp32u channel)
 {
@@ -2066,6 +2092,128 @@ RppStatus compute_multiply_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dst
     }
 
     return RPP_SUCCESS;
+}
+
+template <typename T, typename U>
+RppStatus compute_bitwise_AND_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
+                           Rpp32u channel)
+{
+    T *srcPtr1Temp, *dstPtrTemp;
+    U *srcPtr2Temp;
+    srcPtr1Temp = srcPtr1;
+    srcPtr2Temp = srcPtr2;
+    dstPtrTemp = dstPtr;
+
+    Rpp8u pixel;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+    {
+        pixel = ((Rpp8u) (*srcPtr1Temp)) & ((Rpp8u) (*srcPtr2Temp));
+        pixel = RPPPIXELCHECK(pixel);
+        *dstPtrTemp =(T) pixel;
+        srcPtr1Temp++;
+        srcPtr2Temp++;
+        dstPtrTemp++;
+    }
+
+    return RPP_SUCCESS;
+
+}
+
+template <typename T, typename U>
+RppStatus compute_inclusive_OR_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
+                            Rpp32u channel)
+{
+    T *srcPtr1Temp, *dstPtrTemp;
+    U *srcPtr2Temp;
+    srcPtr1Temp = srcPtr1;
+    srcPtr2Temp = srcPtr2;
+    dstPtrTemp = dstPtr;
+
+    Rpp8u pixel;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+    {
+        pixel = ((Rpp8u) (*srcPtr1Temp)) | ((Rpp8u) (*srcPtr2Temp));
+        pixel = RPPPIXELCHECK(pixel);
+        *dstPtrTemp =(T) pixel;
+        srcPtr1Temp++;
+        srcPtr2Temp++;
+        dstPtrTemp++;
+    }
+
+    return RPP_SUCCESS;
+
+}
+
+template <typename T, typename U>
+RppStatus compute_exclusive_OR_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
+                            Rpp32u channel)
+{
+    T *srcPtr1Temp, *dstPtrTemp;
+    U *srcPtr2Temp;
+    srcPtr1Temp = srcPtr1;
+    srcPtr2Temp = srcPtr2;
+    dstPtrTemp = dstPtr;
+
+    Rpp8u pixel;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+    {
+        pixel = ((Rpp8u) (*srcPtr1Temp)) ^ ((Rpp8u) (*srcPtr2Temp));
+        pixel = RPPPIXELCHECK(pixel);
+        *dstPtrTemp =(T) pixel;
+        srcPtr1Temp++;
+        srcPtr2Temp++;
+        dstPtrTemp++;
+    }
+
+    return RPP_SUCCESS;
+
+}
+
+template <typename T, typename U>
+RppStatus compute_min_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
+                                   Rpp32u channel)
+{
+    T *srcPtr1Temp, *dstPtrTemp;
+    U *srcPtr2Temp;
+    srcPtr1Temp = srcPtr1;
+    srcPtr2Temp = srcPtr2;
+    dstPtrTemp = dstPtr;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+    {
+        *dstPtrTemp = RPPMIN2(*srcPtr1Temp, ((T)*srcPtr2Temp));
+        srcPtr1Temp++;
+        srcPtr2Temp++;
+        dstPtrTemp++;
+    }
+
+    return RPP_SUCCESS;
+
+}
+
+template <typename T, typename U>
+RppStatus compute_max_host(T* srcPtr1, U* srcPtr2, RppiSize srcSize, T* dstPtr,
+                                   Rpp32u channel)
+{
+    T *srcPtr1Temp, *dstPtrTemp;
+    U *srcPtr2Temp;
+    srcPtr1Temp = srcPtr1;
+    srcPtr2Temp = srcPtr2;
+    dstPtrTemp = dstPtr;
+
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
+    {
+        *dstPtrTemp = RPPMAX2(*srcPtr1Temp, ((T)*srcPtr2Temp));
+        srcPtr1Temp++;
+        srcPtr2Temp++;
+        dstPtrTemp++;
+    }
+
+    return RPP_SUCCESS;
+
 }
 
 template <typename T, typename U>

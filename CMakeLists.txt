@@ -7,6 +7,51 @@ project(amd_rpp VERSION 0.1)
 
 
 add_executable(
+    rppi_min
+    src/statistical_operations/rppi_min.cpp
+)
+target_include_directories(rppi_min
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_min
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_max
+    src/statistical_operations/rppi_max.cpp
+)
+target_include_directories(rppi_max
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_max
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_control_flow
+    src/computer_vision/rppi_control_flow.cpp
+)
+target_include_directories(rppi_control_flow
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_control_flow
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_canny_edge_detector
     src/computer_vision/rppi_canny_edge_detector.cpp
 )
@@ -114,7 +159,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     rppi_absolute_difference
     src/arithmetic_operations/rppi_absolute_difference.cpp
@@ -387,7 +432,7 @@ target_link_libraries(
 
 
 
-
+#[[
 add_executable(
     rppi_box_filter
     src/filter_operations/rppi_box_filter.cpp
