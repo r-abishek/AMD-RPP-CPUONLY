@@ -1752,6 +1752,36 @@ RppStatus fast_corner_detector_score_function_kernel_host(T* srcPtrWindow, U* ds
     return RPP_SUCCESS;
 }
 
+template<typename T>
+RppStatus hough_lines_mapper_kernel_host(Rpp32u row, Rpp32u column, Rpp32u thetaRad, Rpp32u *r)
+{
+    *r = (column * cos(thetaRad)) + (row * sin(thetaRad));
+
+    return RPP_SUCCESS;
+}
+
+template<typename T>
+RppStatus hough_lines_accumulatorMax_kernel_host(Rpp32u *accumulator, RppiSize accumulatorSize, 
+                                                 Rpp32u *accumulatorMax, Rpp32u *angle, Rpp32u *r)
+{
+    Rpp32u *accumulatorTemp;
+    accumulatorTemp = accumulator;
+
+    for (int i = 0; i < accumulatorSize.height; i++)
+    {
+        for (int j = 0; j < accumulatorSize.width; j++)
+        {
+            if (*accumulatorTemp > *accumulatorMax)
+            {
+                *accumulatorMax = *accumulatorTemp;
+                *angle = j;
+                *r = i;
+            }
+        }
+    }
+
+    return RPP_SUCCESS;
+}
 
 
 

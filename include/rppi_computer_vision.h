@@ -210,6 +210,17 @@ RppStatus
 rppi_reconstruction_laplacian_image_pyramid_u8_pkd3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr);
 
 
+// ----------------------------------------
+// Host hough_lines functions declaration
+// ----------------------------------------
+
+RppStatus
+rppi_hough_lines_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t lines, 
+                              Rpp32f rho, Rpp32f theta, Rpp32u threshold, 
+                              Rpp32u lineLength, Rpp32u lineGap, 
+                              Rpp32u thetaMax, Rpp32u thetaMin);
+
+
 #ifdef __cplusplus
 }
 #endif
