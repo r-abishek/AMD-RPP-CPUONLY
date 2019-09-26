@@ -3,7 +3,7 @@
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_filter_operations.h"
+#include "rppi_computer_vision.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
@@ -175,6 +175,8 @@ int main(int argc, char** argv)
 
         namedWindow("Input and Output Images", WINDOW_NORMAL );
         imshow("Input and Output Images", images);
+
+        imwrite("images/cannyEdgeImageOutput.jpg", imageOut);
 
         waitKey(0);
 
