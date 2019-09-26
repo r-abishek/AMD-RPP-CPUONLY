@@ -217,8 +217,7 @@ rppi_reconstruction_laplacian_image_pyramid_u8_pkd3_host(RppPtr_t srcPtr1, RppiS
 RppStatus
 rppi_hough_lines_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t lines, 
                               Rpp32f rho, Rpp32f theta, Rpp32u threshold, 
-                              Rpp32u lineLength, Rpp32u lineGap, 
-                              Rpp32u thetaMax, Rpp32u thetaMin);
+                              Rpp32u minLineLength, Rpp32u maxLineGap, Rpp32u linesMax);
 
 
 // ----------------------------------------
@@ -233,6 +232,15 @@ rppi_control_flow_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcS
 
 RppStatus
 rppi_control_flow_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, RppPtr_t dstPtr, Rpp32u type);
+
+
+// ----------------------------------------
+// Host bressenham_line functions declaration
+// ----------------------------------------
+
+RppStatus
+rppi_bressenham_line_u8_pln1_host(RppPtr_t dstPtr, RppiSize dstSize, Rpp32u *endpoints, Rpp32u *rasterCoordinates);
+
 
 
 #ifdef __cplusplus

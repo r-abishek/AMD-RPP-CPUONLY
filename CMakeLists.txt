@@ -7,51 +7,6 @@ project(amd_rpp VERSION 0.1)
 
 
 add_executable(
-    rppi_min
-    src/statistical_operations/rppi_min.cpp
-)
-target_include_directories(rppi_min
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_min
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_max
-    src/statistical_operations/rppi_max.cpp
-)
-target_include_directories(rppi_max
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_max
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_control_flow
-    src/computer_vision/rppi_control_flow.cpp
-)
-target_include_directories(rppi_control_flow
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_control_flow
-    ${OpenCV_LIBS}
-)
-
-add_executable(
     rppi_canny_edge_detector
     src/computer_vision/rppi_canny_edge_detector.cpp
 )
@@ -67,99 +22,39 @@ target_link_libraries(
 )
 
 add_executable(
-    rppi_harris_corner_detector
-    src/computer_vision/rppi_harris_corner_detector.cpp
+    rppi_hough_lines
+    src/computer_vision/rppi_hough_lines.cpp
 )
-target_include_directories(rppi_harris_corner_detector
+target_include_directories(rppi_hough_lines
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_harris_corner_detector
-    ${OpenCV_LIBS}
-)
-
-
-add_executable(
-    rppi_fast_corner_detector
-    src/computer_vision/rppi_fast_corner_detector.cpp
-)
-target_include_directories(rppi_fast_corner_detector
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_fast_corner_detector
+    rppi_hough_lines
     ${OpenCV_LIBS}
 )
 
 add_executable(
-    rppi_match_template
-    src/computer_vision/rppi_match_template.cpp
+    rppi_bressenham_line
+    src/computer_vision/rppi_bressenham_line.cpp
 )
-target_include_directories(rppi_match_template
+target_include_directories(rppi_bressenham_line
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_match_template
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_reconstruction_laplacian_image_pyramid
-    src/computer_vision/rppi_reconstruction_laplacian_image_pyramid.cpp
-)
-target_include_directories(rppi_reconstruction_laplacian_image_pyramid
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_reconstruction_laplacian_image_pyramid
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_gaussian_image_pyramid
-    src/computer_vision/rppi_gaussian_image_pyramid.cpp
-)
-target_include_directories(rppi_gaussian_image_pyramid
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_gaussian_image_pyramid
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_laplacian_image_pyramid
-    src/computer_vision/rppi_laplacian_image_pyramid.cpp
-)
-target_include_directories(rppi_laplacian_image_pyramid
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_laplacian_image_pyramid
+    rppi_bressenham_line
     ${OpenCV_LIBS}
 )
 
 
 
 
+#[[
 add_executable(
     rppi_absolute_difference
     src/arithmetic_operations/rppi_absolute_difference.cpp
@@ -432,7 +327,7 @@ target_link_libraries(
 
 
 
-#[[
+
 add_executable(
     rppi_box_filter
     src/filter_operations/rppi_box_filter.cpp
@@ -1589,6 +1484,66 @@ target_include_directories(rppi_fast_corner_detector
 )
 target_link_libraries(
     rppi_fast_corner_detector
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_control_flow
+    src/computer_vision/rppi_control_flow.cpp
+)
+target_include_directories(rppi_control_flow
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_control_flow
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_reconstruction_laplacian_image_pyramid
+    src/computer_vision/rppi_reconstruction_laplacian_image_pyramid.cpp
+)
+target_include_directories(rppi_reconstruction_laplacian_image_pyramid
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_reconstruction_laplacian_image_pyramid
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_bressenham_line
+    src/computer_vision/rppi_bressenham_line.cpp
+)
+target_include_directories(rppi_bressenham_line
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_bressenham_line
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_hough_lines
+    src/computer_vision/rppi_hough_lines.cpp
+)
+target_include_directories(rppi_hough_lines
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hough_lines
     ${OpenCV_LIBS}
 )
 ]]

@@ -2,394 +2,248 @@
 #include <stdlib.h>
 #include <time.h>
 #include <algorithm>
+#include <vector>
+using namespace std;
 
-template <typename T>
-RppStatus hough_lines_host(T* srcPtr, RppiSize srcSize, Rpp16u* lines, 
+template <typename T, typename U>
+RppStatus hough_lines_host(T* srcPtr, RppiSize srcSize, U* lines, 
                            Rpp32f rho, Rpp32f theta, Rpp32u threshold, 
-                           Rpp32u lineLength, Rpp32u lineGap, 
-                           Rpp32u thetaMax, Rpp32u thetaMin, 
-                           RppiChnFormat chnFormat, Rpp32u channel)
+                           Rpp32u lineLength, Rpp32u lineGap, Rpp32u linesMax)
 {
-    srand (time(NULL));
-    Rpp32u imageDim = srcSize.height * srcSize.width;
-    Rpp32u diagonal = (Rpp32u) ((sqrt((Rpp32f) ((srcSize.height * srcSize.height) + (srcSize.width * srcSize.width)))) + 1);
-    Rpp32u thetaRange = thetaMax - thetaMin + 1;
-    Rpp32u accumulatorMax = 0, row, column, r, angle;
+    // Initializations
 
-    Rpp16u rowStart, colStart, rowStop, colStop;
-    Rpp16u *linesTemp;
+    srand (time(NULL));
+    
+    U *linesTemp;
     linesTemp = lines;
+    Rpp32u numofLines = 0;
+
+    Rpp8u *srcPtrTemp;
+    srcPtrTemp = srcPtr;
 
     RppiSize accumulatorSize;
-    accumulatorSize.height = ((Rpp32u) (rho + 1)) * diagonal;
-    accumulatorSize.width = thetaRange;
-    Rpp32u *accumulator = (Rpp32u*) calloc(accumulatorSize.height * accumulatorSize.width, sizeof(Rpp32u));
-    
-    T *zeroImage = (T *)calloc(channel * srcSize.height * srcSize.width, sizeof(T));
-    T *srcPtrCpy = (T *)calloc(channel * srcSize.height * srcSize.width, sizeof(T));
-    
-    memcpy(srcPtrCpy, srcPtr, sizeof(T));
+    accumulatorSize.width = round(((srcSize.width + srcSize.height) * 2 + 1) / rho);
+    accumulatorSize.height = round(PI / theta);
 
-    while (memcmp(zeroImage, srcPtrCpy, sizeof(T)) != 0)
+    Rpp32s *accumulator = (Rpp32s*)calloc(accumulatorSize.width * accumulatorSize.height, sizeof(Rpp32s));
+    Rpp32s *accumulatorTemp, *accumulatorTemp2;
+
+    T *validPixelMask = (T*)calloc(srcSize.height * srcSize.width, sizeof(T));
+    T *validPixelMaskTemp;
+    validPixelMaskTemp = validPixelMask;
+    
+    Rpp32f *cosLookUpTable = (Rpp32f*)calloc(accumulatorSize.height, sizeof(Rpp32f));
+    Rpp32f *sinLookUpTable = (Rpp32f*)calloc(accumulatorSize.height, sizeof(Rpp32f));
+    Rpp32f *cosLookUpTableTemp, *sinLookUpTableTemp;
+    cosLookUpTableTemp = cosLookUpTable;
+    sinLookUpTableTemp = sinLookUpTable;
+
+    for(int n = 0; n < accumulatorSize.height; n++ )
     {
-        row = rand() % (srcSize.height - 1);
-        column = rand() % (srcSize.width - 1);
-        r = 0;
-        for (angle = thetaMin; angle <= thetaMax; angle+=theta)
-        {
-            hough_lines_mapper_kernel_host(row, column, RAD(angle), &r);
-            *(accumulator + (r * thetaRange) + (angle - thetaMin))++;
-        }
-        *(srcPtrCpy + (row * srcSize.width) + column) = (T) 0;
+        *cosLookUpTableTemp = (Rpp32f) (cos((Rpp64f) (n * theta)) / rho);
+        *sinLookUpTableTemp = (Rpp32f) (sin((Rpp64f) (n * theta)) / rho);
+        cosLookUpTableTemp++;
+        sinLookUpTableTemp++;
+    }
+    std::vector<Rpp32u> validPixelLocations;
 
-        accumulatorMax = 0;
-        hough_lines_accumulatorMax_kernel_host(accumulator, accumulatorSize, &accumulatorMax, &angle, &r);
-        angle += thetaMin;
-        
-        if(accumulatorMax <= threshold)
+    // Valid pixel locations
+    for( int i = 0; i < srcSize.height; i++ )
+    {
+        for( int j = 0; j < srcSize.width; j++ )
         {
+            if(*srcPtrTemp)
+            {
+                *validPixelMaskTemp = (T) 1;
+                validPixelLocations.push_back(j);
+                validPixelLocations.push_back(i);
+            }
+            else
+            {
+                *validPixelMaskTemp = (T) 0;
+            }
+            srcPtrTemp++;
+            validPixelMaskTemp++;
+        }
+    }
+
+    int count = (int)validPixelLocations.size() / 2;
+    Rpp32s *endpoints = (Rpp32s*)calloc(4, sizeof(Rpp32s));
+
+    // Pick random pixels and process them
+    for( ; count > 0; count-- )
+    {
+        // Choose a random point
+        Rpp32u randomPixelLoc = rand() % (count + 1);
+        int max_val = threshold-1, max_n = 0;
+        Rpp32u pixelLocX, pixelLocY;
+        pixelLocX = validPixelLocations[2 * randomPixelLoc];
+        pixelLocY = validPixelLocations[(2 * randomPixelLoc) + 1];
+
+        Rpp32f a, b;
+        accumulatorTemp = accumulator;
+        Rpp32s i = pixelLocY, j = pixelLocX, k, x0, y0, dx0, dy0, xflag;
+        Rpp32s good_line;
+        Rpp32s shift = 16;
+
+        // "remove" it by overriding it with the last element
+        validPixelLocations[2 * randomPixelLoc] = validPixelLocations[2 * (count-1)];
+        validPixelLocations[(2 * randomPixelLoc) + 1] = validPixelLocations[(2 * (count-1)) + 1];
+
+        // Check if pixel is part of some other line
+        if(!*(validPixelMask + (i * srcSize.width) + j))
             continue;
-        }
 
-        for (row = 0; row < srcSize.height; row++)
+        // Update the accumulator
+        cosLookUpTableTemp = cosLookUpTable;
+        sinLookUpTableTemp = sinLookUpTable;
+        for( int n = 0; n < accumulatorSize.height; n++, accumulatorTemp += accumulatorSize.width )
         {
-            column = (Rpp32u) ((r - (row * sin(RAD(angle)))) / cos(RAD(angle)));
-            if (*(srcPtrCpy + (row * srcSize.width) + column) == 0)
+            Rpp32s r = round( j * *cosLookUpTableTemp + i * *sinLookUpTableTemp );
+            r += (accumulatorSize.width - 1) / 2;
+            *(accumulatorTemp + r) += 1;
+            int val = *(accumulatorTemp + r);
+            if( max_val < val )
             {
-                continue;
+                max_val = val;
+                max_n = n;
             }
-            else
-            {
-                rowStart = row;
-                colStart = column;
-                
-            }
-            
+            cosLookUpTableTemp++;
+            sinLookUpTableTemp++;
         }
 
+        // Compare against threshold given by the user
+        if( max_val < threshold )
+            continue;
 
-        //accumulatorMax = max(accumulator);
-        //if (accumulatorMax < )
-    }
-
-    return RPP_SUCCESS;
-
-
-
-
-
-
-
-    
-    // Initialize accumulator and 
-    
-    
-
-    for (int i = 0; i < srcSize.height; i++)
-    {
-        for (int j = 0; j < srcSize.width; j++)
+        // From the selected point, walk in each direction along the found line and extract line segment
+        a = -*(sinLookUpTable + max_n);
+        b = *(cosLookUpTable + max_n);
+        x0 = j;
+        y0 = i;
+        if( RPPABS(a) > RPPABS(b) )
         {
-            jitteredPixelLocDiffX = (rand() % (jitterRangeX + 1))
+            xflag = 1;
+            dx0 = a > 0 ? 1 : -1;
+            dy0 = round( b*(1 << shift)/RPPABS(a) );
+            y0 = (y0 << shift) + (1 << (shift-1));
         }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // RGB to Greyscale Conversion
-
-    Rpp32u imageDim = srcSize.height * srcSize.width;
-
-    T *srcPtrGreyscale = (T *)calloc(imageDim, sizeof(T));
-    T *srcPtrGreyscaleTemp;
-    srcPtrGreyscaleTemp = srcPtrGreyscale;
-
-    if (channel == 3)
-    {
-        if (chnFormat == RPPI_CHN_PLANAR)
+        else
         {
-            T *srcPtrTempR, *srcPtrTempG, *srcPtrTempB;
-            srcPtrTempR = srcPtr;
-            srcPtrTempG = srcPtr + imageDim;
-            srcPtrTempB = srcPtrTempG + imageDim;
-
-            for (int i = 0; i < imageDim; i++)
-            {
-                *srcPtrGreyscaleTemp = (T) (((Rpp32u)(*srcPtrTempR) + (Rpp32u)(*srcPtrTempG) + (Rpp32u)(*srcPtrTempB)) / 3);
-                srcPtrGreyscaleTemp++;
-                srcPtrTempR++;
-                srcPtrTempG++;
-                srcPtrTempB++;
-            }
+            xflag = 0;
+            dy0 = b > 0 ? 1 : -1;
+            dx0 = round( a*(1 << shift)/RPPABS(b) );
+            x0 = (x0 << shift) + (1 << (shift-1));
         }
-        else if (chnFormat == RPPI_CHN_PACKED)
+
+        for( k = 0; k < 4; k += 2 )
         {
-            T *srcPtrTempR, *srcPtrTempG, *srcPtrTempB;
-            srcPtrTempR = srcPtr;
-            srcPtrTempG = srcPtr + 1;
-            srcPtrTempB = srcPtrTempG + 1;
-            
-            for (int i = 0; i < imageDim; i++)
+            Rpp32s gap = 0, x = x0, y = y0, dx = dx0, dy = dy0;
+
+            if( k > 0 )
+                dx = -dx, dy = -dy;
+
+            // Walk along the line, Stop at either the image border or in case of too big gap
+            for( ;; x += dx, y += dy )
             {
-                *srcPtrGreyscaleTemp = (T) (((Rpp32u)(*srcPtrTempR) + (Rpp32u)(*srcPtrTempG) + (Rpp32u)(*srcPtrTempB)) / 3);
-                srcPtrGreyscaleTemp++;
-                srcPtrTempR += channel;
-                srcPtrTempG += channel;
-                srcPtrTempB += channel;
+                Rpp32s i1, j1;
+
+                if( xflag )
+                {
+                    j1 = x;
+                    i1 = y >> shift;
+                }
+                else
+                {
+                    j1 = x >> shift;
+                    i1 = y;
+                }
+
+                if( j1 < 0 || j1 >= srcSize.width || i1 < 0 || i1 >= srcSize.height )
+                    break;
+
+                validPixelMaskTemp = validPixelMask + (i1 * srcSize.width) + j1;
+
+                // For all valid points update line end, clear the mask element and reset the gap
+                if(*validPixelMaskTemp)
+                {
+                    gap = 0;
+                    *(endpoints + k + 1) = i1;
+                    *(endpoints + k) = j1;
+                }
+                else if( ++gap > lineGap )
+                    break;
             }
         }
-    }
-    else if (channel == 1)
-    {
-        memcpy(srcPtrGreyscale, srcPtr, imageDim * sizeof(T));
-    }
 
-    Rpp32u newChannel = 1;
+        good_line = RPPABS(*(endpoints + 2) - *(endpoints + 0)) >= lineLength ||
+                    RPPABS(*(endpoints + 3) - *(endpoints + 1)) >= lineLength;
 
-    
-    // Gaussian Filter
-    
-    // Rpp32u kernelSize = 5;
-    // Rpp32f stdDev = 0.75;
-    // Rpp32f *kernel = (Rpp32f *)calloc(kernelSize * kernelSize, sizeof(Rpp32f));
-    // int bound = ((kernelSize - 1) / 2);
-    // 
-    // generate_gaussian_kernel_host(stdDev, kernel, kernelSize);
-    // 
-    // RppiSize srcSizeMod;
-    // srcSizeMod.width = srcSize.width + (2 * bound);
-    // srcSizeMod.height = srcSize.height + (2 * bound);
-    // T *srcPtrGaussianPadded = (T *)calloc(srcSizeMod.height * srcSizeMod.width * newChannel, sizeof(T));
-    // 
-    // generate_evenly_padded_image_host(srcPtrGreyscale, srcSize, srcPtrGaussianPadded, srcSizeMod, chnFormat, newChannel);
-    // 
-    // RppiSize rppiKernelSize;
-    // rppiKernelSize.height = kernelSize;
-    // rppiKernelSize.width = kernelSize;
-    // T *srcPtrBlurred = (T *)calloc(srcSize.height * srcSize.width * newChannel, sizeof(T));
-    // convolve_image_host(srcPtrGaussianPadded, srcSizeMod, srcPtrBlurred, srcSize, kernel, rppiKernelSize, chnFormat, newChannel);
-    
-    
-    
-    RppiSize srcSizeMod, rppiKernelSize;
-    Rpp32u kernelSize;
-    int bound;
-
-    // Sobel Filter
-    
-    kernelSize = 3;
-    bound = (kernelSize - 1) / 2;
-
-    srcSizeMod.width = srcSize.width + (2 * bound);
-    srcSizeMod.height = srcSize.height + (2 * bound);
-
-    T *dstPtrGreyscale = (T *)calloc(srcSize.height * srcSize.width * newChannel, sizeof(T));
-
-    T *srcPtrMod = (T *)calloc(srcSizeMod.height * srcSizeMod.width * newChannel, sizeof(T));
-    generate_evenly_padded_image_host(srcPtrGreyscale, srcSize, srcPtrMod, srcSizeMod, chnFormat, newChannel);
-
-    rppiKernelSize.height = kernelSize;
-    rppiKernelSize.width = kernelSize;
-
-    Rpp32f *kernelX = (Rpp32f *)calloc(3 * 3, sizeof(Rpp32f));
-    generate_sobel_kernel_host(kernelX, 1);
-    Rpp32s *dstPtrIntermediateX = (Rpp32s *)calloc(srcSize.height * srcSize.width * newChannel, sizeof(Rpp32s));
-    convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediateX, srcSize, kernelX, rppiKernelSize, chnFormat, newChannel);
-
-    Rpp32f *kernelY = (Rpp32f *)calloc(3 * 3, sizeof(Rpp32f));
-    generate_sobel_kernel_host(kernelY, 2);
-    Rpp32s *dstPtrIntermediateY = (Rpp32s *)calloc(srcSize.height * srcSize.width * newChannel, sizeof(Rpp32s));
-    convolve_image_host(srcPtrMod, srcSizeMod, dstPtrIntermediateY, srcSize, kernelY, rppiKernelSize, chnFormat, newChannel);
-
-    compute_magnitude_host(dstPtrIntermediateX, dstPtrIntermediateY, srcSize, dstPtrGreyscale, chnFormat, newChannel);
-
-
-
-
-
-    // Find Image Maximum
-
-    T *srcPtrTemp;
-    srcPtrTemp = srcPtrGreyscale;
-    Rpp8u max = *srcPtrTemp;
-    for (int i = 0; i < (newChannel * srcSize.height * srcSize.width); i++)
-    {
-        if (*srcPtrTemp > max)
+        for( k = 0; k < 4; k += 2 )
         {
-            max = *srcPtrTemp;
+            int x = x0, y = y0, dx = dx0, dy = dy0;
+
+            if( k > 0 )
+                dx = -dx, dy = -dy;
+
+            // Walk along the line, Stop at either the image border or in case of too big gap
+            for( ;; x += dx, y += dy )
+            {
+                Rpp32s i1, j1;
+
+                if( xflag )
+                {
+                    j1 = x;
+                    i1 = y >> shift;
+                }
+                else
+                {
+                    j1 = x >> shift;
+                    i1 = y;
+                }
+
+                validPixelMaskTemp = validPixelMask + (i1 * srcSize.width) + j1;
+
+                // For all valid points update line end, clear the mask element and reset the gap
+                if(*validPixelMaskTemp)
+                {
+                    if( good_line )
+                    {
+                        accumulatorTemp2 = accumulator;
+                        cosLookUpTableTemp = cosLookUpTable;
+                        sinLookUpTableTemp = sinLookUpTable;
+                        for( int n = 0; n < accumulatorSize.height; n++, accumulatorTemp2 += accumulatorSize.width )
+                        {
+                            Rpp32s r = round( j1 * *cosLookUpTableTemp + i1 * *sinLookUpTableTemp);
+                            r += (accumulatorSize.width - 1) / 2;
+                            *(accumulatorTemp2 + r) -= 1;
+                            cosLookUpTableTemp++;
+                            sinLookUpTableTemp++;
+                        }
+                    }
+                    *validPixelMaskTemp = (T) 0;
+                }
+
+                if( i1 == *(endpoints + k + 1) && j1 == *(endpoints + k) )
+                    break;
+            }
         }
-        srcPtrTemp++;
-    }
 
-
-
-
-
-    // Determine Gradients, Perform NMS, Double Thresholding and Edge Tracing by hysterisis
-
-    Rpp32f gradient;
-    Rpp32s *dstPtrIntermediateXTemp, *dstPtrIntermediateYTemp;
-    dstPtrIntermediateXTemp = dstPtrIntermediateX;
-    dstPtrIntermediateYTemp = dstPtrIntermediateY;
-
-    T *srcPtrWindow, *dstPtrGreyscaleTemp, *srcPtrWindowCenter;
-    srcPtrWindow = srcPtrMod;
-    dstPtrGreyscaleTemp = dstPtrGreyscale;
-
-    generate_evenly_padded_image_host(dstPtrGreyscale, srcSize, srcPtrMod, srcSizeMod, chnFormat, newChannel);
-    
-    //Rpp32f minThresholdRatio=0.05, maxThresholdRatio=0.09;
-    //T maxThreshold = (T) ((Rpp32f) max * maxThresholdRatio);
-    //T minThreshold = (T) ((Rpp32f) maxThreshold * minThresholdRatio);
-    
-    srcPtrWindowCenter = srcPtrWindow + (bound * srcSizeMod.width) + bound;
-    Rpp32u toNeighborhood1 = 1;
-    Rpp32u toNeighborhood2 = 2;
-    Rpp32u toNeighborhood3 = srcSizeMod.width + 2;
-    Rpp32u toNeighborhood4 = 2 * (srcSizeMod.width + 1);
-    Rpp32u toNeighborhood5 = (2 * srcSizeMod.width) + 1;
-    Rpp32u toNeighborhood6 = 2 * srcSizeMod.width;
-    Rpp32u toNeighborhood7 = srcSizeMod.width;
-    T *position1Ptr, *position2Ptr;
-    dstPtrIntermediateXTemp = dstPtrIntermediateX;
-    dstPtrIntermediateYTemp = dstPtrIntermediateY;
-    
-    for (int i = 0; i < srcSize.height; i++)
-    {
-        for (int j = 0; j < srcSize.width; j++)
+        if( good_line )
         {
-            gradient = atan((Rpp32f) *dstPtrIntermediateYTemp / (Rpp32f) *dstPtrIntermediateXTemp);
-            if (gradient > 1.178097 || gradient < -1.178097)
-            {
-                position1Ptr = srcPtrWindow + toNeighborhood1;
-                position2Ptr = srcPtrWindow + toNeighborhood5;
-            }
-            else if (gradient > 0.392699)
-            {
-                position1Ptr = srcPtrWindow + toNeighborhood2;
-                position2Ptr = srcPtrWindow + toNeighborhood6;
-            }
-            else if (gradient < -0.392699)
-            {
-                position1Ptr = srcPtrWindow;
-                position2Ptr = srcPtrWindow + toNeighborhood4;
-            }
-            else
-            {
-                position1Ptr = srcPtrWindow + toNeighborhood3;
-                position2Ptr = srcPtrWindow + toNeighborhood7;
-            }
+            *linesTemp = (U) *(endpoints + 0);
+            linesTemp++;
+            *linesTemp = (U) *(endpoints + 1);
+            linesTemp++;
+            *linesTemp = (U) *(endpoints + 2);
+            linesTemp++;
+            *linesTemp = (U) *(endpoints + 3);
+            linesTemp++;
 
-            canny_non_max_suppression_kernel_host(dstPtrGreyscaleTemp, *srcPtrWindowCenter, position1Ptr, position2Ptr);
-            
-            if (*dstPtrGreyscaleTemp > maxThreshold)
-            {
-                *dstPtrGreyscaleTemp = (T) 255;
-            }
-            else if (*dstPtrGreyscaleTemp < minThreshold)
-            {
-                *dstPtrGreyscaleTemp = (T) 0;
-            }
-            else
-            {
-                *dstPtrGreyscaleTemp = (T) 100;
-            }
-
-            srcPtrWindow++;
-            srcPtrWindowCenter++;
-            dstPtrGreyscaleTemp++;
-            dstPtrIntermediateXTemp++;
-            dstPtrIntermediateYTemp++;
+            numofLines++;
+            if(numofLines >= linesMax)
+                return RPP_SUCCESS;
         }
-        srcPtrWindow += (kernelSize - 1);
-        srcPtrWindowCenter += (kernelSize - 1);
-    }
-
-    srcPtrWindow = srcPtrMod;
-    dstPtrGreyscaleTemp = dstPtrGreyscale;
-    generate_evenly_padded_image_host(dstPtrGreyscale, srcSize, srcPtrMod, srcSizeMod, chnFormat, newChannel);
-
-    srcPtrWindowCenter = srcPtrWindow + (bound * srcSizeMod.width) + bound;
-    Rpp32u remainingElementsInRow = srcSizeMod.width - kernelSize;
-    
-    for (int i = 0; i < srcSize.height; i++)
-    {
-        for (int j = 0; j < srcSize.width; j++)
-        {
-            if (*srcPtrWindowCenter == (T) 100)
-            {
-                canny_hysterisis_edge_tracing_kernel_host(srcPtrWindow, dstPtrGreyscaleTemp, srcSize, 
-                                kernelSize, remainingElementsInRow, *srcPtrWindowCenter, bound, 
-                                chnFormat, newChannel);
-            }
-            srcPtrWindow++;
-            srcPtrWindowCenter++;
-            dstPtrGreyscaleTemp++;
-        }
-        srcPtrWindow += (kernelSize - 1);
-        srcPtrWindowCenter += (kernelSize - 1);
-    }
-
-
-
-
-
-
-    
-
-    // Greyscale TO RGB Conversion
-
-    dstPtrGreyscaleTemp = dstPtrGreyscale;
-    T *dstPtrTemp;
-    dstPtrTemp = dstPtr;
-    
-    if (channel == 3)
-    {
-        if (chnFormat == RPPI_CHN_PLANAR)
-        {
-            for (int c = 0; c < channel; c++)
-            {
-                memcpy(dstPtrTemp, dstPtrGreyscaleTemp, imageDim * sizeof(T));
-                dstPtrTemp += imageDim;
-            }
-        }
-        else if (chnFormat == RPPI_CHN_PACKED)
-        {
-            for (int i = 0; i < imageDim; i++)
-            {
-                memcpy(dstPtrTemp, dstPtrGreyscaleTemp, sizeof(T));
-                dstPtrTemp++;
-                memcpy(dstPtrTemp, dstPtrGreyscaleTemp, sizeof(T));
-                dstPtrTemp++;
-                memcpy(dstPtrTemp, dstPtrGreyscaleTemp, sizeof(T));
-                dstPtrTemp++;
-                dstPtrGreyscaleTemp++;
-            }
-        }
-    }
-    else if (channel == 1)
-    {
-        memcpy(dstPtr, dstPtrGreyscale, imageDim * sizeof(T));
     }
 
     return RPP_SUCCESS;

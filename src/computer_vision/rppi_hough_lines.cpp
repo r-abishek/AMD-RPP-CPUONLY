@@ -3,13 +3,13 @@
 // Uncomment the segment below to get this standalone to work for basic unit testing
 
 #include "rppdefs.h"
-#include "rppi_filter_operations.h"
+#include "rppi_computer_vision.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
 #include "cpu/rpp_cpu_input_and_display.hpp"
 #include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
-#include "cpu/host_hough_lines.hpp"
+#include "cpu/host_hough_lines_trial.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -21,14 +21,10 @@ using namespace std::chrono;
 RppStatus
 rppi_hough_lines_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t lines, 
                               Rpp32f rho, Rpp32f theta, Rpp32u threshold, 
-                              Rpp32u lineLength, Rpp32u lineGap, 
-                              Rpp32u thetaMax, Rpp32u thetaMin)
+                              Rpp32u minLineLength, Rpp32u maxLineGap, Rpp32u linesMax)
 {
-    hough_lines_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp16u*>(lines), 
-                            rho, theta, threshold, 
-                            lineLength, lineGap, 
-                            thetaMax, thetaMin, 
-                            RPPI_CHN_PLANAR, 1);
+    hough_lines_host<Rpp8u, Rpp32u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp32u*>(lines), rho, theta, threshold, minLineLength, maxLineGap, linesMax);
+
     return RPP_SUCCESS;
 }
 
@@ -38,25 +34,34 @@ rppi_hough_lines_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t lines,
 
 int main(int argc, char** argv)
 {
-    RppiSize srcSize, dstSize;
-    unsigned int channel;
+    RppiSize srcSize;
+    RppiSize dstSize;
+    unsigned int channel = 1;
+    Rpp32f minLineLength = 100, maxLineGap = 3;
     
-    unsigned int max;
-    printf("\nEnter max Threshold: ");
-    scanf("%d", &max);
+    Rpp32u linesMax = 100;
+    printf("\nEnter maximum number of lines you want to detect: ");
+    scanf("%d", &linesMax);
+    
+    float theta = PI/180;
+    printf("\nEnter theta in degrees (increment for angle in r-theta notation): ");
+    scanf("%f", &theta);
+    theta = theta * (PI / 180);
 
-    unsigned int min;
-    printf("\nEnter min Threshold: ");
-    scanf("%d", &min);
+    float rho = 1;
+    printf("\nEnter rho (increment for r in r-theta notation): ");
+    scanf("%f", &rho);
 
+    Rpp32u threshold;
+    printf("\nEnter threshold for accumulator: ");
+    scanf("%d", &threshold);
+
+    Rpp32u *lines = (Rpp32u *)calloc(4 * linesMax, sizeof(Rpp32u));
+    
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
-
-    int type;
-    printf("\nEnter type of arrangement: 1 = planar, 2 = packed: ");
-    scanf("%d", &type);
-
+    
     if (input == 1)
     {
         if ( argc != 2 )
@@ -65,21 +70,8 @@ int main(int argc, char** argv)
             return -1;
         }
 
-        do
-        {   printf("\nThe image input/inputs can be interpreted as 1 or 3 channel (greyscale or RGB). Please choose - only 1 or 3: ");
-            scanf("%d", &channel);
-        }while (channel != 1 && channel != 3);
-
         Mat imageIn;
-
-        if (channel == 1)
-        {
-            imageIn = imread( argv[1], 0 );
-        }
-        else if (channel ==3)
-        {
-            imageIn = imread( argv[1], 1 );
-        }
+        imageIn = imread( argv[1], 0 );
 
         if ( !imageIn.data )
         {
@@ -97,64 +89,41 @@ int main(int argc, char** argv)
         
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+
+        //memcpy(dstPtr, srcPtr, srcSize.height * srcSize.width * sizeof(Rpp8u));
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
 
-        Mat imageOut;
-
-        if (type == 1)
-        {   
-            if (channel == 1)
-            {
-                printf("\nExecuting pln1...\n");
-                start = high_resolution_clock::now();
-                rppi_hough_lines_u8_pln1_host(srcPtr, srcSize, dstPtr, max, min);
-                stop = high_resolution_clock::now();
-
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
-                
-            }
-            else if (channel == 3)
-            {
-                printf("\nExecuting pln3...\n");
-                Rpp8u *srcPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
-                Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
-                rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
-
-                start = high_resolution_clock::now();
-                rppi_hough_lines_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, max, min);
-                stop = high_resolution_clock::now();
-
-                rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
-
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
-            }
-        }
-        else if (type == 2)
-        {   
-            if (channel == 1)
-            {
-                printf("\nExecuting pln1 for pkd1...\n");
-                start = high_resolution_clock::now();
-                rppi_hough_lines_u8_pln1_host(srcPtr, srcSize, dstPtr, max, min);
-                stop = high_resolution_clock::now();
-
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
-            }
-            else if (channel ==3)
-            {
-                printf("\nExecuting pkd3...\n");
-                start = high_resolution_clock::now();
-                rppi_hough_lines_u8_pkd3_host(srcPtr, srcSize, dstPtr, max, min);
-                stop = high_resolution_clock::now();
-
-                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
-            }
-        }
+        printf("\nExecuting pln1...\n");
+        start = high_resolution_clock::now();
+        rppi_hough_lines_u8_pln1_host(srcPtr, srcSize, lines, rho, theta, threshold, (Rpp32u) minLineLength, (Rpp32u) maxLineGap, linesMax);
+        stop = high_resolution_clock::now();
 
         auto duration = duration_cast<milliseconds>(stop - start);
         cout << "\nTime taken (milliseconds) = " << duration.count() << endl;
+
+        Rpp32u *endpoints = (Rpp32u*)calloc(4, sizeof(Rpp32u));
+        Rpp32u *rasterCoordinates= (Rpp32u *)calloc(2 * (dstSize.height + dstSize.width), sizeof(Rpp32u));
+        Rpp32u *linesTemp;
+        linesTemp = lines;
+        for (int i = 0; i < linesMax; i++)
+        {
+            *endpoints = *linesTemp;
+            *(endpoints + 1) = *(linesTemp+1);
+            *(endpoints + 2) = *(linesTemp+2);
+            *(endpoints + 3) = *(linesTemp+3);
+
+            //printf("\n line %d endpoints - (%d,%d) to (%d,%d)", i+1, *endpoints, *(endpoints+1), *(endpoints+2), *(endpoints+3));
+
+            generate_bressenham_line_host(dstPtr, dstSize, endpoints, rasterCoordinates);
+
+            linesTemp += 4;
+        }
+        //printf("\n");
+
+        Mat imageOut;
+        imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
 
         Mat images(imageIn.rows, imageIn.cols*2, imageIn.type());
         imageIn.copyTo(images(cv::Rect(0,0, imageIn.cols, imageIn.rows)));
@@ -167,7 +136,10 @@ int main(int argc, char** argv)
 
         return 0;
     }
-     
+
+    printf("\nThis option isn't available for hough lines!");
+
+/*     
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
@@ -181,40 +153,17 @@ int main(int argc, char** argv)
         Rpp8u dstPtr[12] = {0};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_hough_lines_u8_pln1_host(srcPtr, srcSize, dstPtr, max, min);
+        rppi_hough_lines_u8_pln1_host(srcPtr, srcSize, dstPtr, lines, rho, theta, threshold, lineLength, lineGap, thetaMax, thetaMin, accumulator, accumulatorSize);
         printf("\n\nOutput of hough_lines:\n");
         displayPlanar(dstPtr, srcSize, channel);
     }
     else if (matrix == 2)
     {
-        channel = 3;
-        srcSize.height = 3;
-        srcSize.width = 4;
-        if (type == 1)
-        {
-            Rpp8u srcPtr[36] = {255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244, 130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108, 65, 66, 67, 68, 69, 70, 71, 72, 13, 24, 15, 16};
-            Rpp8u dstPtr[36] = {0};
-            printf("\n\nInput:\n");
-            displayPlanar(srcPtr, srcSize, channel);
-            rppi_hough_lines_u8_pln3_host(srcPtr, srcSize, dstPtr, max, min);
-            printf("\n\nOutput of hough_lines:\n");
-            displayPlanar(dstPtr, srcSize, channel);
-        }
-        else if (type == 2)
-        {
-            Rpp8u srcPtr[36] = {255, 130, 65, 254, 129, 66, 253, 128, 67, 252, 127, 68, 251, 126, 69, 250, 117, 70, 249, 113, 71, 248, 121, 72, 247, 127, 13, 246, 111, 24, 245, 100, 15, 244, 108, 16};
-            Rpp8u dstPtr[36] = {0};
-            printf("\n\nInput:\n");
-            displayPacked(srcPtr, srcSize, channel);
-            rppi_hough_lines_u8_pkd3_host(srcPtr, srcSize, dstPtr, max, min);
-            printf("\n\nOutput of hough_lines:\n");
-            displayPacked(dstPtr, srcSize, channel);
-        } 
+        printf("\nThis option isn't available for hough lines!");
     }
     else if (matrix == 3)
     {
-        printf("\nEnter number of channels: ");
-        scanf("%d", &channel);
+        channel = 1;
         printf("Enter height of image in pixels: ");
         scanf("%d", &srcSize.height);
         printf("Enter width of image in pixels: ");
@@ -223,41 +172,18 @@ int main(int argc, char** argv)
         Rpp8u *srcPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
         int *intSrcPtr = (int *)calloc(channel * srcSize.height * srcSize.width, sizeof(int));
-        if (type == 1)
-        {
-            printf("\n\n\n\nEnter elements in array of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);
-            inputPlanar(intSrcPtr, srcSize, channel);
-            cast(intSrcPtr, srcPtr, srcSize, channel);
-            printf("\n\nInput:\n");
-            displayPlanar(srcPtr, srcSize, channel);
-            if (channel == 1)
-            {
-                rppi_hough_lines_u8_pln1_host(srcPtr, srcSize, dstPtr, max, min);
-            }
-            else if (channel == 3)
-            {
-                rppi_hough_lines_u8_pln3_host(srcPtr, srcSize, dstPtr, max, min);
-            }
-            printf("\n\nOutput of hough_lines:\n");
-            displayPlanar(dstPtr, srcSize, channel);
-        }
-        else if (type == 2)
-        {
-            printf("\n\n\n\nEnter elements in array of size %d x %d x %d in packed format: \n", channel, srcSize.height, srcSize.width);
-            inputPacked(intSrcPtr, srcSize, channel);
-            cast(intSrcPtr, srcPtr, srcSize, channel);
-            printf("\n\nInput:\n");
-            displayPacked(srcPtr, srcSize, channel);
-            if (channel == 1)
-            {
-                rppi_hough_lines_u8_pln1_host(srcPtr, srcSize, dstPtr, max, min);
-            }
-            else if (channel == 3)
-            {
-                rppi_hough_lines_u8_pkd3_host(srcPtr, srcSize, dstPtr, max, min);
-            }
-            printf("\n\nOutput of hough_lines:\n");
-            displayPacked(dstPtr, srcSize, channel);
-        }
+        
+        printf("\n\n\n\nEnter elements in array of size %d x %d x %d in planar format: \n", channel, srcSize.height, srcSize.width);
+        inputPlanar(intSrcPtr, srcSize, channel);
+        cast(intSrcPtr, srcPtr, srcSize, channel);
+        printf("\n\nInput:\n");
+        displayPlanar(srcPtr, srcSize, channel);
+
+        rppi_hough_lines_u8_pln1_host(srcPtr, srcSize, dstPtr, lines, rho, theta, threshold, lineLength, lineGap, thetaMax, thetaMin, accumulator, accumulatorSize);
+        
+        printf("\n\nOutput of hough_lines:\n");
+        displayPlanar(dstPtr, srcSize, channel);
     }
+*/
+    return 0;
 }

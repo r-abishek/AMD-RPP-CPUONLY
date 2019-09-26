@@ -532,6 +532,102 @@ RppStatus generate_sobel_kernel_host(Rpp32f* kernel, Rpp32u type)
 }
 */
 
+template <typename T>
+RppStatus generate_bressenham_line_host(T *dstPtr, RppiSize dstSize, Rpp32u *endpoints, Rpp32u *rasterCoordinates)
+{
+    Rpp32u *rasterCoordinatesTemp;
+    rasterCoordinatesTemp = rasterCoordinates;
+
+    Rpp32s x0 = *endpoints;
+    Rpp32s y0 = *(endpoints + 1);
+    Rpp32s x1 = *(endpoints + 2);
+    Rpp32s y1 = *(endpoints + 3);
+
+    Rpp32s dx, dy;
+    Rpp32s stepX, stepY;
+
+    dx = x1 - x0;
+    dy = y1 - y0;
+
+    if (dy < 0)
+    {
+        dy = -dy;
+        stepY = -1;
+    }
+    else
+    {
+        stepY = 1;
+    }
+    
+    if (dx < 0)
+    {
+        dx = -dx;
+        stepX = -1;
+    }
+    else
+    {
+        stepX = 1;
+    }
+
+    dy <<= 1;
+    dx <<= 1;
+
+    if ((0 <= x0) && (x0 < dstSize.width) && (0 <= y0) && (y0 < dstSize.height))
+    {
+        *(dstPtr + (y0 * dstSize.width) + x0) = (T) 255;
+        *rasterCoordinatesTemp = y0;
+        rasterCoordinatesTemp++;
+        *rasterCoordinatesTemp = x0;
+        rasterCoordinatesTemp++;
+    }
+
+    if (dx > dy)
+    {
+        Rpp32s fraction = dy - (dx >> 1);
+        while (x0 != x1)
+        {
+            x0 += stepX;
+            if (fraction >= 0)
+            {
+                y0 += stepY;
+                fraction -= dx;
+            }
+            fraction += dy;
+            if ((0 <= x0) && (x0 < dstSize.width) && (0 <= y0) && (y0 < dstSize.height))
+            {
+                *(dstPtr + (y0 * dstSize.width) + x0) = (T) 255;
+                *rasterCoordinatesTemp = y0;
+                rasterCoordinatesTemp++;
+                *rasterCoordinatesTemp = x0;
+                rasterCoordinatesTemp++;
+            }
+        }
+    }
+    else
+    {
+        int fraction = dx - (dy >> 1);
+        while (y0 != y1)
+        {
+            if (fraction >= 0)
+            {
+                x0 += stepX;
+                fraction -= dy;
+            }
+            y0 += stepY;
+            fraction += dx;
+            if ((0 <= x0) && (x0 < dstSize.width) && (0 <= y0) && (y0 < dstSize.height))
+            {
+                *(dstPtr + (y0 * dstSize.width) + x0) = (T) 255;
+                *rasterCoordinatesTemp = y0;
+                rasterCoordinatesTemp++;
+                *rasterCoordinatesTemp = x0;
+                rasterCoordinatesTemp++;
+            }
+        }
+    }
+    
+    return RPP_SUCCESS;
+}
 
 
 
@@ -1752,36 +1848,6 @@ RppStatus fast_corner_detector_score_function_kernel_host(T* srcPtrWindow, U* ds
     return RPP_SUCCESS;
 }
 
-template<typename T>
-RppStatus hough_lines_mapper_kernel_host(Rpp32u row, Rpp32u column, Rpp32u thetaRad, Rpp32u *r)
-{
-    *r = (column * cos(thetaRad)) + (row * sin(thetaRad));
-
-    return RPP_SUCCESS;
-}
-
-template<typename T>
-RppStatus hough_lines_accumulatorMax_kernel_host(Rpp32u *accumulator, RppiSize accumulatorSize, 
-                                                 Rpp32u *accumulatorMax, Rpp32u *angle, Rpp32u *r)
-{
-    Rpp32u *accumulatorTemp;
-    accumulatorTemp = accumulator;
-
-    for (int i = 0; i < accumulatorSize.height; i++)
-    {
-        for (int j = 0; j < accumulatorSize.width; j++)
-        {
-            if (*accumulatorTemp > *accumulatorMax)
-            {
-                *accumulatorMax = *accumulatorTemp;
-                *angle = j;
-                *r = i;
-            }
-        }
-    }
-
-    return RPP_SUCCESS;
-}
 
 
 
