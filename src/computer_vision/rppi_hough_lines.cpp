@@ -9,7 +9,7 @@
 #include <chrono>
 #include "cpu/rpp_cpu_input_and_display.hpp"
 #include <cpu/rpp_cpu_pixel_arrangement_conversions.hpp>
-#include "cpu/host_hough_lines_trial.hpp"
+#include "cpu/host_hough_lines.hpp"
 #include "opencv2/opencv.hpp"
 using namespace std;
 using namespace cv;
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     RppiSize srcSize;
     RppiSize dstSize;
     unsigned int channel = 1;
-    Rpp32f minLineLength = 100, maxLineGap = 3;
+    Rpp32f minLineLength = 350, maxLineGap = 2;
     
     Rpp32u linesMax = 100;
     printf("\nEnter maximum number of lines you want to detect: ");
