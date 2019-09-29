@@ -5,29 +5,7 @@ RppStatus channel_extract_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                     Rpp32u extractChannelNumber, 
                     RppiChnFormat chnFormat, Rpp32u channel)
 {
-    if (extractChannelNumber != 0 && extractChannelNumber != 1 && extractChannelNumber != 2)
-    {
-        return RPP_ERROR;
-    }
-
-    T *srcPtrTemp, *dstPtrTemp;
-    dstPtrTemp = dstPtr;
-
-    if (chnFormat == RPPI_CHN_PLANAR)
-    {
-        srcPtrTemp = srcPtr + (extractChannelNumber * srcSize.height * srcSize.width);
-        memcpy(dstPtrTemp, srcPtrTemp, srcSize.height * srcSize.width * sizeof(T));
-    }
-    else if (chnFormat == RPPI_CHN_PACKED)
-    {
-        srcPtrTemp = srcPtr + extractChannelNumber;
-        for (int i = 0; i < srcSize.height * srcSize.width; i++)
-        {
-            *dstPtrTemp = *srcPtrTemp;
-            srcPtrTemp = srcPtrTemp + channel;
-            dstPtrTemp++;
-        }
-    }
+    compute_channel_extract_host(srcPtr, srcSize, dstPtr, extractChannelNumber, chnFormat, channel);
 
     return RPP_SUCCESS;
 }

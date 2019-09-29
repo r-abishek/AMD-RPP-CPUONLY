@@ -1848,6 +1848,53 @@ RppStatus fast_corner_detector_score_function_kernel_host(T* srcPtrWindow, U* ds
     return RPP_SUCCESS;
 }
 
+template<typename T, typename U, typename V>
+RppStatus hog_single_channel_gradient_computations_kernel_host(T* srcPtr, RppiSize srcSize, U* gradientX, U* gradientY, U* gradientMagnitude, V* gradientDirection, 
+                                                               Rpp32f* gradientKernel, RppiSize rppiGradientKernelSizeX, RppiSize rppiGradientKernelSizeY)
+{
+    custom_convolve_image_host(srcPtr, srcSize, gradientX, gradientKernel, rppiGradientKernelSizeX, RPPI_CHN_PLANAR, 1);
+    custom_convolve_image_host(srcPtr, srcSize, gradientY, gradientKernel, rppiGradientKernelSizeY, RPPI_CHN_PLANAR, 1);
+    compute_magnitude_host(gradientX, gradientY, srcSize, gradientMagnitude, RPPI_CHN_PLANAR, 1);
+    compute_gradient_direction_host(gradientX, gradientY, srcSize, gradientDirection, RPPI_CHN_PLANAR, 1);
+
+    return RPP_SUCCESS;
+}
+
+template<typename T, typename U, typename V>
+RppStatus hog_three_channel_gradient_computations_kernel_host(T* srcPtr, T* srcPtrSingleChannel, RppiSize srcSize, 
+                                                              U* gradientX0, U* gradientY0, U* gradientX1, U* gradientY1, U* gradientX2, U* gradientY2, 
+                                                              U* gradientX, U* gradientY, 
+                                                              U* gradientMagnitude, V* gradientDirection, 
+                                                              Rpp32f* gradientKernel, RppiSize rppiGradientKernelSizeX, RppiSize rppiGradientKernelSizeY, 
+                                                              RppiChnFormat chnFormat, Rpp32u channel)
+{
+    Rpp32u imageDim = srcSize.height * srcSize.width;
+
+    compute_channel_extract_host(srcPtr, srcSize, srcPtrSingleChannel, 0, chnFormat, channel);
+    custom_convolve_image_host(srcPtrSingleChannel, srcSize, gradientX0, gradientKernel, rppiGradientKernelSizeX, RPPI_CHN_PLANAR, 1);
+    custom_convolve_image_host(srcPtrSingleChannel, srcSize, gradientY0, gradientKernel, rppiGradientKernelSizeY, RPPI_CHN_PLANAR, 1);
+
+    compute_channel_extract_host(srcPtr, srcSize, srcPtrSingleChannel, 1, chnFormat, channel);
+    custom_convolve_image_host(srcPtrSingleChannel, srcSize, gradientX1, gradientKernel, rppiGradientKernelSizeX, RPPI_CHN_PLANAR, 1);
+    custom_convolve_image_host(srcPtrSingleChannel, srcSize, gradientY1, gradientKernel, rppiGradientKernelSizeY, RPPI_CHN_PLANAR, 1);
+
+    compute_channel_extract_host(srcPtr, srcSize, srcPtrSingleChannel, 2, chnFormat, channel);
+    custom_convolve_image_host(srcPtrSingleChannel, srcSize, gradientX2, gradientKernel, rppiGradientKernelSizeX, RPPI_CHN_PLANAR, 1);
+    custom_convolve_image_host(srcPtrSingleChannel, srcSize, gradientY2, gradientKernel, rppiGradientKernelSizeY, RPPI_CHN_PLANAR, 1);
+
+    compute_max_host(gradientX0, gradientX1, srcSize, gradientX, channel);
+    memcpy(gradientX0, gradientX, imageDim * sizeof(Rpp32s));
+    compute_max_host(gradientX0, gradientX2, srcSize, gradientX, channel);
+
+    compute_max_host(gradientY0, gradientY1, srcSize, gradientY, channel);
+    memcpy(gradientY0, gradientY, imageDim * sizeof(Rpp32s));
+    compute_max_host(gradientY0, gradientY2, srcSize, gradientY, channel);
+
+    compute_magnitude_host(gradientX, gradientY, srcSize, gradientMagnitude, RPPI_CHN_PLANAR, 1);
+    compute_gradient_direction_host(gradientX, gradientY, srcSize, gradientDirection, RPPI_CHN_PLANAR, 1);
+    
+    return RPP_SUCCESS;
+}
 
 
 
@@ -1988,6 +2035,36 @@ RppStatus convolve_subimage_host(T* srcPtrMod, RppiSize srcSizeMod, T* dstPtr, R
             dstPtrTemp += widthDiffPacked;
         }
     }
+    
+    return RPP_SUCCESS;
+}
+
+template <typename T, typename U>
+RppStatus custom_convolve_image_host(T* srcPtr, RppiSize srcSize, U* dstPtr,
+                                  Rpp32f *kernel, RppiSize rppiKernelSize, 
+                                  RppiChnFormat chnFormat, Rpp32u channel)
+{
+    if (rppiKernelSize.height % 2 == 0 || rppiKernelSize.width % 2 == 0)
+    {
+        return RPP_ERROR;
+    }
+
+    int boundY = ((rppiKernelSize.height - 1) / 2);
+    int boundX = ((rppiKernelSize.width - 1) / 2);
+
+    RppiSize srcSizeMod1, srcSizeMod2;
+
+    srcSizeMod1.height = srcSize.height + boundY;
+    srcSizeMod1.width = srcSize.width + boundX;
+    T *srcPtrMod1 = (T *)calloc(srcSizeMod1.height * srcSizeMod1.width * channel, sizeof(T));
+    generate_corner_padded_image_host(srcPtr, srcSize, srcPtrMod1, srcSizeMod1, 1, chnFormat, channel);
+
+    srcSizeMod2.height = srcSizeMod1.height + boundY;
+    srcSizeMod2.width = srcSizeMod1.width + boundX;
+    T *srcPtrMod2 = (T *)calloc(srcSizeMod2.height * srcSizeMod2.width * channel, sizeof(T));
+    generate_corner_padded_image_host(srcPtrMod1, srcSizeMod1, srcPtrMod2, srcSizeMod2, 4, chnFormat, channel);
+    
+    convolve_image_host(srcPtrMod2, srcSizeMod2, dstPtr, srcSize, kernel, rppiKernelSize, chnFormat, channel);
     
     return RPP_SUCCESS;
 }
@@ -3002,6 +3079,79 @@ RppStatus compute_downsampled_image_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
             }
             srcPtrTemp += elementsInRow;
         }
+    }
+
+    return RPP_SUCCESS;
+}
+
+template <typename T>
+RppStatus compute_channel_extract_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
+                                       Rpp32u extractChannelNumber, 
+                                       RppiChnFormat chnFormat, Rpp32u channel)
+{
+    if (extractChannelNumber != 0 && extractChannelNumber != 1 && extractChannelNumber != 2)
+    {
+        return RPP_ERROR;
+    }
+
+    T *srcPtrTemp, *dstPtrTemp;
+    dstPtrTemp = dstPtr;
+
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        srcPtrTemp = srcPtr + (extractChannelNumber * srcSize.height * srcSize.width);
+        memcpy(dstPtrTemp, srcPtrTemp, srcSize.height * srcSize.width * sizeof(T));
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        srcPtrTemp = srcPtr + extractChannelNumber;
+        for (int i = 0; i < srcSize.height * srcSize.width; i++)
+        {
+            *dstPtrTemp = *srcPtrTemp;
+            srcPtrTemp = srcPtrTemp + channel;
+            dstPtrTemp++;
+        }
+    }
+
+    return RPP_SUCCESS;
+}
+
+template <typename T, typename U>
+RppStatus compute_gradient_direction_host(T* gradientX, T* gradientY, RppiSize srcSize, U* gradientDirection, 
+                                          RppiChnFormat chnFormat, Rpp32u channel)
+{
+    T *gradientXTemp, *gradientYTemp;
+    U *gradientDirectionTemp;
+    gradientXTemp = gradientX;
+    gradientYTemp = gradientY;
+    gradientDirectionTemp = gradientDirection;
+
+    Rpp32f pixel;
+
+    for (int i = 0; i < (srcSize.height * srcSize.width * channel); i++)
+    {
+        if (*gradientXTemp != 0)
+        {
+            *gradientDirectionTemp = atan((Rpp32f) *gradientYTemp / (Rpp32f) *gradientXTemp);
+        }
+        else if (*gradientXTemp == 0)
+        {
+            if (*gradientYTemp > 0)
+            {
+                *gradientDirectionTemp = ((Rpp32f) PI) / 2.0;
+            }
+            else if (*gradientYTemp < 0)
+            {
+                *gradientDirectionTemp = ((Rpp32f) PI) / 2.0 * -1.0;
+            }
+            else if (*gradientYTemp == 0)
+            {
+                *gradientDirectionTemp = 0.0;
+            }
+        }
+        gradientDirectionTemp++;
+        gradientXTemp++;
+        gradientYTemp++;
     }
 
     return RPP_SUCCESS;

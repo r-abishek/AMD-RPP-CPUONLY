@@ -7,6 +7,36 @@ project(amd_rpp VERSION 0.1)
 
 
 add_executable(
+    rppi_channel_extract
+    src/color_model_conversions/rppi_channel_extract.cpp
+)
+target_include_directories(rppi_channel_extract
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_channel_extract
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_hog
+    src/computer_vision/rppi_hog.cpp
+)
+target_include_directories(rppi_hog
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hog
+    ${OpenCV_LIBS}
+)
+
+add_executable(
     rppi_canny_edge_detector
     src/computer_vision/rppi_canny_edge_detector.cpp
 )

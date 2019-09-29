@@ -242,6 +242,34 @@ RppStatus
 rppi_bressenham_line_u8_pln1_host(RppPtr_t dstPtr, RppiSize dstSize, Rpp32u *endpoints, Rpp32u *rasterCoordinates);
 
 
+// ----------------------------------------
+// Host hog functions declaration
+// ----------------------------------------
+
+RppStatus
+rppi_hog_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t binsTensor, Rpp32u binsTensorLength, RppiSize kernelSize, RppiSize windowSize, Rpp32u windowStride, Rpp32u numOfBins);
+
+RppStatus
+rppi_hog_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t binsTensor, Rpp32u binsTensorLength, RppiSize kernelSize, RppiSize windowSize, Rpp32u windowStride, Rpp32u numOfBins);
+
+RppStatus
+rppi_hog_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t binsTensor, Rpp32u binsTensorLength, RppiSize kernelSize, RppiSize windowSize, Rpp32u windowStride, Rpp32u numOfBins);
+
+
+// ----------------------------------------
+// Host optical_flow_pyramid functions declaration
+// ----------------------------------------
+
+RppStatus
+rppi_optical_flow_pyramid_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, Rpp32u* oldPoints, Rpp32u* newPointsEstimates, Rpp32f* newPoints, Rpp32u numPoints, Rpp32f threshold, Rpp32u numIterations, Rpp32u kernelSize,RppHandle_t rppHandle);
+
+RppStatus
+rppi_optical_flow_pyramid_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, Rpp32u* oldPoints, Rpp32u* newPointsEstimates, Rpp32f* newPoints, Rpp32u numPoints, Rpp32f threshold, Rpp32u numIterations, Rpp32u kernelSize,RppHandle_t rppHandle);
+
+RppStatus
+rppi_optical_flow_pyramid_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, Rpp32u* oldPoints, Rpp32u* newPointsEstimates, Rpp32f* newPoints, Rpp32u numPoints, Rpp32f threshold, Rpp32u numIterations, Rpp32u kernelSize,RppHandle_t rppHandle);
+
+
 
 #ifdef __cplusplus
 }
