@@ -258,6 +258,22 @@ RppStatus
 rppi_tensor_transpose_u8_host(RppPtr_t srcPtr, RppPtr_t dstPtr, 
                               Rpp32u dimension1, Rpp32u dimension2, 
                               Rpp32u tensorDimension, RppPtr_t tensorDimensionValues);
+
+// ----------------------------------------
+// Host warp_perspective functions declaration 
+// ----------------------------------------
+
+RppStatus
+rppi_warp_perspective_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+                              Rpp32f* perspective);
+
+RppStatus
+rppi_warp_perspective_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+                              Rpp32f* perspective);
+
+RppStatus
+rppi_warp_perspective_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
+                              Rpp32f* perspective);
  
 #ifdef __cplusplus
 }

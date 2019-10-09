@@ -19,16 +19,16 @@ using namespace std::chrono;
 
 
 
-RppStatus
-rppi_warp_perspective_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
-                                  Rpp32f* perspective)
-{
-    warp_perspective_output_size_host<Rpp32f>(srcSize, dstSizePtr,
-                                         perspective);
-
-    return RPP_SUCCESS;
-
-}
+//RppStatus
+//rppi_warp_perspective_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
+//                                  Rpp32f* perspective)
+//{
+//    warp_perspective_output_size_host<Rpp32f>(srcSize, dstSizePtr,
+//                                         perspective);
+//
+//    return RPP_SUCCESS;
+//
+//}
 
 RppStatus
 rppi_warp_perspective_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
@@ -75,18 +75,58 @@ int main(int argc, char** argv)
     RppiSize srcSize, dstSize;
     unsigned int channel;
 
-    //Rpp32f perspective[6] = {0.707, -0.707, 0, -0.707, 0.707, 0};
-    Rpp32f perspective[9] = {1.35, 0.3, 0, -0.75, 1.1, 0, 0, 0, 1};
+    
+    //Rpp32f perspective[6] = {1.35, 0.3, 0, -0.75, 1.1, 0};
+    //Rpp32f perspective[6] = {1, -2, 0, 1, 0, 2};
+    
+    //Random
+    //Rpp32f perspective[6] = {0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
+    
+    //No Change
+    //Rpp32f perspective[6] = {1, 0, 0, 0, 1, 0};
+
+    //Translate by 50 in x and 50 in y direction
+    //Rpp32f perspective[6] = {1, 0, 50, 0, 1, 50};
+    
+    //Scale to 0.5x
+    //Rpp32f perspective[6] = {0.5, 0, 0, 0, 0.5, 0};
+    
+    //Rotate by 45 deg clockwise
+    //Rpp32f perspective[9] = {0.707, 0.707, 0, -0.707, 0.707, 0, 0.001, 0.001, 1};
+
+    //Shear 30deg - x direction
+    Rpp32f perspective[9] = {1, 0.5773, 0, 0, 1, 0, 0.00002, 0.0008, 1};
+
+    //Shear 30deg - y direction
+    //Rpp32f perspective[6] = {1, 0, 0, 0.5773, 1, 0};
+    
+    //Both axis flip
+    //Rpp32f perspective[6] = {-1, 0, 0, 0, -1, 0};
+    
+    //Horizontal flip
+    //Rpp32f perspective[9] = {1, 0, 0, 0, -1, 0, 0.0005, 0.001, 1};
+
+    //Vertical flip
+    //Rpp32f perspective[9] = {-1, 0, 0, 0, 1, 0, 0.0005, 0.001, 1};
+    
     //Mat perspectiveMat = Mat(2, 3, CV_32FC1, perspective);
     //_InputArray perspectiveReshaped = _InputArray(perspectiveMat);
 /*    
-    printf("\nEnter the 2x3 perspective transformation matrix:");
-    for (int i = 0; i < 6; i++)
+    printf("\nEnter the 3x3 perspective transformation matrix:");
+    for (int i = 0; i < 9; i++)
     {
         printf("\nElement %d: ", i);
         scanf("%f", &perspective[i]);
     }
 */
+    unsigned int dstWidth = 1280;
+    printf("\nEnter destination Width: ");
+    scanf("%d", &dstWidth);
+
+    unsigned int dstHeight = 720;
+    printf("\nEnter destination Height: ");
+    scanf("%d", &dstHeight);
+
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
     scanf("%d", &input);
@@ -131,7 +171,11 @@ int main(int argc, char** argv)
         printf("\nInput Height - %d, Input Width - %d, Input Channels - %d\n", srcSize.height, srcSize.width, channel);
         Rpp8u *srcPtr = imageIn.data;
         
-        rppi_warp_perspective_output_size_host(srcSize, &dstSize, perspective);
+        //rppi_warp_perspective_output_size_host(srcSize, &dstSize, perspective);
+        //dstSize.height = imageIn.rows;
+        //dstSize.width = imageIn.cols;
+        dstSize.height = dstHeight;
+        dstSize.width = dstWidth;
         printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
         Rpp8u *dstPtr = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
         
@@ -143,7 +187,7 @@ int main(int argc, char** argv)
         //Mat imageOutOpenCV;
         //imageOutOpenCV.rows = dstSize.height;
         //imageOutOpenCV.cols = dstSize.width;
-        //warpperspective(imageIn,imageOutOpenCV,perspectiveReshaped,imageOutOpenCV.size());
+        //warpPerspective(imageIn,imageOutOpenCV,perspectiveReshaped,imageOutOpenCV.size());
 
         if (type == 1)
         {   
@@ -213,6 +257,9 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    printf("\nThis option doesn't exist for warp_perspective!");
+
+/*
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
@@ -318,4 +365,5 @@ int main(int argc, char** argv)
             displayPacked(dstPtr, dstSize, channel);
         }
     }
+*/
 }
