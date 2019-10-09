@@ -1,7 +1,7 @@
 #include <cpu/rpp_cpu_common.hpp>
 
 template <typename T, typename U>
-RppStatus match_template_host(T* srcPtr, RppiSize srcSize, U* dstPtr, RppiSize dstSize, 
+RppStatus match_template_host(T* srcPtr, RppiSize srcSize, U* dstPtr, 
                                   T *templateImage, RppiSize templateImageSize, 
                                   RppiChnFormat chnFormat, Rpp32u channel)
 {
@@ -106,7 +106,8 @@ RppStatus match_template_host(T* srcPtr, RppiSize srcSize, U* dstPtr, RppiSize d
     U *dstPtrTemp;
     dstPtrTemp = dstPtr;
     U peakValue = (U) 65535;
-    for (int i = 0; i < dstSize.height * dstSize.width; i++)
+    //for (int i = 0; i < dstSize.height * dstSize.width; i++)
+    for (int i = 0; i < srcSize.height * srcSize.width; i++)
     {
         *dstPtrTemp = peakValue;
         dstPtrTemp++;
@@ -118,11 +119,13 @@ RppStatus match_template_host(T* srcPtr, RppiSize srcSize, U* dstPtr, RppiSize d
     dstPtrWindow = dstPtr;
     
     Rpp32u rowIter = srcSize.height - templateImageSize.height + 1;
-    rowIter = RPPMIN2(rowIter, dstSize.height);
+    //rowIter = RPPMIN2(rowIter, dstSize.height);
+    rowIter = RPPMIN2(rowIter, srcSize.height);
     Rpp32u colIter = srcSize.width - templateImageSize.width + 1;
-    colIter = RPPMIN2(colIter, dstSize.width);
+    //colIter = RPPMIN2(colIter, dstSize.width);
+    colIter = RPPMIN2(colIter, srcSize.width);
 
-    Rpp32u widthDiff = RPPABS(srcSize.width - dstSize.width);
+    //Rpp32u widthDiff = RPPABS(srcSize.width - dstSize.width);
     Rpp32u remainingElementsInRow = srcSize.width - templateImageSize.width;
     
     for (int i = 0; i < rowIter; i++)
@@ -135,7 +138,8 @@ RppStatus match_template_host(T* srcPtr, RppiSize srcSize, U* dstPtr, RppiSize d
             srcPtrWindow++;
         }
         srcPtrWindow += (templateImageSize.width - 1);
-        dstPtrWindow += (templateImageSize.width - 1 - widthDiff);
+        //dstPtrWindow += (templateImageSize.width - 1 - widthDiff);
+        dstPtrWindow += (templateImageSize.width - 1);
     }
     
     return RPP_SUCCESS;

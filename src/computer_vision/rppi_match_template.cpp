@@ -19,30 +19,30 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_match_template_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+rppi_match_template_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                                  RppPtr_t templateImage, RppiSize templateImageSize)
 {
-    match_template_host<Rpp8u, Rpp16u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp16u*>(dstPtr), dstSize, 
+    match_template_host<Rpp8u, Rpp16u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp16u*>(dstPtr), 
                                    static_cast<Rpp8u*>(templateImage), templateImageSize, 
                                    RPPI_CHN_PLANAR, 1);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_match_template_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+rppi_match_template_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                                  RppPtr_t templateImage, RppiSize templateImageSize)
 {
-    match_template_host<Rpp8u, Rpp16u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp16u*>(dstPtr), dstSize, 
+    match_template_host<Rpp8u, Rpp16u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp16u*>(dstPtr), 
                                    static_cast<Rpp8u*>(templateImage), templateImageSize, 
                                    RPPI_CHN_PLANAR, 3);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_match_template_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+rppi_match_template_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                                  RppPtr_t templateImage, RppiSize templateImageSize)
 {
-    match_template_host<Rpp8u, Rpp16u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp16u*>(dstPtr), dstSize, 
+    match_template_host<Rpp8u, Rpp16u>(static_cast<Rpp8u*>(srcPtr), srcSize, static_cast<Rpp16u*>(dstPtr), 
                                    static_cast<Rpp8u*>(templateImage), templateImageSize, 
                                    RPPI_CHN_PACKED, 3);
     return RPP_SUCCESS;
@@ -57,13 +57,13 @@ int main(int argc, char** argv)
     RppiSize srcSize, dstSize, templateImageSize;
     unsigned int channel;
 
-    int outputWidth;
-    printf("\nEnter dstSize.width: ");
-    scanf("%d", &outputWidth);
+    //int outputWidth;
+    //printf("\nEnter dstSize.width: ");
+    //scanf("%d", &outputWidth);
 
-    int outputHeight;
-    printf("\nEnter dstSize.height: ");
-    scanf("%d", &outputHeight);
+    //int outputHeight;
+    //printf("\nEnter dstSize.height: ");
+    //scanf("%d", &outputHeight);
     
     int input;
     printf("\nEnter input: 1 = image, 2 = pixel values: ");
@@ -107,8 +107,8 @@ int main(int argc, char** argv)
 
         srcSize.height = imageIn.rows;
         srcSize.width = imageIn.cols;
-        dstSize.height = outputHeight;
-        dstSize.width = outputWidth;
+        //dstSize.height = outputHeight;
+        //dstSize.width = outputWidth;
         templateImageSize.height = templateImageIn.rows;
         templateImageSize.width = templateImageIn.cols;
 
@@ -118,8 +118,10 @@ int main(int argc, char** argv)
         printf("\nTemplate Height - %d, Template Width - %d, Template Channels - %d\n", templateImageSize.height, templateImageSize.width, channel);
         Rpp8u *templateImage = templateImageIn.data;
         
-        printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
-        Rpp16u *dstPtr = (Rpp16u *)calloc(dstSize.height * dstSize.width, sizeof(Rpp16u));
+        //printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", dstSize.height, dstSize.width, channel);
+        //Rpp16u *dstPtr = (Rpp16u *)calloc(dstSize.height * dstSize.width, sizeof(Rpp16u));
+        printf("\nOutput Height - %d, Output Width - %d, Output Channels - %d\n", srcSize.height, srcSize.width, channel);
+        Rpp16u *dstPtr = (Rpp16u *)calloc(srcSize.height * srcSize.width, sizeof(Rpp16u));
         
         auto start = high_resolution_clock::now();
         auto stop = high_resolution_clock::now();
@@ -132,26 +134,27 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_match_template_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
+                rppi_match_template_u8_pln1_host(srcPtr, srcSize, dstPtr, templateImage, templateImageSize);
                 stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_16UC1, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_16UC1, dstPtr);
                 
             }
             else if (channel == 3)
             {
                 printf("\nExecuting pln3...\n");
                 Rpp8u *srcPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
-                Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
+                //Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
+                Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
                 rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
 
                 start = high_resolution_clock::now();
-                rppi_match_template_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, dstSize, templateImage, templateImageSize);
+                rppi_match_template_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, templateImage, templateImageSize);
                 stop = high_resolution_clock::now();
 
-                rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+                rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, srcSize, dstPtr);
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_16UC1, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_16UC1, dstPtr);
             }
         }
         else if (type == 2)
@@ -160,19 +163,19 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_match_template_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
+                rppi_match_template_u8_pln1_host(srcPtr, srcSize, dstPtr, templateImage, templateImageSize);
                 stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_16UC1, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_16UC1, dstPtr);
             }
             else if (channel ==3)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_match_template_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
+                rppi_match_template_u8_pkd3_host(srcPtr, srcSize, dstPtr, templateImage, templateImageSize);
                 stop = high_resolution_clock::now();
 
-                imageOut = Mat(dstSize.height, dstSize.width, CV_16UC1, dstPtr);
+                imageOut = Mat(srcSize.height, srcSize.width, CV_16UC1, dstPtr);
             }
         }
 
@@ -195,7 +198,8 @@ int main(int argc, char** argv)
         Rpp16u max = *dstPtr;
         Rpp16u *dstPtrTemp;
         dstPtrTemp = dstPtr;
-        for (int i = 0; i < (dstSize.height * dstSize.width); i++)
+        //for (int i = 0; i < (dstSize.height * dstSize.width); i++)
+        for (int i = 0; i < (srcSize.height * srcSize.width); i++)
         {
             if (*dstPtrTemp < min)
             {
@@ -222,8 +226,8 @@ int main(int argc, char** argv)
         channel = 1;
         srcSize.height = 3;
         srcSize.width = 4;
-        dstSize.height = outputHeight;
-        dstSize.width = outputWidth;
+        dstSize.height = srcSize.height;
+        dstSize.width = srcSize.width;
         templateImageSize.height = 1;
         templateImageSize.width = 3;
         Rpp8u srcPtr[12] = {130, 129, 128, 127, 126, 117, 113, 121, 127, 111, 100, 108};
@@ -231,7 +235,7 @@ int main(int argc, char** argv)
         Rpp8u templateImage[3] = {117, 113, 121};
         printf("\n\nInput:\n");
         displayPlanar(srcPtr, srcSize, channel);
-        rppi_match_template_u8_pln1_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
+        rppi_match_template_u8_pln1_host(srcPtr, srcSize, dstPtr, templateImage, templateImageSize);
         printf("\n\nOutput of match_template:\n");
         displayPlanar(dstPtr, dstSize, 1);
 
@@ -253,8 +257,8 @@ int main(int argc, char** argv)
         channel = 3;
         srcSize.height = 3;
         srcSize.width = 4;
-        dstSize.height = outputHeight;
-        dstSize.width = outputWidth;
+        dstSize.height = srcSize.height;
+        dstSize.width = srcSize.width;
         templateImageSize.height = 1;
         templateImageSize.width = 3;
         Rpp8u templateImage[3] = {117, 113, 121};
@@ -264,7 +268,7 @@ int main(int argc, char** argv)
             Rpp16u dstPtr[12] = {0};
             printf("\n\nInput:\n");
             displayPlanar(srcPtr, srcSize, channel);
-            rppi_match_template_u8_pln3_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
+            rppi_match_template_u8_pln3_host(srcPtr, srcSize, dstPtr, templateImage, templateImageSize);
             printf("\n\nOutput of match_template:\n");
             displayPlanar(dstPtr, dstSize, 1);
 
@@ -287,7 +291,7 @@ int main(int argc, char** argv)
             Rpp16u dstPtr[12] = {0};
             printf("\n\nInput:\n");
             displayPacked(srcPtr, srcSize, channel);
-            rppi_match_template_u8_pkd3_host(srcPtr, srcSize, dstPtr, dstSize, templateImage, templateImageSize);
+            rppi_match_template_u8_pkd3_host(srcPtr, srcSize, dstPtr, templateImage, templateImageSize);
             printf("\n\nOutput of match_template:\n");
             displayPacked(dstPtr,dstSize, 1);
 

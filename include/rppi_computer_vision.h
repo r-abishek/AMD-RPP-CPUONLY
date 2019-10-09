@@ -164,15 +164,15 @@ rppi_tensor_convert_bit_depth_u8s16_host(RppPtr_t srcPtr, RppPtr_t dstPtr,
 // ----------------------------------------
 
 RppStatus
-rppi_match_template_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+rppi_match_template_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                                  RppPtr_t templateImage, RppiSize templateImageSize);
 
 RppStatus
-rppi_match_template_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+rppi_match_template_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                                  RppPtr_t templateImage, RppiSize templateImageSize);
 
 RppStatus
-rppi_match_template_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize, 
+rppi_match_template_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, 
                                  RppPtr_t templateImage, RppiSize templateImageSize);
 
 
