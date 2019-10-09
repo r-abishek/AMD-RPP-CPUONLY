@@ -201,13 +201,16 @@ rppi_fast_corner_detector_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr
 // ----------------------------------------
 
 RppStatus
-rppi_reconstruction_laplacian_image_pyramid_u8_pln1_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr);
+rppi_reconstruction_laplacian_image_pyramid_u8_pln1_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr, 
+                                                        Rpp32f stdDev, Rpp32u kernelSize);
 
 RppStatus
-rppi_reconstruction_laplacian_image_pyramid_u8_pln3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr);
+rppi_reconstruction_laplacian_image_pyramid_u8_pln3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr, 
+                                                        Rpp32f stdDev, Rpp32u kernelSize);
 
 RppStatus
-rppi_reconstruction_laplacian_image_pyramid_u8_pkd3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr);
+rppi_reconstruction_laplacian_image_pyramid_u8_pkd3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr, 
+                                                        Rpp32f stdDev, Rpp32u kernelSize);
 
 
 // ----------------------------------------
@@ -254,20 +257,6 @@ rppi_hog_u8_pln3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t binsTensor, Rp
 
 RppStatus
 rppi_hog_u8_pkd3_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t binsTensor, Rpp32u binsTensorLength, RppiSize kernelSize, RppiSize windowSize, Rpp32u windowStride, Rpp32u numOfBins);
-
-
-// ----------------------------------------
-// Host optical_flow_pyramid functions declaration
-// ----------------------------------------
-
-RppStatus
-rppi_optical_flow_pyramid_u8_pln1_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, Rpp32u* oldPoints, Rpp32u* newPointsEstimates, Rpp32f* newPoints, Rpp32u numPoints, Rpp32f threshold, Rpp32u numIterations, Rpp32u kernelSize,RppHandle_t rppHandle);
-
-RppStatus
-rppi_optical_flow_pyramid_u8_pln3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, Rpp32u* oldPoints, Rpp32u* newPointsEstimates, Rpp32f* newPoints, Rpp32u numPoints, Rpp32f threshold, Rpp32u numIterations, Rpp32u kernelSize,RppHandle_t rppHandle);
-
-RppStatus
-rppi_optical_flow_pyramid_u8_pkd3_host(RppPtr_t srcPtr1, RppPtr_t srcPtr2, RppiSize srcSize, Rpp32u* oldPoints, Rpp32u* newPointsEstimates, Rpp32f* newPoints, Rpp32u numPoints, Rpp32f threshold, Rpp32u numIterations, Rpp32u kernelSize,RppHandle_t rppHandle);
 
 
 

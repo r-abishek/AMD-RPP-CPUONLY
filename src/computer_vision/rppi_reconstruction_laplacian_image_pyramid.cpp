@@ -20,25 +20,31 @@ using namespace std::chrono;
 
 
 RppStatus
-rppi_reconstruction_laplacian_image_pyramid_u8_pln1_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr)
+rppi_reconstruction_laplacian_image_pyramid_u8_pln1_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr, 
+                                                        Rpp32f stdDev, Rpp32u kernelSize)
 {
     reconstruction_laplacian_image_pyramid_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), srcSize1, static_cast<Rpp8u*>(srcPtr2), srcSize2, static_cast<Rpp8u*>(dstPtr), 
+                                                       stdDev, kernelSize, 
                                                        RPPI_CHN_PLANAR, 1);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_reconstruction_laplacian_image_pyramid_u8_pln3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr)
+rppi_reconstruction_laplacian_image_pyramid_u8_pln3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr, 
+                                                        Rpp32f stdDev, Rpp32u kernelSize)
 {
     reconstruction_laplacian_image_pyramid_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), srcSize1, static_cast<Rpp8u*>(srcPtr2), srcSize2, static_cast<Rpp8u*>(dstPtr), 
+                                                       stdDev, kernelSize, 
                                                        RPPI_CHN_PLANAR, 3);
     return RPP_SUCCESS;
 }
 
 RppStatus
-rppi_reconstruction_laplacian_image_pyramid_u8_pkd3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr)
+rppi_reconstruction_laplacian_image_pyramid_u8_pkd3_host(RppPtr_t srcPtr1, RppiSize srcSize1, RppPtr_t srcPtr2, RppiSize srcSize2, RppPtr_t dstPtr, 
+                                                        Rpp32f stdDev, Rpp32u kernelSize)
 {
     reconstruction_laplacian_image_pyramid_host<Rpp8u>(static_cast<Rpp8u*>(srcPtr1), srcSize1, static_cast<Rpp8u*>(srcPtr2), srcSize2, static_cast<Rpp8u*>(dstPtr), 
+                                                       stdDev, kernelSize, 
                                                        RPPI_CHN_PACKED, 3);
     return RPP_SUCCESS;
 }
@@ -51,8 +57,8 @@ int main(int argc, char** argv)
 {
     RppiSize srcSize1, srcSize2, dstSize;
     unsigned int channel;
-    //float stdDev = 20;
-    //unsigned int kernelSize = 3;
+    Rpp32f stdDev = 20;
+    unsigned int kernelSize = 3;
 
     //printf("\nEnter kernelSize: ");
     //scanf("%d", &kernelSize);
@@ -129,7 +135,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1...\n");
                 start = high_resolution_clock::now();
-                rppi_reconstruction_laplacian_image_pyramid_u8_pln1_host(srcPtr1, srcSize1, srcPtr2, srcSize2, dstPtr);
+                rppi_reconstruction_laplacian_image_pyramid_u8_pln1_host(srcPtr1, srcSize1, srcPtr2, srcSize2, dstPtr, stdDev, kernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -145,7 +151,7 @@ int main(int argc, char** argv)
                 rppi_packed_to_planar_u8_pkd3_host(srcPtr2, srcSize2, srcPtr2Temp);
 
                 start = high_resolution_clock::now();
-                rppi_reconstruction_laplacian_image_pyramid_u8_pln3_host(srcPtr1Temp, srcSize1, srcPtr2Temp, srcSize2, dstPtrTemp);
+                rppi_reconstruction_laplacian_image_pyramid_u8_pln3_host(srcPtr1Temp, srcSize1, srcPtr2Temp, srcSize2, dstPtrTemp, stdDev, kernelSize);
                 stop = high_resolution_clock::now();
 
                 rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
@@ -159,7 +165,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pln1 for pkd1...\n");
                 start = high_resolution_clock::now();
-                rppi_reconstruction_laplacian_image_pyramid_u8_pln1_host(srcPtr1, srcSize1, srcPtr2, srcSize2, dstPtr);
+                rppi_reconstruction_laplacian_image_pyramid_u8_pln1_host(srcPtr1, srcSize1, srcPtr2, srcSize2, dstPtr, stdDev, kernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
@@ -168,7 +174,7 @@ int main(int argc, char** argv)
             {
                 printf("\nExecuting pkd3...\n");
                 start = high_resolution_clock::now();
-                rppi_reconstruction_laplacian_image_pyramid_u8_pkd3_host(srcPtr1, srcSize1, srcPtr2, srcSize2, dstPtr);
+                rppi_reconstruction_laplacian_image_pyramid_u8_pkd3_host(srcPtr1, srcSize1, srcPtr2, srcSize2, dstPtr, stdDev, kernelSize);
                 stop = high_resolution_clock::now();
 
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
