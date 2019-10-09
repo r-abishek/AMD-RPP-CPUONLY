@@ -19,16 +19,16 @@ using namespace std::chrono;
 
 
 
-RppStatus
-rppi_warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
-                                  Rpp32f* affine)
-{
-    warp_affine_output_size_host<Rpp32f>(srcSize, dstSizePtr,
-                                         affine);
-
-    return RPP_SUCCESS;
-
-}
+//RppStatus
+//rppi_warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
+//                                  Rpp32f* affine)
+//{
+//    warp_affine_output_size_host<Rpp32f>(srcSize, dstSizePtr,
+//                                         affine);
+//
+//    return RPP_SUCCESS;
+//
+//}
 
 RppStatus
 rppi_warp_affine_u8_pln1_host(RppPtr_t srcPtr, RppiSize srcSize, RppPtr_t dstPtr, RppiSize dstSize,
@@ -75,13 +75,40 @@ int main(int argc, char** argv)
     RppiSize srcSize, dstSize;
     unsigned int channel;
 
-    //Rpp32f affine[6] = {0.707, 0.707, 0, -0.707, 0.707, 0};
+    
     //Rpp32f affine[6] = {1.35, 0.3, 0, -0.75, 1.1, 0};
     //Rpp32f affine[6] = {1, -2, 0, 1, 0, 2};
+    
+    //Random
     //Rpp32f affine[6] = {0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
-    //Rpp32f affine[6] = {1, 0.5773, 0, 0, 1, 0};
-    //Rpp32f affine[6] = {1, 0, 100, 0, 1, 0};
-    Rpp32f affine[6] = {-1, 0, 0, 0, -1, 0};
+    
+    //No Change
+    //Rpp32f affine[6] = {1, 0, 0, 0, 1, 0};
+
+    //Translate by 50 in x and 50 in y direction
+    //Rpp32f affine[6] = {1, 0, 50, 0, 1, 50};
+    
+    //Scale to 0.5x
+    //Rpp32f affine[6] = {0.5, 0, 0, 0, 0.5, 0};
+    
+    //Rotate by 45 deg clockwise
+    //Rpp32f affine[6] = {0.707, 0.707, 0, -0.707, 0.707, 0};
+
+    //Shear 30deg - x direction
+    Rpp32f affine[6] = {1, 0.5773, 0, 0, 1, 0};
+
+    //Shear 30deg - y direction
+    //Rpp32f affine[6] = {1, 0, 0, 0.5773, 1, 0};
+    
+    //Both axis flip
+    //Rpp32f affine[6] = {-1, 0, 0, 0, -1, 0};
+    
+    //Horizontal flip
+    //Rpp32f affine[6] = {1, 0, 0, 0, -1, 0};
+
+    //Vertical flip
+    //Rpp32f affine[6] = {-1, 0, 0, 0, 1, 0};
+    
     //Mat affineMat = Mat(2, 3, CV_32FC1, affine);
     //_InputArray affineReshaped = _InputArray(affineMat);
 /*    
@@ -92,11 +119,11 @@ int main(int argc, char** argv)
         scanf("%f", &affine[i]);
     }
 */
-    unsigned int dstWidth;
+    unsigned int dstWidth = 1280;
     printf("\nEnter destination Width: ");
     scanf("%d", &dstWidth);
 
-    unsigned int dstHeight;
+    unsigned int dstHeight = 720;
     printf("\nEnter destination Height: ");
     scanf("%d", &dstHeight);
 
@@ -230,6 +257,9 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    printf("\nThis option doesn't exist for warp_affine!");
+
+/*
     int matrix;
     printf("\nEnter matrix input style: 1 = default 1 channel (1x3x4), 2 = default 3 channel (3x3x4), 3 = customized: ");
     scanf("%d", &matrix);
@@ -335,4 +365,5 @@ int main(int argc, char** argv)
             displayPacked(dstPtr, dstSize, channel);
         }
     }
+*/
 }

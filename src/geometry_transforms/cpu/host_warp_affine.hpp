@@ -8,6 +8,138 @@ RppStatus warp_affine_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstS
     T *srcPtrTemp, *dstPtrTemp, *srcPtrTopRow, *srcPtrBottomRow;
     srcPtrTemp = srcPtr;
     dstPtrTemp = dstPtr;
+    Rpp32f srcLocationRow, srcLocationColumn, pixel;
+
+    if (chnFormat == RPPI_CHN_PLANAR)
+    {
+        for (int c = 0; c < channel; c++)
+        {
+            for (int i = 0; i < dstSize.height; i++)
+            {
+                Rpp32s iNew = i - (srcSize.height / 2);
+                for (int j = 0; j < dstSize.width; j++)
+                {
+                    Rpp32s jNew = j - (srcSize.width / 2);
+                    
+                    srcLocationColumn = (jNew * affine[0]) + (iNew * affine[1]) + affine[2];
+                    srcLocationRow = (jNew * affine[3]) + (iNew * affine[4]) + affine[5];
+
+                    srcLocationColumn += (srcSize.width / 2);
+                    srcLocationRow += (srcSize.height / 2);
+
+                    //printf("\nsrcLocationColumn = %f, srcLocationRow = %f", srcLocationColumn, srcLocationRow);
+
+                    if (srcLocationRow < 0 || srcLocationColumn < 0 || srcLocationRow > (srcSize.height - 2) || srcLocationColumn > (srcSize.width - 2))
+                    {
+                        *dstPtrTemp = 0;
+                        dstPtrTemp++;
+                    }
+                    else
+                    {
+                        //printf("\nsrcLocationColumn = %f, srcLocationRow = %f", srcLocationColumn, srcLocationRow);
+                        
+                        Rpp32s srcLocationRowFloor = (Rpp32s) RPPFLOOR(srcLocationRow);
+                        Rpp32s srcLocationColumnFloor = (Rpp32s) RPPFLOOR(srcLocationColumn);
+                        //printf("\nsrcLocationColumnFloor = %d, srcLocationRowFloor = %d", srcLocationColumnFloor, srcLocationRowFloor);
+                        
+                        Rpp32f weightedHeight = srcLocationRow - srcLocationRowFloor;
+                        Rpp32f weightedWidth = srcLocationColumn - srcLocationColumnFloor;
+                        //printf("\nweightedHeight = %f, weightedWidth = %f", weightedHeight, weightedWidth);
+                        
+                        srcPtrTopRow = srcPtrTemp + srcLocationRowFloor * srcSize.width;
+                        srcPtrBottomRow  = srcPtrTopRow + srcSize.width;
+
+                        Rpp32s srcLocColFloorChanneled = channel * srcLocationColumnFloor;
+
+                        pixel = ((*(srcPtrTopRow + srcLocationColumnFloor)) * (1 - weightedHeight) * (1 - weightedWidth)) 
+                            + ((*(srcPtrTopRow + srcLocationColumnFloor + 1)) * (1 - weightedHeight) * (weightedWidth)) 
+                            + ((*(srcPtrBottomRow + srcLocationColumnFloor)) * (weightedHeight) * (1 - weightedWidth)) 
+                            + ((*(srcPtrBottomRow + srcLocationColumnFloor + 1)) * (weightedHeight) * (weightedWidth));
+
+                        *dstPtrTemp = (T) round(pixel);
+                        dstPtrTemp ++;
+                    }
+
+                }
+            }
+            srcPtrTemp += srcSize.height * srcSize.width;
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        Rpp32s elementsInRow = srcSize.width * channel;
+        for (int i = 0; i < dstSize.height; i++)
+        {
+            Rpp32s iNew = i - (srcSize.height / 2);
+            for (int j = 0; j < dstSize.width; j++)
+            {
+                Rpp32s jNew = j - (srcSize.width / 2);
+
+                srcLocationColumn = (jNew * affine[0]) + (iNew * affine[1]) + affine[2];
+                srcLocationRow = (jNew * affine[3]) + (iNew * affine[4]) + affine[5];
+
+                srcLocationColumn += (srcSize.width / 2);
+                srcLocationRow += (srcSize.height / 2);
+
+                //printf("\nsrcLocationColumn = %f, srcLocationRow = %f", srcLocationColumn, srcLocationRow);
+
+                if (srcLocationRow < 0 || srcLocationColumn < 0 || srcLocationRow > (srcSize.height - 2) || srcLocationColumn > (srcSize.width - 2))
+                {
+                    for (int c = 0; c < channel; c++)
+                    {
+                        *dstPtrTemp = 0;
+                        dstPtrTemp++;
+                    }
+                }
+                else
+                {
+                    //printf("\nsrcLocationColumn = %f, srcLocationRow = %f", srcLocationColumn, srcLocationRow);
+                    
+                    Rpp32s srcLocationRowFloor = (Rpp32s) RPPFLOOR(srcLocationRow);
+                    Rpp32s srcLocationColumnFloor = (Rpp32s) RPPFLOOR(srcLocationColumn);
+                    //printf("\nsrcLocationColumnFloor = %d, srcLocationRowFloor = %d", srcLocationColumnFloor, srcLocationRowFloor);
+                    
+                    Rpp32f weightedHeight = srcLocationRow - srcLocationRowFloor;
+                    Rpp32f weightedWidth = srcLocationColumn - srcLocationColumnFloor;
+                    //printf("\nweightedHeight = %f, weightedWidth = %f", weightedHeight, weightedWidth);
+                    
+                    srcPtrTopRow = srcPtrTemp + srcLocationRowFloor * elementsInRow;
+                    srcPtrBottomRow  = srcPtrTopRow + elementsInRow;
+
+                    Rpp32s srcLocColFloorChanneled = channel * srcLocationColumnFloor;
+
+                    for (int c = 0; c < channel; c++)
+                    {
+                        pixel = ((*(srcPtrTopRow + c + srcLocColFloorChanneled)) * (1 - weightedHeight) * (1 - weightedWidth)) 
+                            + ((*(srcPtrTopRow + c + srcLocColFloorChanneled + channel)) * (1 - weightedHeight) * (weightedWidth)) 
+                            + ((*(srcPtrBottomRow + c + srcLocColFloorChanneled)) * (weightedHeight) * (1 - weightedWidth)) 
+                            + ((*(srcPtrBottomRow + c + srcLocColFloorChanneled + channel)) * (weightedHeight) * (weightedWidth));
+
+                        *dstPtrTemp = (T) round(pixel);
+                        dstPtrTemp ++;
+                    }
+                }
+            }
+        }
+    }
+
+    return RPP_SUCCESS;
+}
+
+
+
+
+
+
+
+
+
+// Previous Working Version
+/*
+{
+    T *srcPtrTemp, *dstPtrTemp, *srcPtrTopRow, *srcPtrBottomRow;
+    srcPtrTemp = srcPtr;
+    dstPtrTemp = dstPtr;
 
     Rpp32f divisor = (affine[1] * affine[3]) - (affine[0] * affine[4]);
     Rpp32f srcLocationRow, srcLocationColumn, srcLocationRowTerm1, srcLocationColumnTerm1, pixel;
@@ -117,6 +249,7 @@ RppStatus warp_affine_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstS
 
     return RPP_SUCCESS;
 }
+*/
 
 
 
@@ -158,6 +291,9 @@ RppStatus warp_affine_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstS
 
 
 
+
+// Old Version
+/*
 template <typename T>
 RppStatus warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
                                        Rpp32f* affine)
@@ -193,7 +329,7 @@ RppStatus warp_affine_output_size_host(RppiSize srcSize, RppiSize *dstSizePtr,
 
     return RPP_SUCCESS;
 }
-/*
+
 template <typename T, typename U>
 RppStatus warp_affine_host(T* srcPtr, RppiSize srcSize, T* dstPtr, RppiSize dstSize,
                            Rpp32f* affine,
