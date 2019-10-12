@@ -6,6 +6,12 @@ RppStatus canny_edge_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                    RppiChnFormat chnFormat, Rpp32u channel)
 {
     // RGB to Greyscale Conversion
+    
+    Rpp32u imageDim = srcSize.height * srcSize.width;
+    T *srcPtrGreyscale = (T *)calloc(imageDim, sizeof(T));
+    compute_rgb_to_greyscale_host(srcPtr, srcSize, srcPtrGreyscale, chnFormat, channel);
+/*
+    // RGB to Greyscale Conversion
 
     Rpp32u imageDim = srcSize.height * srcSize.width;
 
@@ -52,7 +58,7 @@ RppStatus canny_edge_detector_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
     {
         memcpy(srcPtrGreyscale, srcPtr, imageDim * sizeof(T));
     }
-
+*/
     Rpp32u newChannel = 1;
 
     

@@ -6,18 +6,79 @@ project(amd_rpp VERSION 0.1)
 
 
 
+
 add_executable(
-    rppi_channel_extract
-    src/color_model_conversions/rppi_channel_extract.cpp
+    rppi_canny_edge_detector
+    src/computer_vision/rppi_canny_edge_detector.cpp
 )
-target_include_directories(rppi_channel_extract
+target_include_directories(rppi_canny_edge_detector
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_channel_extract
+    rppi_canny_edge_detector
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_corner_pad_image
+    src/geometry_transforms/rppi_corner_pad_image.cpp
+)
+target_include_directories(rppi_corner_pad_image
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_corner_pad_image
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_optical_flow_pyramid
+    src/computer_vision/rppi_optical_flow_pyramid.cpp
+)
+target_include_directories(rppi_optical_flow_pyramid
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_optical_flow_pyramid
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_warp_affine
+    src/geometry_transforms/rppi_warp_affine.cpp
+)
+target_include_directories(rppi_warp_affine
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_warp_affine
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_warp_perspective
+    src/geometry_transforms/rppi_warp_perspective.cpp
+)
+target_include_directories(rppi_warp_perspective
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_warp_perspective
     ${OpenCV_LIBS}
 )
 
@@ -37,49 +98,36 @@ target_link_libraries(
 )
 
 add_executable(
-    rppi_canny_edge_detector
-    src/computer_vision/rppi_canny_edge_detector.cpp
+    rppi_match_template
+    src/computer_vision/rppi_match_template.cpp
 )
-target_include_directories(rppi_canny_edge_detector
+target_include_directories(rppi_match_template
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_canny_edge_detector
+    rppi_match_template
     ${OpenCV_LIBS}
 )
 
 add_executable(
-    rppi_hough_lines
-    src/computer_vision/rppi_hough_lines.cpp
+    rppi_reconstruction_laplacian_image_pyramid
+    src/computer_vision/rppi_reconstruction_laplacian_image_pyramid.cpp
 )
-target_include_directories(rppi_hough_lines
+target_include_directories(rppi_reconstruction_laplacian_image_pyramid
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_hough_lines
+    rppi_reconstruction_laplacian_image_pyramid
     ${OpenCV_LIBS}
 )
 
-add_executable(
-    rppi_bressenham_line
-    src/computer_vision/rppi_bressenham_line.cpp
-)
-target_include_directories(rppi_bressenham_line
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_bressenham_line
-    ${OpenCV_LIBS}
-)
+
 
 
 
@@ -1574,6 +1622,36 @@ target_include_directories(rppi_hough_lines
 )
 target_link_libraries(
     rppi_hough_lines
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_hog
+    src/computer_vision/rppi_hog.cpp
+)
+target_include_directories(rppi_hog
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_hog
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_optical_flow_pyramid
+    src/computer_vision/rppi_optical_flow_pyramid.cpp
+)
+target_include_directories(rppi_optical_flow_pyramid
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_optical_flow_pyramid
     ${OpenCV_LIBS}
 )
 ]]
