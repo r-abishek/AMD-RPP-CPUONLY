@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <algorithm>
+#include <cstring>
 
 #include <rppdefs.h>
 

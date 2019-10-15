@@ -120,6 +120,8 @@ int main(int argc, char** argv)
 
         Mat imageOut;
 
+// Running once
+/*
         if (type == 1)
         {   
             if (channel == 1)
@@ -169,6 +171,76 @@ int main(int argc, char** argv)
                 imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
             }
         }
+*/
+
+// Running n times
+///*
+        int n = 0;
+        printf("\nEnter number of times to run - ");
+        scanf("%d", &n);
+
+        if (type == 1)
+        {   
+            if (channel == 1)
+            {
+                printf("\nExecuting pln1...\n");
+                start = high_resolution_clock::now();
+                for (int i = 0; i < n; i++)
+                {
+                    rppi_brightness_u8_pln1_host(srcPtr, srcSize, dstPtr, alpha, beta);
+                }
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+                
+            }
+            else if (channel == 3)
+            {
+                printf("\nExecuting pln3...\n");
+                Rpp8u *srcPtrTemp = (Rpp8u *)calloc(channel * srcSize.height * srcSize.width, sizeof(Rpp8u));
+                Rpp8u *dstPtrTemp = (Rpp8u *)calloc(channel * dstSize.height * dstSize.width, sizeof(Rpp8u));
+                rppi_packed_to_planar_u8_pkd3_host(srcPtr, srcSize, srcPtrTemp);
+
+                start = high_resolution_clock::now();
+                for (int i = 0; i < n; i++)
+                {
+                    rppi_brightness_u8_pln3_host(srcPtrTemp, srcSize, dstPtrTemp, alpha, beta);
+                }
+                stop = high_resolution_clock::now();
+
+                rppi_planar_to_packed_u8_pln3_host(dstPtrTemp, dstSize, dstPtr);
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+            }
+        }
+        else if (type == 2)
+        {   
+            if (channel == 1)
+            {
+                printf("\nExecuting pln1 for pkd1...\n");
+                start = high_resolution_clock::now();
+                for (int i = 0; i < n; i++)
+                {
+                    rppi_brightness_u8_pln1_host(srcPtr, srcSize, dstPtr, alpha, beta);
+                }
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC1, dstPtr);
+            }
+            else if (channel ==3)
+            {
+                printf("\nExecuting pkd3...\n");
+                start = high_resolution_clock::now();
+                for (int i = 0; i < n; i++)
+                {
+                    rppi_brightness_u8_pkd3_host(srcPtr, srcSize, dstPtr, alpha, beta);
+                }
+                stop = high_resolution_clock::now();
+
+                imageOut = Mat(dstSize.height, dstSize.width, CV_8UC3, dstPtr);
+            }
+        }
+//*/
 
         auto duration = duration_cast<milliseconds>(stop - start);
         cout << "\nTime taken (milliseconds) = " << duration.count() << endl;

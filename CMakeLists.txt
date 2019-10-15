@@ -4,129 +4,41 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 FIND_PACKAGE(OpenCV REQUIRED)
 project(amd_rpp VERSION 0.1)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+
+
 
 
 
 add_executable(
-    rppi_canny_edge_detector
-    src/computer_vision/rppi_canny_edge_detector.cpp
+    rppi_brightness
+    src/image_augmentations/rppi_brightness.cpp
 )
-target_include_directories(rppi_canny_edge_detector
+target_include_directories(rppi_brightness
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_canny_edge_detector
+    rppi_brightness
     ${OpenCV_LIBS}
 )
 
 add_executable(
-    rppi_corner_pad_image
-    src/geometry_transforms/rppi_corner_pad_image.cpp
+    rppi_gamma_correction
+    src/image_augmentations/rppi_gamma_correction.cpp
 )
-target_include_directories(rppi_corner_pad_image
+target_include_directories(rppi_gamma_correction
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${OPENCV_INCLUDE_DIRS}
 )
 target_link_libraries(
-    rppi_corner_pad_image
+    rppi_gamma_correction
     ${OpenCV_LIBS}
 )
-
-add_executable(
-    rppi_optical_flow_pyramid
-    src/computer_vision/rppi_optical_flow_pyramid.cpp
-)
-target_include_directories(rppi_optical_flow_pyramid
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_optical_flow_pyramid
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_warp_affine
-    src/geometry_transforms/rppi_warp_affine.cpp
-)
-target_include_directories(rppi_warp_affine
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_warp_affine
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_warp_perspective
-    src/geometry_transforms/rppi_warp_perspective.cpp
-)
-target_include_directories(rppi_warp_perspective
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_warp_perspective
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_hog
-    src/computer_vision/rppi_hog.cpp
-)
-target_include_directories(rppi_hog
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_hog
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_match_template
-    src/computer_vision/rppi_match_template.cpp
-)
-target_include_directories(rppi_match_template
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_match_template
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_reconstruction_laplacian_image_pyramid
-    src/computer_vision/rppi_reconstruction_laplacian_image_pyramid.cpp
-)
-target_include_directories(rppi_reconstruction_laplacian_image_pyramid
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_reconstruction_laplacian_image_pyramid
-    ${OpenCV_LIBS}
-)
-
 
 
 
