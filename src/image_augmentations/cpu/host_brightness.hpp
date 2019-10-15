@@ -1,6 +1,6 @@
 #include <cpu/rpp_cpu_common.hpp>
 
-// With OMP - Running without indexing (using pointers) - #pragma omp parallel, #pragma omp single, #pragma omp task firstprivate
+// With OMP - Running without indexing (with pointers) - #pragma omp parallel for simd firstprivate
 /*
 #include <omp.h>
 template <typename T>
@@ -8,54 +8,25 @@ RppStatus brightness_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                    Rpp32f alpha, Rpp32f beta,
                                    RppiChnFormat chnFormat, Rpp32u channel)
 {
-    #pragma omp parallel
+    T *srcPtrTemp, *dstPtrTemp;
+    srcPtrTemp = srcPtr;
+    dstPtrTemp = dstPtr;
+
+    Rpp32f pixel;
+
+    #pragma omp parallel for simd firstprivate(pixel)
+    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
-        #pragma omp single
-        {
-            T *srcPtrTemp, *dstPtrTemp;
-            srcPtrTemp = srcPtr;
-            dstPtrTemp = dstPtr;
-
-            Rpp32f pixel;
-
-            for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
-            {
-                #pragma omp task firstprivate(srcPtrTemp, dstPtrTemp, pixel)
-                {
-                    pixel = ((Rpp32f) (*srcPtrTemp)) * alpha + beta;
-                    pixel = RPPPIXELCHECK(pixel);
-                    *dstPtrTemp = (T) round(pixel);
-                }
-                srcPtrTemp++;
-                dstPtrTemp++;
-            }
-        }
+        pixel = ((Rpp32f) (*srcPtrTemp)) * alpha + beta;
+        // pixel = ((Rpp32f) (srcPtr[i])) * alpha + beta;
+        pixel = RPPPIXELCHECK(pixel);
+        *dstPtrTemp = (T) round(pixel);
+        //dstPtr[i] = (T) round(pixel);
+        *dstPtrTemp++;
+        *srcPtrTemp++;
     }
-    
+
     return RPP_SUCCESS;
-    
-    
-    
-    
-    
-    //T *srcPtrTemp, *dstPtrTemp;
-    //srcPtrTemp = srcPtr;
-    //dstPtrTemp = dstPtr;
-    //Rpp32f pixel;
-    //#pragma omp parallel
-    //#pragma omp single
-    //for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
-    //{
-    //    #pragma omp task firstprivate(srcPtrTemp, dstPtrTemp, pixel)
-    //    {
-    //        pixel = ((Rpp32f) (*srcPtrTemp)) * alpha + beta;
-    //        pixel = RPPPIXELCHECK(pixel);
-    //        *dstPtrTemp = (T) round(pixel);
-    //    }
-    //    srcPtrTemp++;
-    //    dstPtrTemp++;
-    //}
-    //return RPP_SUCCESS;
 
 }
 */
@@ -70,7 +41,8 @@ RppStatus brightness_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
 
 
 
-// With OMP - Running by indexing (single increment) - #pragma omp parallel for simd firstprivate with simd static scheduling
+
+// With OMP - Running without indexing (with pointers) - #pragma omp parallel for firstprivate
 ///*
 #include <omp.h>
 template <typename T>
@@ -78,35 +50,22 @@ RppStatus brightness_host(T* srcPtr, RppiSize srcSize, T* dstPtr,
                                    Rpp32f alpha, Rpp32f beta,
                                    RppiChnFormat chnFormat, Rpp32u channel)
 {
-    //T *srcPtrTemp, *dstPtrTemp;
-    //srcPtrTemp = srcPtr;
-    //dstPtrTemp = dstPtr;
+    T *srcPtrTemp, *dstPtrTemp;
+    srcPtrTemp = srcPtr;
+    dstPtrTemp = dstPtr;
 
     Rpp32f pixel;
 
-    //#pragma omp parallel
-    //{
-    //    printf("\nNumber of processors = %d", omp_get_max_threads());
-    //    printf("\nNumber of threads given = %d", omp_get_num_threads());
-    //    #pragma omp for simd firstprivate(pixel)
-    //    for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
-    //    {
-    //        // pixel = ((Rpp32f) (*srcPtrTemp)) * alpha + beta;
-    //        pixel = ((Rpp32f) (srcPtr[i])) * alpha + beta;
-    //        pixel = RPPPIXELCHECK(pixel);
-    //        // *dstPtrTemp = (T) round(pixel);
-    //        dstPtr[i] = (T) round(pixel);
-    //    }
-    //}
-
-    #pragma omp parallel for simd schedule(simd: static, 20) firstprivate(pixel)
+    #pragma omp parallel for firstprivate(pixel)
     for (int i = 0; i < (channel * srcSize.height * srcSize.width); i++)
     {
-        // pixel = ((Rpp32f) (*srcPtrTemp)) * alpha + beta;
-        pixel = ((Rpp32f) (srcPtr[i])) * alpha + beta;
+        pixel = ((Rpp32f) (*srcPtrTemp)) * alpha + beta;
+        // pixel = ((Rpp32f) (srcPtr[i])) * alpha + beta;
         pixel = RPPPIXELCHECK(pixel);
-        // *dstPtrTemp = (T) round(pixel);
-        dstPtr[i] = (T) round(pixel);
+        *dstPtrTemp = (T) round(pixel);
+        //dstPtr[i] = (T) round(pixel);
+        *dstPtrTemp++;
+        *srcPtrTemp++;
     }
 
     return RPP_SUCCESS;
