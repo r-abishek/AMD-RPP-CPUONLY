@@ -7,8 +7,8 @@ project(amd_rpp VERSION 0.1)
 #set(CMAKE_C_COMPILER gcc-9 CACHE STRING "C compiler" FORCE)
 #set(CMAKE_CXX_COMPILER g++-9 CACHE STRING "C++ compiler" FORCE)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp -O3")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -O3")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp -Ofast")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -Ofast")
 
 
 
@@ -41,21 +41,6 @@ target_include_directories(rppi_gamma_correction
 )
 target_link_libraries(
     rppi_gamma_correction
-    ${OpenCV_LIBS}
-)
-
-add_executable(
-    rppi_max
-    src/statistical_operations/rppi_max.cpp
-)
-target_include_directories(rppi_max
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        ${OPENCV_INCLUDE_DIRS}
-)
-target_link_libraries(
-    rppi_max
     ${OpenCV_LIBS}
 )
 
