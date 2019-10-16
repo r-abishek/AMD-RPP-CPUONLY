@@ -44,6 +44,141 @@ target_link_libraries(
     ${OpenCV_LIBS}
 )
 
+add_executable(
+    rppi_absolute_difference
+    src/arithmetic_operations/rppi_absolute_difference.cpp
+)
+target_include_directories(rppi_absolute_difference
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_absolute_difference
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_accumulate_weighted
+    src/arithmetic_operations/rppi_accumulate_weighted.cpp
+)
+target_include_directories(rppi_accumulate_weighted
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_accumulate_weighted
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_accumulate
+    src/arithmetic_operations/rppi_accumulate.cpp
+)
+target_include_directories(rppi_accumulate
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_accumulate
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_accumulate_squared
+    src/arithmetic_operations/rppi_accumulate_squared.cpp
+)
+target_include_directories(rppi_accumulate_squared
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_accumulate_squared
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_add
+    src/arithmetic_operations/rppi_add.cpp
+)
+target_include_directories(rppi_add
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_add
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_subtract
+    src/arithmetic_operations/rppi_subtract.cpp
+)
+target_include_directories(rppi_subtract
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_subtract
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_magnitude
+    src/arithmetic_operations/rppi_magnitude.cpp
+)
+target_include_directories(rppi_magnitude
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_magnitude
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_multiply
+    src/arithmetic_operations/rppi_multiply.cpp
+)
+target_include_directories(rppi_multiply
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_multiply
+    ${OpenCV_LIBS}
+)
+
+add_executable(
+    rppi_phase
+    src/arithmetic_operations/rppi_phase.cpp
+)
+target_include_directories(rppi_phase
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${OPENCV_INCLUDE_DIRS}
+)
+target_link_libraries(
+    rppi_phase
+    ${OpenCV_LIBS}
+)
+
 
 
 
