@@ -4,6 +4,7 @@
 #include <math.h>
 #include <algorithm>
 #include <cstring>
+#include <omp.h>
 
 #include <rppdefs.h>
 
