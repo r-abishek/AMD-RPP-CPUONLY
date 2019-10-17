@@ -156,10 +156,14 @@ int main(int argc, char** argv)
         }
 
         RppiROI roi;
-        roi.x = 0;
-        roi.y = 0;
-        roi.roiHeight = srcSize.height;
-        roi.roiWidth = srcSize.width;
+        //roi.x = 0;
+        //roi.y = 0;
+        //roi.roiHeight = srcSize.height;
+        //roi.roiWidth = srcSize.width;
+        roi.x = 640;
+        roi.y = 360;
+        roi.roiHeight = 300;
+        roi.roiWidth = 360;
         RppiROI *roiBatch = (RppiROI *)calloc(nbatchSize, sizeof(RppiROI));
         for (int i = 0; i < nbatchSize; i++)
         {
