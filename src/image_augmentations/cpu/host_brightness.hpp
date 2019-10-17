@@ -1,7 +1,128 @@
 #include <cpu/rpp_cpu_common.hpp>
 
-// With OMP - With Batch - Uses Pointers
+// With OMP - With Batch - Uses Pointers - Intuitive Variables
 ///*
+template <typename T>
+RppStatus brightness_host(T* srcPtr, RppiSize *batch_srcSize, T* dstPtr, 
+                          Rpp32f *batch_alpha, Rpp32f *batch_beta, RppiROI *roiPoints, Rpp32u nbatchSize,
+                          RppiChnFormat chnFormat, Rpp32u channel)
+{
+    Rpp32f pixel;
+    Rpp32u x1,y1,x2,y2;
+    Rpp32f alpha, beta;
+    if(chnFormat == RPPI_CHN_PLANAR)
+    {
+        #pragma omp parallel for simd firstprivate(x1, y1, x2, y2, alpha, beta, pixel)
+        for(int batchCount = 0; batchCount < nbatchSize; batchCount ++)
+        {
+            x1 = roiPoints[batchCount].x;
+            y1 = roiPoints[batchCount].y;
+            x2 = x1 + roiPoints[batchCount].roiWidth;
+            y2 = y1 + roiPoints[batchCount].roiHeight;
+            if (x2 == 0) x2 = batch_srcSize[batchCount].width;
+            if (y2 == 0) y2 = batch_srcSize[batchCount].height;
+            alpha = batch_alpha[batchCount];
+            beta = batch_beta[batchCount];
+            
+            T *srcPtrTemp, *dstPtrTemp;
+            Rpp32u loc = 0;
+            compute_image_location_host(batch_srcSize, batchCount, &loc, channel);
+            srcPtrTemp = srcPtr + loc;
+            dstPtrTemp = dstPtr + loc;
+
+            for(int c = 0; c < channel; c++)
+            {
+                for(int i = 0; i < batch_srcSize[batchCount].height; i++)
+                {
+                    for(int j = 0; j < batch_srcSize[batchCount].width; j++)
+                    {
+                        if((x1 <= j) && (j <= x2 ) && ( y1 <= i) && (i <= y2))
+                        {
+                            pixel = ((Rpp32f) (*srcPtrTemp)) * alpha + beta;
+                            pixel = RPPPIXELCHECK(pixel);
+                            *dstPtrTemp = (T) round(pixel);
+                            srcPtrTemp++;
+                            dstPtrTemp++;
+                        }
+                        else
+                        {
+                            *dstPtrTemp = *srcPtrTemp;
+                            srcPtrTemp++;
+                            dstPtrTemp++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    else if (chnFormat == RPPI_CHN_PACKED)
+    {
+        #pragma omp parallel for simd firstprivate(x1, y1, x2, y2, alpha, beta, pixel)
+        for(int batchCount = 0; batchCount < nbatchSize; batchCount ++)
+        {
+            x1 = roiPoints[batchCount].x;
+            y1 = roiPoints[batchCount].y;
+            x2 = x1 + roiPoints[batchCount].roiWidth;
+            y2 = y1 + roiPoints[batchCount].roiHeight;
+            if (x2 == 0) x2 = batch_srcSize[batchCount].width;
+            if (y2 == 0) y2 = batch_srcSize[batchCount].height;
+            alpha = batch_alpha[batchCount];
+            beta = batch_beta[batchCount];
+            
+            T *srcPtrTemp, *dstPtrTemp;
+            Rpp32u loc = 0;
+            compute_image_location_host(batch_srcSize, batchCount, &loc, channel);
+            srcPtrTemp = srcPtr + loc;
+            dstPtrTemp = dstPtr + loc;
+            
+            for(int i = 0; i < batch_srcSize[batchCount].height; i++)
+            {
+                for(int j = 0; j < batch_srcSize[batchCount].width; j++)
+                {
+                    for(int c = 0; c < channel; c++)
+                    {
+                        if((x1 <= j) && (j <= x2 ) && ( y1 <= i) && (i <= y2))
+                        {
+                            pixel = ((Rpp32f) (*srcPtrTemp)) * alpha + beta;
+                            pixel = RPPPIXELCHECK(pixel);
+                            *dstPtrTemp = (T) round(pixel);
+                            srcPtrTemp++;
+                            dstPtrTemp++;
+                        }
+                        else
+                        {
+                            *dstPtrTemp = *srcPtrTemp;
+                            srcPtrTemp++;
+                            dstPtrTemp++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    return RPP_SUCCESS;
+}
+//*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// With OMP - With Batch - Uses Pointers
+/*
 template <typename T>
 RppStatus brightness_host(T* srcPtr, RppiSize *srcSize, T* dstPtr, 
                           Rpp32f *alpha, Rpp32f *beta, RppiROI *roiPoints, Rpp32u nbatchSize,
@@ -95,7 +216,7 @@ RppStatus brightness_host(T* srcPtr, RppiSize *srcSize, T* dstPtr,
     }
     return RPP_SUCCESS;
 }
-//*/
+*/
 
 
 

@@ -3335,4 +3335,16 @@ RppStatus compute_gradient_direction_host(T* gradientX, T* gradientY, RppiSize s
     return RPP_SUCCESS;
 }
 
+//template <typename T>
+RppStatus compute_image_location_host(RppiSize *batch_srcSize, int batchCount, Rpp32u *loc, Rpp32u channel)
+{
+    for (int m = 0; m < batchCount; m++)
+    {
+        *loc += (batch_srcSize[m].height * batch_srcSize[m].width);
+    }
+    *loc *= channel;
+    
+    return RPP_SUCCESS;
+}
+
 #endif //RPP_CPU_COMMON_H
