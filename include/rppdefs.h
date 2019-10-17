@@ -21,8 +21,8 @@ typedef double              Rpp64f;
 
 typedef void*              RppPtr_t;
 
-typedef void*              RppHandle_t;
 
+typedef void*          RppHandle_t;
 
 typedef enum
 {
@@ -55,6 +55,11 @@ typedef struct {
     unsigned int height;
     } RppiSize;
 
+typedef struct{
+     int x;
+     int y;
+} RppiPoint;
+
 typedef struct
    {
        int x;
@@ -62,6 +67,13 @@ typedef struct
        int width;
        int height;
    } RppiRect;
+
+typedef struct {
+    unsigned int x;
+    unsigned int y;
+    unsigned int roiWidth;
+    unsigned int roiHeight;
+    } RppiROI;
 
 typedef enum{
     GAUSS3,
@@ -82,17 +94,20 @@ typedef enum{
     HSV
 } RppiFormat;
 
-typedef enum
-{
-    RPPI_LBP,
-    RPPI_MLBP,
-    RPPI_ULBP
-} RppiLbpFormat;
-
 typedef struct {
        Rpp32f rho;
        Rpp32f theta;
    } RppPointPolar;
+
+typedef enum{
+    GAUSSIAN,
+    SNP
+} RppiNoise;
+
+typedef struct {
+    Rpp32f mean;
+    Rpp32f sigma;
+} RppiGaussParameter;
 
 
 #define RPP_MIN_8U      ( 0 )
