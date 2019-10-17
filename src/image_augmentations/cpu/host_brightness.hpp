@@ -12,7 +12,7 @@ RppStatus brightness_host(T* srcPtr, RppiSize *srcSize, T* dstPtr,
     Rpp32f alphaBatch, betaBatch;
     if(chnFormat == RPPI_CHN_PLANAR)
     {
-        #pragma omp parallel for firstprivate(x1, y1, x2, y2, alphaBatch, betaBatch, pixel)
+        #pragma omp parallel for simd firstprivate(x1, y1, x2, y2, alphaBatch, betaBatch, pixel)
         for(int batch_cnt = 0; batch_cnt < nbatchSize; batch_cnt ++){
             x1 = roiPoints[batch_cnt].x;
             y1 = roiPoints[batch_cnt].y;
@@ -53,7 +53,7 @@ RppStatus brightness_host(T* srcPtr, RppiSize *srcSize, T* dstPtr,
         }
     } else if (chnFormat == RPPI_CHN_PACKED)
     {
-        #pragma omp parallel for firstprivate(x1, y1, x2, y2, alphaBatch, betaBatch, pixel)
+        #pragma omp parallel for simd firstprivate(x1, y1, x2, y2, alphaBatch, betaBatch, pixel)
         for(int batch_cnt = 0; batch_cnt < nbatchSize; batch_cnt ++){
             x1 = roiPoints[batch_cnt].x;
             y1 = roiPoints[batch_cnt].y;
